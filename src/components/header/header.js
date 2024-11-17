@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import blackLogo from "../../public/logo/black_logo.svg";
-import burgerIcon from "../../public/icons/burger_icon.svg";
 import gsap from "gsap";
+import NavLinks from "./nav-link";
+import blackLogo from "../../../public/logo/black_logo.svg";
 
 export function handleClickBurger(isPlayed) {
   const tl = gsap.timeline();
@@ -60,25 +60,12 @@ export function handleClickBurger(isPlayed) {
 
 export default function Header({ isPlayed }) {
   return (
-    <div className="border-b-solid border-b-[1px] border-b-black">
-      <header className="flex items-center justify-between px-5 py-8">
-        <div>
+    <div className="border-b-solid flex items-center justify-center border-b-[1px] border-b-black">
+      <header className="grid w-full max-w-[1150px] grid-cols-2 content-between items-center px-5 py-8 md:px-10 lg:grid-cols-12 lg:px-4">
+        <div className="lg:col-start-1 lg:col-end-3">
           <Image width={100} height={30} src={blackLogo} alt="logo image" />
         </div>
-        <div
-          onClick={() => {
-            handleClickBurger(isPlayed.current);
-            isPlayed.current = !isPlayed.current;
-          }}
-        >
-          <Image
-            className="transition-all active:opacity-0"
-            width={50}
-            height={50}
-            src={burgerIcon}
-            alt="burger icon"
-          />
-        </div>
+        <NavLinks isPlayed={isPlayed} />
       </header>
     </div>
   );

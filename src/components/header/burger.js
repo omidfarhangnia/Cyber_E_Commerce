@@ -5,7 +5,7 @@ import { handleClickBurger } from "./header";
 
 export default function Burger({ isPlayed }) {
   return (
-    <div className="divider-container absolute flex flex-col bottom-[150%] h-[140vh] w-[600vw]">
+    <div className="divider-container absolute bottom-[150%] flex h-[140vh] w-[600vw] flex-col">
       <div className="z-10 h-[50vh] bg-green-500">
         <div className="nav-links fixed right-[10vw] top-[10vh] hidden h-[60vh] w-[80vw] bg-white opacity-0">
           <div
