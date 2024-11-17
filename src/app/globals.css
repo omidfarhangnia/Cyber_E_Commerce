@@ -3,46 +3,20 @@
 @tailwind utilities;
 
 @layer base {
-  @font-face {
-    font-family: "sf-pro-bold";
-    src: url("/fonts/SFPRODISPLAYBOLD.OTF");
-  }
-  @font-face {
-    font-family: "sf-pro-meduim";
-    src: url("/fonts/SFPRODISPLAYMEDIUM.OTF");
-  }
-  @font-face {
-    font-family: "sf-pro-regular";
-    src: url("/fonts/SFPRODISPLAYREGULAR.OTF");
+  * {
+    @apply font-sans;
   }
 }
 
 @layer utilities {
-  .search-input::placeholder {
-    position: relative;
-    background: red;
-    padding-left: 20px;
-  }
-
-  .search-input::placeholder:after {
-    content: "";
-    width: 20px;
-    height: 20px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: black;
-  }
-
-  .font-sf-rg {
-    font-family: "sf-pro-regular", Arial, sans-serif;
-  }
-
-  .font-sf-bd {
-    font-family: "sf-pro-bold", Arial, sans-serif;
-  }
-
-  .font-sf-md {
-    font-family: "sf-pro-meduim", Arial, sans-serif;
+  .nav--links {
+    --s: 7px; /* size of the corners */
+    border: 2px solid transparent;
+    padding: 3px 5px;
+    mask:
+      conic-gradient(#000 0 0) content-box,
+      conic-gradient(at var(--s) var(--s), #0000 75%, #000 0) 0 0 /
+        calc(100% - var(--s)) calc(100% - var(--s));
+    transition: border-color 0.6s;
   }
 }

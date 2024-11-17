@@ -5,16 +5,18 @@ import Footer from "@/components/footer";
 import Burger from "@/components/header/burger";
 
 import { useRef } from "react";
+import SearchBox from "@/components/header/search-box";
 
 export default function Template({ children }) {
   const isPlayed = useRef(false);
 
   return (
-    <div className="relative h-[100vh] w-full overflow-hidden font-sf-md">
+    <div className="font-sf-md relative h-[100vh] w-full overflow-hidden">
       <Header isPlayed={isPlayed} />
       {children}
       <Footer />
       <Burger isPlayed={isPlayed} />
+      <SearchBox />
     </div>
   );
 }

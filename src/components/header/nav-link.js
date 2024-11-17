@@ -1,10 +1,37 @@
+"use client";
+
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { handleClickBurger } from "./header";
+import { usePathname } from "next/navigation";
+
+const links = [
+  {
+    url: "/",
+    id: 0,
+    label: "Home",
+  },
+  {
+    url: "/about",
+    id: 1,
+    label: "About",
+  },
+  {
+    url: "/contact-us",
+    id: 2,
+    label: "Contact Us",
+  },
+  {
+    url: "/blog",
+    id: 3,
+    label: "Blog",
+  },
+];
 
 export default function NavLinks({ isPlayed }) {
-  const [auth, setAuth] = useState(false);
+  const [auth, setAuth] = useState(true);
+  const pathname = usePathname();
 
   return (
     <>
@@ -23,29 +50,46 @@ export default function NavLinks({ isPlayed }) {
           alt="burger icon"
         />
       </div>
-      <div className="hidden lg:col-start-3 lg:col-end-6 lg:block">
-        <input
-          type="text"
-          className="search-input w-full border-none bg-[#F5F5F5] p-3 focus-within:outline-none"
-          placeholder="Search"
-        />
+      <div className="hidden lg:col-start-2 lg:col-end-5 lg:block lg:pl-[10px] xl:pl-[30px]">
+        <div className="search-input flex w-full items-center gap-[10px] rounded-lg border-none bg-[#F5F5F5] px-3 py-2 focus-within:outline-none">
+          <Image
+            src={"/icons/search.svg"}
+            width={32}
+            height={32}
+            alt="search icon"
+          />
+          <div className="text-[#656565]">Search</div>
+        </div>
       </div>
-      <nav className="hidden items-center justify-between gap-[40px] lg:col-start-7 lg:col-end-13 lg:flex">
-        <Link href="/">Home</Link>
-        <Link href="/about">About</Link>
-        <Link href={"/contact-us"}>Contact Us</Link>
-        <Link href="/blog">Blog</Link>
+      <nav className="hidden items-center justify-between gap-[30px] ps-[20px] lg:col-start-5 lg:col-end-13 lg:flex xl:col-start-5">
+        {links.map((link) => {
+          return (
+            <Link
+              className={`${pathname === link.url && "font-bold"} nav--links hover:border-black`}
+              href={link.url}
+              key={link.id}
+            >
+              {link.label}
+            </Link>
+          );
+        })}
         {!auth ? (
           // user before auth
           <>
-            <Link href="/blog">sign up</Link>
-            <Link href="/blog">log in</Link>
+            <Link href="/blog" className="nav--links hover:border-black">
+              sign up
+            </Link>
+            <Link href="/blog" className="nav--links hover:border-black">
+              log in
+            </Link>
           </>
         ) : (
           // user after auth
           <>
-            <Link href="/blog">log out</Link>
-            <Link href="/blog">
+            <Link href="/" className="nav--links hover:border-black">
+              log out
+            </Link>
+            <Link href="/">
               <Image
                 width={32}
                 height={32}
@@ -53,7 +97,7 @@ export default function NavLinks({ isPlayed }) {
                 src="/icons/favorites.svg"
               />
             </Link>
-            <Link href="/blog">
+            <Link href="/">
               <Image
                 width={32}
                 height={32}
@@ -61,7 +105,7 @@ export default function NavLinks({ isPlayed }) {
                 src="/icons/cart.svg"
               />
             </Link>
-            <Link href="/blog">
+            <Link href="/">
               <Image
                 width={32}
                 height={32}

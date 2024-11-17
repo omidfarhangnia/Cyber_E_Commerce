@@ -62,7 +62,7 @@ export default function Header({ isPlayed }) {
   return (
     <div className="border-b-solid flex items-center justify-center border-b-[1px] border-b-black">
       <header className="grid w-full max-w-[1150px] grid-cols-2 content-between items-center px-5 py-8 md:px-10 lg:grid-cols-12 lg:px-4">
-        <div className="lg:col-start-1 lg:col-end-3">
+        <div className="lg:col-start-1 lg:col-end-2">
           <Image width={100} height={30} src={blackLogo} alt="logo image" />
         </div>
         <NavLinks isPlayed={isPlayed} />
