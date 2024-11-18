@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { handleClickBurger } from "./header";
 import { usePathname } from "next/navigation";
+import { handleClickSearchBox } from "./search-box";
 
 const links = [
   {
@@ -29,17 +30,17 @@ const links = [
   },
 ];
 
-export default function NavLinks({ isPlayed }) {
+export default function NavLinks({ isBurgerPlayed, isSearchBoxOpen }) {
   const [auth, setAuth] = useState(true);
   const pathname = usePathname();
 
   return (
     <>
       <div
-        className="justify-self-end lg:hidden"
+        className="cursor-pointer justify-self-end lg:hidden"
         onClick={() => {
-          handleClickBurger(isPlayed.current);
-          isPlayed.current = !isPlayed.current;
+          handleClickBurger(isBurgerPlayed.current);
+          isBurgerPlayed.current = !isBurgerPlayed.current;
         }}
       >
         <Image
@@ -50,8 +51,14 @@ export default function NavLinks({ isPlayed }) {
           alt="burger icon"
         />
       </div>
-      <div className="hidden lg:col-start-2 lg:col-end-5 lg:block lg:pl-[10px] xl:pl-[30px]">
-        <div className="search-input flex w-full items-center gap-[10px] rounded-lg border-none bg-[#F5F5F5] px-3 py-2 focus-within:outline-none">
+      <div className="hidden cursor-pointer lg:col-start-2 lg:col-end-5 lg:block lg:pl-[10px] xl:pl-[30px]">
+        <div
+          onClick={() => {
+            handleClickSearchBox(isSearchBoxOpen.current);
+            isSearchBoxOpen.current = !isSearchBoxOpen.current;
+          }}
+          className="search-input flex w-full items-center gap-[10px] rounded-lg border-none bg-[#F5F5F5] px-3 py-2 focus-within:outline-none"
+        >
           <Image
             src={"/icons/search.svg"}
             width={32}

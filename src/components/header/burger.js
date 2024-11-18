@@ -3,7 +3,7 @@
 import "@/components/burger_style.css";
 import { handleClickBurger } from "./header";
 
-export default function Burger({ isPlayed }) {
+export default function Burger({ isBurgerPlayed }) {
   return (
     <div className="divider-container absolute bottom-[150%] flex h-[140vh] w-[600vw] flex-col">
       <div className="z-10 h-[50vh] bg-green-500">
@@ -11,8 +11,8 @@ export default function Burger({ isPlayed }) {
           <div
             className="bg-red-500 text-end text-[30px]"
             onClick={() => {
-              handleClickBurger(isPlayed.current);
-              isPlayed.current = !isPlayed.current;
+              handleClickBurger(isBurgerPlayed.current);
+              isBurgerPlayed.current = !isBurgerPlayed.current;
             }}
           >
             click here

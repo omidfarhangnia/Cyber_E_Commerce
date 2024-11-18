@@ -4,7 +4,22 @@
 
 @layer base {
   * {
+    box-sizing: border-box;
     @apply font-sans;
+  }
+}
+
+@layer components {
+  .input {
+    @apply w-[50%] rounded-lg border-[2px] border-solid border-[#9F9F9F] bg-transparent px-5 py-6 text-[20px] focus-within:outline-none;
+  }
+
+  .submit--btn {
+    @apply rounded-lg bg-black px-10 py-6 text-[20px] text-white;
+  }
+
+  .history--box {
+    @apply flex cursor-pointer items-center gap-[5px] rounded-full border-[1px] border-solid border-black ps-4 pe-2 py-1 text-[20px] transition-all hover:bg-slate-300;
   }
 }
 

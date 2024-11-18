@@ -5,10 +5,10 @@ import gsap from "gsap";
 import NavLinks from "./nav-link";
 import blackLogo from "../../../public/logo/black_logo.svg";
 
-export function handleClickBurger(isPlayed) {
+export function handleClickBurger(isBurgerPlayed) {
   const tl = gsap.timeline();
 
-  if (isPlayed) {
+  if (isBurgerPlayed) {
     tl.to(".nav-links", {
       opacity: 0,
       duration: 0.3,
@@ -58,14 +58,14 @@ export function handleClickBurger(isPlayed) {
   }
 }
 
-export default function Header({ isPlayed }) {
+export default function Header(props) {
   return (
-    <div className="border-b-solid flex items-center justify-center border-b-[1px] border-b-black">
+    <div className="border-b-solid flex items-center justify-center border-b-[1px] border-b-black bg-white">
       <header className="grid w-full max-w-[1150px] grid-cols-2 content-between items-center px-5 py-8 md:px-10 lg:grid-cols-12 lg:px-4">
         <div className="lg:col-start-1 lg:col-end-2">
           <Image width={100} height={30} src={blackLogo} alt="logo image" />
         </div>
-        <NavLinks isPlayed={isPlayed} />
+        <NavLinks {...props} />
       </header>
     </div>
   );

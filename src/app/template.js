@@ -8,15 +8,19 @@ import { useRef } from "react";
 import SearchBox from "@/components/header/search-box";
 
 export default function Template({ children }) {
-  const isPlayed = useRef(false);
+  const isBurgerPlayed = useRef(false);
+  const isSearchBoxOpen = useRef(false);
 
   return (
-    <div className="font-sf-md relative h-[100vh] w-full overflow-hidden">
-      <Header isPlayed={isPlayed} />
+    <div className="font-sf-md relative h-[100vh] w-full overflow-hidden bg-blue-500">
+      <Header
+        isBurgerPlayed={isBurgerPlayed}
+        isSearchBoxOpen={isSearchBoxOpen}
+      />
       {children}
       <Footer />
-      <Burger isPlayed={isPlayed} />
-      <SearchBox />
+      <Burger isBurgerPlayed={isBurgerPlayed} />
+      <SearchBox isSearchBoxOpen={isSearchBoxOpen} />
     </div>
   );
 }
