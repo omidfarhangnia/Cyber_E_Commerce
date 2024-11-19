@@ -2,25 +2,79 @@
 
 import "@/components/burger_style.css";
 import { handleBurgerAction } from "./header";
+import Image from "next/image";
+import Link from "next/link";
+import { links, categories } from "./nav-link";
+import { usePathname } from "next/navigation";
 
 export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
+  const pathname = usePathname();
+
   return (
     <div className="divider-container absolute bottom-[150%] flex h-[140vh] w-[600vw] flex-col">
-      <div className="z-10 h-[50vh] bg-green-500">
-        <div className="nav-links fixed right-[10vw] top-[10vh] hidden h-[60vh] w-[80vw] bg-white opacity-0">
-          <div
-            className="bg-red-500 text-end text-[30px]"
-            onClick={() => {
-              handleBurgerAction(isBurgerPlayed, isAnimePlaying);
-            }}
-          >
-            click here
+      <div className="bg-[#211C24]">
+        <div className="nav-links-sm relative z-10 h-[100vh] opacity-0">
+          <Image
+            width={300}
+            height={1000}
+            src={"/bg/background.svg"}
+            alt="background svg"
+            className="absolute right-0 top-0 h-[100vh] w-[100vw] object-cover"
+          />
+          <div className="fixed right-[10vw] top-[10vh] h-[70vh] w-[80vw] rounded-[30px] bg-[rgba(255,255,255,0.4)] px-[20px] py-[30px]">
+            <div className="flex justify-between">
+              <Link href={"/"}>
+                <Image
+                  width={90}
+                  height={30}
+                  src={"/logo/black_logo.svg"}
+                  alt="logo image"
+                  priority
+                />
+              </Link>
+              <div
+                onClick={() => {
+                  handleBurgerAction(isBurgerPlayed, isAnimePlaying);
+                }}
+              >
+                <Image
+                  src={"/icons/close.svg"}
+                  width={30}
+                  height={30}
+                  alt="close icon"
+                />
+              </div>
+            </div>
+            <div className="mt-[30px] flex flex-col items-start gap-[10px] pl-[10px] text-[20px]">
+              {links.map((link) => {
+                return (
+                  <Link
+                    className={`${pathname === link.url && "font-bold"} nav--links hover:border-black`}
+                    href={link.url}
+                    key={link.id}
+                  >
+                    {" "}
+                    {link.label}
+                  </Link>
+                );
+              })}
+            </div>
+            <div className="mt-[30px] flex flex-wrap justify-evenly gap-[5px]">
+              {categories.map((category) => {
+                return (
+                  <Link
+                    className="rounded-full bg-[#2E2E2E] px-[15px] py-[5px] text-[#969696] transition-all hover:text-white"
+                    href={category.url}
+                    key={category.id}
+                  >
+                    {category.label}
+                  </Link>
+                );
+              })}
+            </div>
           </div>
-          <div className="bg-red-500 text-end text-[30px]">click here</div>
-          <div className="bg-red-500 text-end text-[30px]">click here</div>
         </div>
       </div>
-      <div className="z-10 h-[50vh] w-full bg-green-500"></div>
       <div className="z-10 h-[40vh] w-full">
         <div className="relative">
           <div className="shape-divider-bottom">

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import gsap from "gsap";
 import NavLinks from "./nav-link";
+import Link from "next/link";
 
 export function handleBurgerAction(isBurgerPlayed, isAnimePlaying) {
   // checking for avoiding multiplay animations
@@ -12,11 +13,10 @@ export function handleBurgerAction(isBurgerPlayed, isAnimePlaying) {
   // starting animation function
   const tl = gsap.timeline();
   if (isBurgerPlayed.current) {
-    tl.to(".nav-links", {
+    tl.to(".nav-links-sm", {
       opacity: 0,
       duration: 0.3,
     })
-      .set(".nav-links", { display: "hidden" })
       .to(
         ".divider-container",
         {
@@ -51,10 +51,7 @@ export function handleBurgerAction(isBurgerPlayed, isAnimePlaying) {
         },
         "startLabel",
       )
-      .set(".nav-links", {
-        display: "block",
-      })
-      .to(".nav-links", {
+      .to(".nav-links-sm", {
         opacity: 1,
         duration: 0.5,
       });
@@ -70,13 +67,15 @@ export default function Header(props) {
     <div className="border-b-solid flex items-center justify-center border-b-[1px] border-b-black bg-white">
       <header className="grid w-full max-w-[1150px] grid-cols-2 content-between items-center px-5 py-8 md:px-10 lg:grid-cols-12 lg:px-4">
         <div className="lg:col-start-1 lg:col-end-2">
-          <Image
-            width={100}
-            height={30}
-            src={"/logo/black_logo.svg"}
-            alt="logo image"
-            priority
-          />
+          <Link href={"/"}>
+            <Image
+              width={100}
+              height={30}
+              src={"/logo/black_logo.svg"}
+              alt="logo image"
+              priority
+            />
+          </Link>
         </div>
         <NavLinks {...props} />
       </header>

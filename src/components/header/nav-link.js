@@ -7,7 +7,7 @@ import { handleBurgerAction } from "./header";
 import { usePathname } from "next/navigation";
 import { handleSearchBoxAction } from "./search-box";
 
-const links = [
+export const links = [
   {
     url: "/",
     id: 0,
@@ -27,6 +27,39 @@ const links = [
     url: "/blog",
     id: 3,
     label: "Blog",
+  },
+];
+
+export const categories = [
+  {
+    url: "/category/phones",
+    id: 0,
+    label: "Phones",
+  },
+  {
+    url: "/category/computers",
+    id: 1,
+    label: "Computers",
+  },
+  {
+    url: "/category/smart-watches",
+    id: 2,
+    label: "Smart Watches",
+  },
+  {
+    url: "/category/cameras",
+    id: 3,
+    label: "Cameras",
+  },
+  {
+    url: "/category/headphones",
+    id: 4,
+    label: "Headphones",
+  },
+  {
+    url: "/category/gaming",
+    id: 5,
+    label: "Gaming",
   },
 ];
 
