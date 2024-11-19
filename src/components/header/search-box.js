@@ -1,12 +1,47 @@
 import gsap from "gsap";
+import { redirect } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export function handleClickSearchBox(isSearchBoxOpen) {
-  const tl = gsap.timeline();
+export function handleSearchBoxAction(
+  isSearchBoxOpened,
+  isAnimePlaying,
+  isRedirectPorpuse = false,
+  pathname = "",
+) {
+  // checking for avoiding multiplay animations
+  if (isAnimePlaying.current) return;
+  isAnimePlaying.current = true;
 
-  if (isSearchBoxOpen) {
+  // starting animation function
+  const tl = gsap.timeline();
+  if (isSearchBoxOpened.current) {
+    tl.to(".searchBox--container > div", {
+      y: "-60vh",
+      duration: 0.3,
+      ease: "expo",
+    })
+      .to(
+        ".searchBox--container",
+        {
+          background: "rgba(0,0,0,0)",
+          duration: 0.6,
+          ease: "expo.in",
+        },
+        "<",
+      )
+      .set(".searchBox--container", {
+        bottom: "100%",
+      })
+      .set(".searchBox--container > div", {
+        y: "0",
+        onComplete: () => {
+          if (isRedirectPorpuse) {
+            redirect(pathname);
+          }
+        },
+      });
   } else {
     tl.to(".searchBox--container", {
       bottom: 0,
@@ -22,9 +57,13 @@ export function handleClickSearchBox(isSearchBoxOpen) {
       "<",
     );
   }
+
+  // resetting the ref values
+  isSearchBoxOpened.current = !isSearchBoxOpened.current;
+  isAnimePlaying.current = false;
 }
 
-export default function SearchBox() {
+export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
   const [inputText, setInputText] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
 
@@ -50,6 +89,14 @@ export default function SearchBox() {
       localStorage.setItem("searchHistory", JSON.stringify([inputText]));
     }
     setSearchHistory(JSON.parse(localStorage.getItem("searchHistory")));
+    // redirect to search page
+    handleSearchBoxAction(
+      isSearchBoxOpened,
+      isAnimePlaying,
+      true,
+      `/search/${inputText}`,
+    );
+    setInputText("");
   }
 
   function handleClearHistory() {
@@ -58,8 +105,21 @@ export default function SearchBox() {
   }
 
   return (
-    <div className="searchBox--container fixed bottom-full h-[100vh] w-full">
-      <div className="flex h-[60%] w-full flex-col items-center gap-[30px] rounded-b-[50%] bg-[#F6F6F6] pt-[15vh]">
+    <div className="searchBox--container fixed bottom-full h-[100vh] w-full bg-[rgba(0,0,0,0)]">
+      <div className="relative flex h-[60%] min-h-[450px] w-full flex-col items-center gap-[30px] rounded-b-[50%] bg-[#F6F6F6] pt-[7%]">
+        <div
+          className="absolute right-[20px] top-[20px]"
+          onClick={() => {
+            handleSearchBoxAction(isSearchBoxOpened, isAnimePlaying);
+          }}
+        >
+          <Image
+            src={"/icons/close.svg"}
+            width={40}
+            height={40}
+            alt="close icon"
+          />
+        </div>
         <div className="flex w-[80%] items-center justify-center gap-[20px]">
           <input
             value={inputText}
@@ -68,7 +128,13 @@ export default function SearchBox() {
             className="input"
             type="text"
           />
-          <button className="submit--btn" onClick={handleSearch}>
+          <button
+            className="submit--btn"
+            onClick={() => {
+              if (!inputText.length) return;
+              handleSearch();
+            }}
+          >
             Search
           </button>
         </div>
@@ -117,19 +183,28 @@ export default function SearchBox() {
               <div className="mt-[15px] flex flex-wrap gap-[20px]">
                 {searchHistory?.map((member, i) => {
                   return (
-                    <Link key={i} href={"/"}>
-                      <div className="history--box">
-                        {member}
-                        <div className="w-[30px]">
-                          <Image
-                            width={30}
-                            height={30}
-                            src={"/icons/arrow.svg"}
-                            alt="this is arrow"
-                          />
-                        </div>
+                    <div
+                      key={i}
+                      onClick={() => {
+                        handleSearchBoxAction(
+                          isSearchBoxOpened,
+                          isAnimePlaying,
+                          true,
+                          `/search/${member}`,
+                        );
+                      }}
+                      className="history--box"
+                    >
+                      {member}
+                      <div className="w-[30px]">
+                        <Image
+                          width={30}
+                          height={30}
+                          src={"/icons/arrow.svg"}
+                          alt="this is arrow"
+                        />
                       </div>
-                    </Link>
+                    </div>
                   );
                 })}
               </div>

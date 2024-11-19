@@ -1,9 +1,9 @@
 "use client";
 
 import "@/components/burger_style.css";
-import { handleClickBurger } from "./header";
+import { handleBurgerAction } from "./header";
 
-export default function Burger({ isBurgerPlayed }) {
+export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
   return (
     <div className="divider-container absolute bottom-[150%] flex h-[140vh] w-[600vw] flex-col">
       <div className="z-10 h-[50vh] bg-green-500">
@@ -11,8 +11,7 @@ export default function Burger({ isBurgerPlayed }) {
           <div
             className="bg-red-500 text-end text-[30px]"
             onClick={() => {
-              handleClickBurger(isBurgerPlayed.current);
-              isBurgerPlayed.current = !isBurgerPlayed.current;
+              handleBurgerAction(isBurgerPlayed, isAnimePlaying);
             }}
           >
             click here

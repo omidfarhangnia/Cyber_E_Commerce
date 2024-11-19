@@ -9,18 +9,23 @@ import SearchBox from "@/components/header/search-box";
 
 export default function Template({ children }) {
   const isBurgerPlayed = useRef(false);
-  const isSearchBoxOpen = useRef(false);
+  const isSearchBoxOpened = useRef(false);
+  const isAnimePlaying = useRef(false);
 
   return (
     <div className="font-sf-md relative h-[100vh] w-full overflow-hidden bg-blue-500">
       <Header
         isBurgerPlayed={isBurgerPlayed}
-        isSearchBoxOpen={isSearchBoxOpen}
+        isSearchBoxOpened={isSearchBoxOpened}
+        isAnimePlaying={isAnimePlaying}
       />
       {children}
       <Footer />
-      <Burger isBurgerPlayed={isBurgerPlayed} />
-      <SearchBox isSearchBoxOpen={isSearchBoxOpen} />
+      <Burger isBurgerPlayed={isBurgerPlayed} isAnimePlaying={isAnimePlaying} />
+      <SearchBox
+        isSearchBoxOpened={isSearchBoxOpened}
+        isAnimePlaying={isAnimePlaying}
+      />
     </div>
   );
 }

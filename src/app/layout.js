@@ -1,6 +1,5 @@
 import localFont from "next/font/local";
 import "./globals.css";
-// import fff from "../../public/fonts/Montserrat-Black.ttf";
 
 export const metadata = {
   title: "Create Next App",
