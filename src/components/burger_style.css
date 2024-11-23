@@ -17,7 +17,7 @@
 }
 
 .shape-divider-bottom .shape-fill {
-  fill: #ffffff;
+  fill: url(#bottom--gradient);
 }
 
 /* top divider */
@@ -38,5 +38,5 @@
 }
 
 .shape-divider-top .shape-fill {
-  fill: #ffffff;
+  fill: url(#top--gradient);
 }

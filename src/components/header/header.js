@@ -69,7 +69,7 @@ export default function Header(props) {
         <div className="lg:col-start-1 lg:col-end-2">
           <Link href={"/"}>
             <Image
-              width={100}
+              width={90}
               height={30}
               src={"/logo/black_logo.svg"}
               alt="logo image"

@@ -21,8 +21,8 @@ export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
             alt="background svg"
             className="absolute right-0 top-0 h-[100vh] w-[100vw] object-cover"
           />
-          <div className="fixed right-[10vw] top-[10vh] h-[70vh] w-[80vw] rounded-[30px] bg-[rgba(255,255,255,0.4)] px-[20px] py-[30px]">
-            <div className="flex justify-between">
+          <div className="fixed right-[10vw] top-[10vh] flex h-[70vh] w-[80vw] flex-col justify-between rounded-[30px] bg-[rgba(255,255,255,0.4)] px-[20px] py-[30px]">
+            <div className="flex justify-between px-[2.5vw]">
               <Link href={"/"}>
                 <Image
                   width={90}
@@ -45,7 +45,7 @@ export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
                 />
               </div>
             </div>
-            <div className="mt-[30px] flex flex-col items-start gap-[10px] pl-[10px] text-[20px]">
+            <div className="flex flex-col items-start gap-[10px] pl-[6vw] text-[25px] md:pl-[10vw] md:text-[30px]">
               {links.map((link) => {
                 return (
                   <Link
@@ -59,11 +59,11 @@ export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
                 );
               })}
             </div>
-            <div className="mt-[30px] flex flex-wrap justify-evenly gap-[5px]">
+            <div className="border-t-solid flex max-w-[450px] flex-wrap justify-evenly gap-[5px] self-center border-t-[1px] border-t-[#2E2E2E] pt-[20px] md:text-[18px]">
               {categories.map((category) => {
                 return (
                   <Link
-                    className="rounded-full bg-[#2E2E2E] px-[15px] py-[5px] text-[#969696] transition-all hover:text-white"
+                    className="rounded-full bg-[#2E2E2E] px-[15px] py-[5px] text-[#d6d6d6] transition-all hover:text-white"
                     href={category.url}
                     key={category.id}
                   >
@@ -84,6 +84,18 @@ export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
               viewBox="0 0 1200 120"
               preserveAspectRatio="none"
             >
+              <defs>
+                <linearGradient
+                  id="bottom--gradient"
+                  x1={0}
+                  x2={0}
+                  y1={0}
+                  y2={1}
+                >
+                  <stop offset={"0%"} stopColor="#8B304D" />
+                  <stop offset={"50%"} stopColor="#c94b4b" />
+                </linearGradient>
+              </defs>
               <path
                 d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
                 className="shape-fill"
@@ -97,6 +109,12 @@ export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
               viewBox="0 0 1200 120"
               preserveAspectRatio="none"
             >
+              <defs>
+                <linearGradient id="top--gradient" x1={0} x2={0} y1={0} y2={1}>
+                  <stop offset={"0%"} stopColor="#8B304D" />
+                  <stop offset={"50%"} stopColor="#4b134f" />
+                </linearGradient>
+              </defs>
               <path
                 d="M0,0V46.29c47.79,22.2,103.59,32.17,158,28,70.36-5.37,136.33-33.31,206.8-37.5C438.64,32.43,512.34,53.67,583,72.05c69.27,18,138.3,24.88,209.4,13.08,36.15-6,69.85-17.84,104.45-29.34C989.49,25,1113-14.29,1200,52.47V0Z"
                 opacity=".25"

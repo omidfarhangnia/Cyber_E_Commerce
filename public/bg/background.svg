@@ -9,7 +9,7 @@
         </filter>
     </defs>
     <g filter="url(#bbblurry-filter)">
-        <ellipse rx="206.5" ry="208.5" cx="528.8624483844428" cy="153.75100599874662" fill="#7051ee"></ellipse>
+        <ellipse rx="206.5" ry="208.5" cx="528.8624483844428" cy="153.75100599874662" fill="#792c2c"></ellipse>
         <ellipse rx="206.5" ry="208.5" cx="472.18703694981855" cy="737.4475573442114" fill="#3d1548"></ellipse>
         <ellipse rx="206.5" ry="208.5" cx="39.84742652712839" cy="416.60221682571046" fill="#810032"></ellipse>
     </g>
