@@ -35,31 +35,37 @@ export const categories = [
     url: "/category/phones",
     id: 0,
     label: "Phones",
+    svg: "/icons/phones.svg",
   },
   {
     url: "/category/computers",
     id: 1,
     label: "Computers",
+    svg: "/icons/computers.svg",
   },
   {
     url: "/category/smart-watches",
     id: 2,
     label: "Smart Watches",
+    svg: "/icons/smart-watches.svg",
   },
   {
     url: "/category/cameras",
     id: 3,
     label: "Cameras",
+    svg: "/icons/cameras.svg",
   },
   {
     url: "/category/headphones",
     id: 4,
     label: "Headphones",
+    svg: "/icons/headphones.svg",
   },
   {
     url: "/category/gaming",
     id: 5,
     label: "Gaming",
+    svg: "/icons/gaming.svg",
   },
 ];
 

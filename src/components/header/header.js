@@ -4,6 +4,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import NavLinks from "./nav-link";
 import Link from "next/link";
+import { categories } from "./nav-link";
 
 export function handleBurgerAction(isBurgerPlayed, isAnimePlaying) {
   // checking for avoiding multiplay animations
@@ -64,21 +65,52 @@ export function handleBurgerAction(isBurgerPlayed, isAnimePlaying) {
 
 export default function Header(props) {
   return (
-    <div className="border-b-solid flex items-center justify-center border-b-[1px] border-b-black bg-white">
-      <header className="grid w-full max-w-[1150px] grid-cols-2 content-between items-center px-5 py-8 md:px-10 lg:grid-cols-12 lg:px-4">
-        <div className="lg:col-start-1 lg:col-end-2">
-          <Link href={"/"}>
-            <Image
-              width={90}
-              height={30}
-              src={"/logo/black_logo.svg"}
-              alt="logo image"
-              priority
-            />
-          </Link>
+    <>
+      <div className="flex items-center justify-center bg-white">
+        <header className="grid w-full max-w-[1150px] grid-cols-2 content-between items-center px-5 py-8 md:px-10 lg:grid-cols-12 lg:px-4">
+          <div className="lg:col-start-1 lg:col-end-2">
+            <Link href={"/"}>
+              <Image
+                width={90}
+                height={30}
+                src={"/logo/black_logo.svg"}
+                alt="logo image"
+                priority
+              />
+            </Link>
+          </div>
+          <NavLinks {...props} />
+        </header>
+      </div>
+      <div className="hidden bg-[#2E2E2E] lg:block">
+        <div className="mx-auto flex max-w-[1128px] items-center justify-between px-[20px]">
+          {categories.map((category) => {
+            return (
+              // <>
+              <div
+                key={category.id}
+                className="flex cursor-pointer items-center gap-[6px] transition-all hover:-translate-y-[2px]"
+              >
+                <Image
+                  width={30}
+                  height={30}
+                  alt="link icons"
+                  src={category.svg}
+                />
+                <Link
+                  href={category.url}
+                  className="py-[7px] font-semibold leading-[32px] text-[#969696]"
+                >
+                  {category.label}
+                </Link>
+              </div>
+              // {/* {category.id !== 5 && (
+              //   <div key={i + 10} className="h-[30px] w-[1px] bg-[#969696]"></div>
+              // )} </> */}
+            );
+          })}
         </div>
-        <NavLinks {...props} />
-      </header>
-    </div>
+      </div>
+    </>
   );
 }
