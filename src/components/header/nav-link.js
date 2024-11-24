@@ -89,7 +89,7 @@ export default function NavLinks({
           className="transition-all active:opacity-0"
           width={50}
           height={50}
-          src={"/icons/burger_icon.svg"}
+          src={"/icons/burger-icon.svg"}
           alt="burger icon"
         />
       </div>

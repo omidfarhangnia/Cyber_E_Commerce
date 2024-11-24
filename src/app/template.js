@@ -1,11 +1,11 @@
 "use client";
 
 import Header, { handleBurgerAction } from "@/components/header/header";
-import Footer from "@/components/footer";
 import Burger from "@/components/header/burger";
 
 import { useEffect, useRef } from "react";
 import SearchBox from "@/components/header/search-box";
+import Footer from "@/components/footer/footer";
 
 export default function Template({ children }) {
   const isBurgerPlayed = useRef(false);

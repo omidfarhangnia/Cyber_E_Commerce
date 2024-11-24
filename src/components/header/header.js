@@ -73,7 +73,7 @@ export default function Header(props) {
               <Image
                 width={90}
                 height={30}
-                src={"/logo/black_logo.svg"}
+                src={"/logo/black-logo.svg"}
                 alt="logo image"
                 priority
               />
