@@ -11,7 +11,7 @@ export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
   const pathname = usePathname();
 
   return (
-    <div className="divider-container absolute bottom-[150%] flex h-[140vh] w-[600vw] flex-col">
+    <div className="divider-container absolute bottom-[150%] flex h-[140vh] w-[600vw] flex-col lg:hidden">
       <div className="bg-[#211C24]">
         <div className="nav-links-sm relative z-10 h-[100vh] opacity-0">
           <Image
@@ -22,7 +22,7 @@ export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
             className="absolute right-0 top-0 h-[100vh] w-[100vw] object-cover"
           />
           <div className="fixed right-[10vw] top-[10vh] flex h-[70vh] w-[80vw] flex-col justify-between rounded-[30px] bg-[rgba(255,255,255,0.4)] px-[20px] py-[30px]">
-            <div className="flex justify-between px-[2.5vw]">
+            <div className="flex justify-between items-center px-[2.5vw]">
               <Link href={"/"}>
                 <Image
                   width={90}
@@ -33,14 +33,15 @@ export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
                 />
               </Link>
               <div
+                className="cursor-pointer"
                 onClick={() => {
                   handleBurgerAction(isBurgerPlayed, isAnimePlaying);
                 }}
               >
                 <Image
                   src={"/icons/close.svg"}
-                  width={30}
-                  height={30}
+                  width={45}
+                  height={45}
                   alt="close icon"
                 />
               </div>

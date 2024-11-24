@@ -86,27 +86,25 @@ export default function Header(props) {
         <div className="mx-auto flex max-w-[1128px] items-center justify-between px-[20px]">
           {categories.map((category) => {
             return (
-              // <>
-              <div
-                key={category.id}
-                className="flex cursor-pointer items-center gap-[6px] transition-all hover:-translate-y-[2px]"
-              >
-                <Image
-                  width={30}
-                  height={30}
-                  alt="link icons"
-                  src={category.svg}
-                />
+              <div className="relative" key={category.id}>
                 <Link
                   href={category.url}
-                  className="py-[7px] font-semibold leading-[32px] text-[#969696]"
+                  className="mx-auto flex items-center gap-[6px] transition-all hover:translate-y-[-3px]"
                 >
-                  {category.label}
+                  <Image
+                    width={30}
+                    height={30}
+                    alt="link icons"
+                    src={category.svg}
+                  />
+                  <span className="py-[7px] font-medium leading-[32px] text-[#969696]">
+                    {category.label}
+                  </span>
                 </Link>
+                {category.id !== 5 && (
+                  <div className="absolute right-[-36px] top-[8px] h-[30px] w-[2px] bg-[#969696]"></div>
+                )}
               </div>
-              // {/* {category.id !== 5 && (
-              //   <div key={i + 10} className="h-[30px] w-[1px] bg-[#969696]"></div>
-              // )} </> */}
             );
           })}
         </div>
