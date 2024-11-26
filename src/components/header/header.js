@@ -31,6 +31,9 @@ export function handleBurgerAction(isBurgerPlayed, isAnimePlaying) {
         {
           x: 0,
           duration: 1.5,
+          onComplete: () => {
+            document.querySelector(".divider-container").style.display = "none";
+          },
         },
         "startLabel",
       );
@@ -40,6 +43,9 @@ export function handleBurgerAction(isBurgerPlayed, isAnimePlaying) {
       {
         bottom: "-40vh",
         duration: 2.5,
+        onStart: () => {
+          document.querySelector(".divider-container").style.display = "flex";
+        },
       },
       "startLabel",
     )
@@ -89,15 +95,16 @@ export default function Header(props) {
               <div className="relative" key={category.id}>
                 <Link
                   href={category.url}
-                  className="mx-auto flex items-center gap-[6px] transition-all hover:translate-y-[-3px]"
+                  className="group mx-auto flex items-center gap-[6px] transition-all hover:translate-y-[-2px]"
                 >
                   <Image
                     width={30}
                     height={30}
                     alt="link icons"
+                    className="opacity-50 group-hover:opacity-80"
                     src={category.svg}
                   />
-                  <span className="py-[7px] font-medium leading-[32px] text-[#969696]">
+                  <span className="py-[7px] font-medium leading-[32px] text-[#969696] group-hover:text-[#e5e5e5]">
                     {category.label}
                   </span>
                 </Link>

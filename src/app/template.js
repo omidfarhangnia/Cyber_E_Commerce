@@ -21,7 +21,7 @@ export default function Template({ children }) {
   }, []);
 
   return (
-    <div className="font-sf-md relative h-[100vh] w-full overflow-hidden bg-blue-500">
+    <div className="font-sf-md relative min-h-[100vh] w-full overflow-hidden">
       <Header
         isBurgerPlayed={isBurgerPlayed}
         isSearchBoxOpened={isSearchBoxOpened}
