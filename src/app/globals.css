@@ -21,11 +21,15 @@
   .history--box {
     @apply flex cursor-pointer items-center gap-[5px] rounded-full border-[1px] border-solid border-black py-1 pe-2 ps-4 text-[20px] transition-all hover:bg-slate-300;
   }
+
+  .white--btn {
+    @apply rounded-[6px] border-[1px] border-solid border-white px-[56px] py-[16px] text-white transition-all hover:bg-white hover:text-[#211C24];
+  }
 }
 
 @layer utilities {
   .nav--links {
-    --s: 7px; /* size of the corners */
+    --s: 7px;
     border: 2px solid transparent;
     padding: 3px 5px;
     text-align: center;
