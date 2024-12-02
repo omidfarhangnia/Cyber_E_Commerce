@@ -105,7 +105,7 @@ export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
   }
 
   return (
-    <div className="searchBox--container fixed bottom-full h-[100vh] w-full bg-[rgba(0,0,0,0)]">
+    <div className="searchBox--container fixed bottom-full z-50 h-[100vh] w-full bg-[rgba(0,0,0,0)]">
       <div className="relative flex h-[60%] min-h-[450px] w-full flex-col items-center gap-[30px] rounded-b-[50%] bg-[#F6F6F6] pt-[7%]">
         <div
           className="absolute right-[20px] top-[20px]"
