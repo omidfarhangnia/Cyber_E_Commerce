@@ -60,8 +60,9 @@ export default function HomeSec1() {
             width="400"
             height="600"
             alt="this is iphone image"
-            className="relative lg:ml-auto"
+            className="relative h-auto w-auto lg:ml-auto"
             src="/images/iphone-image.webp"
+            priority
           />
           <div className="imageBorders absolute left-[20px] top-[-30px] z-[2] hidden h-[150px] w-[150px] rounded-tl-[20px] border-l-[2px] border-t-[2px] border-solid border-[#6B39F0] lg:block"></div>
           <div className="imageBorders absolute bottom-[-40px] right-[-30px] z-[2] hidden h-[150px] w-[150px] rounded-br-[20px] border-b-[2px] border-r-[2px] border-solid border-[#6B39F0] lg:block"></div>
