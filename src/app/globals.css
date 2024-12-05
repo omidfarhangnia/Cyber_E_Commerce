@@ -25,6 +25,10 @@
   .white--btn {
     @apply rounded-[6px] border-[1px] border-solid border-white px-[56px] py-[16px] text-white transition-all hover:bg-white hover:text-[#211C24];
   }
+
+  .black--btn {
+    @apply rounded-[6px] border-[1px] border-solid border-black px-[56px] py-[16px] text-black transition-all hover:bg-black hover:text-[#cccbcd];
+  }
 }
 
 @layer utilities {
