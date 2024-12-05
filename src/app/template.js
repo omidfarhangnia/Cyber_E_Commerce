@@ -6,6 +6,7 @@ import Burger from "@/components/header/burger";
 import { useEffect, useRef } from "react";
 import SearchBox from "@/components/header/search-box";
 import Footer from "@/components/footer/footer";
+import PageChanger from "@/components/sections/page-changer";
 
 export default function Template({ children }) {
   const isBurgerPlayed = useRef(false);
@@ -21,13 +22,14 @@ export default function Template({ children }) {
   }, []);
 
   return (
-    <div className="font-sf-md relative min-h-[100vh] w-full overflow-hidden">
+    <div className="font-sf-md project--template relative h-[100vh] min-h-[100vh] w-full overflow-hidden bg-black">
       <Header
         isBurgerPlayed={isBurgerPlayed}
         isSearchBoxOpened={isSearchBoxOpened}
         isAnimePlaying={isAnimePlaying}
       />
       {children}
+      <PageChanger />
       <Footer />
       <Burger isBurgerPlayed={isBurgerPlayed} isAnimePlaying={isAnimePlaying} />
       <SearchBox
