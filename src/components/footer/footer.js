@@ -79,7 +79,7 @@ export default function Footer() {
             <Image
               width={27}
               height={27}
-              className="h-auto w-auto"
+              className="h-auto"
               src={"/icons/facebook.svg"}
               alt="facebook icon"
             />
@@ -88,7 +88,7 @@ export default function Footer() {
             <Image
               width={27}
               height={27}
-              className="h-auto w-auto"
+              className="h-auto"
               src={"/icons/tiktok.svg"}
               alt="tiktok icon"
             />
