@@ -3,7 +3,7 @@
 import gsap from "gsap";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
 export function HomeSec1() {
@@ -181,6 +181,142 @@ export function HomeSec2() {
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+const secThreeCates = [
+  {
+    iconUrl: "/icons/phones-black.svg",
+    text: "Phones",
+    url: "/category/phones",
+  },
+  {
+    iconUrl: "/icons/smart-watches-black.svg",
+    text: "Smart Watches",
+    url: "/category/smart-watches",
+  },
+  {
+    iconUrl: "/icons/cameras-black.svg",
+    text: "Cameras",
+    url: "/category/cameras",
+  },
+  {
+    iconUrl: "/icons/headphones-black.svg",
+    text: "Headphones",
+    url: "/category/headphones",
+  },
+  {
+    iconUrl: "/icons/computers-black.svg",
+    text: "Computers",
+    url: "/category/computers",
+  },
+  {
+    iconUrl: "/icons/gaming-black.svg",
+    text: "Gaming",
+    url: "/category/gaming",
+  },
+];
+
+const categoryTL = gsap.timeline();
+
+export function HomeSec3() {
+  const [selectedItem, setSelectedItem] = useState(0);
+
+  useEffect(() => {
+    const nextBtn = document.querySelector(".next--catBtn");
+    const prevBtn = document.querySelector(".prev--catBtn");
+
+    nextBtn.addEventListener("click", () => {
+      playCategoryAnime("next");
+    });
+    prevBtn.addEventListener("click", () => {
+      playCategoryAnime("prev");
+    });
+  }, []);
+
+  function playCategoryAnime(dir) {
+    if (categoryTL.isActive()) return;
+    categoryTL
+      .to(".window--parts", {
+        opacity: 1,
+        stagger: {
+          each: 0.1,
+          ease: "linear",
+        },
+        onComplete: () => {
+          if (dir === "next") {
+            setSelectedItem((x) => (x === 5 ? 0 : (x = x + 1)));
+          } else {
+            setSelectedItem((x) => (x === 0 ? 5 : (x = x - 1)));
+          }
+        },
+      })
+      .to(".window--parts", {
+        opacity: 0,
+        filter: "blur(100px)",
+        stagger: {
+          each: 0.05,
+          ease: "linear",
+        },
+        delay: 0.5,
+      })
+      .set(".window--parts", { filter: "none" });
+  }
+
+  return (
+    <div className="flex items-center justify-center bg-[#FAFAFA]">
+      <div className="category w-full max-w-[1150px] px-[16px] py-[50px]">
+        <div className="flex items-center justify-between">
+          <h4 className="text-[23px] font-medium leading-[40px]">
+            Browse By Category
+          </h4>
+          <div className="flex items-center justify-center gap-[10px]">
+            <button className="prev--catBtn transition-opacity hover:opacity-60">
+              <Image
+                width={32}
+                height={32}
+                src={"/icons/category-left-arrow.svg"}
+                alt="left arrow category"
+              />
+            </button>
+            <button className="next--catBtn transition-opacity hover:opacity-60">
+              <Image
+                width={32}
+                height={32}
+                src={"/icons/category-right-arrow.svg"}
+                alt="left arrow category"
+              />
+            </button>
+          </div>
+        </div>
+        <div>
+          <div className="category-sm-dv flex items-center justify-center py-[48px] md:hidden">
+            <Link href={secThreeCates[selectedItem].url}>
+              <div className="category--container relative">
+                <div className="window--parts absolute right-0 top-0 h-[50%] w-[50%] rounded-tr-[20px] bg-[#0e0e0e] opacity-0"></div>
+                <div className="window--parts absolute left-0 top-0 h-[50%] w-[50%] rounded-tl-[20px] bg-[#2A2A2A] opacity-0"></div>
+                <div className="window--parts absolute bottom-0 left-0 h-[50%] w-[50%] rounded-bl-[20px] bg-[#575757] opacity-0"></div>
+                <div className="window--parts absolute bottom-0 right-0 h-[50%] w-[50%] rounded-br-[20px] bg-[#7b7b7b] opacity-0"></div>
+                <div className="flex aspect-square h-[128px] w-[163px] flex-col items-center justify-center gap-[10px] rounded-[20px] bg-[#EDEDED]">
+                  <div>
+                    <Image
+                      width={56}
+                      height={56}
+                      src={secThreeCates[selectedItem].iconUrl}
+                      alt={secThreeCates[selectedItem].text + " icons"}
+                    />
+                  </div>
+                  <div className="text-[18px] font-medium">
+                    {secThreeCates[selectedItem].text}
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
+          <div className="category-md-dv hidden md:block"></div>
+        </div>
       </div>
     </div>
   );
