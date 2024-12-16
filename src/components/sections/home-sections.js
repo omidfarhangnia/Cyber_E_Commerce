@@ -220,60 +220,66 @@ const secThreeCates = [
 ];
 
 const categoryTL = gsap.timeline();
+let initialItems = [0, 1, 2];
 
 export function HomeSec3() {
-  const [selectedItem, setSelectedItem] = useState(0);
+  const [selectedItem, setSelectedItem] = useState(initialItems);
 
   useEffect(() => {
-    const nextBtn = document.querySelector(".next--catBtn");
-    const prevBtn = document.querySelector(".prev--catBtn");
-
-    nextBtn.addEventListener("click", () => {
-      playCategoryAnime("next");
-    });
-    prevBtn.addEventListener("click", () => {
-      playCategoryAnime("prev");
-    });
-  }, []);
-
-  function playCategoryAnime(dir) {
-    if (categoryTL.isActive()) return;
+    categoryTL.clear();
     categoryTL
-      .to(".window--parts", {
-        opacity: 1,
-        stagger: {
-          each: 0.1,
-          ease: "linear",
-        },
-        onComplete: () => {
-          if (dir === "next") {
-            setSelectedItem((x) => (x === 5 ? 0 : (x = x + 1)));
-          } else {
-            setSelectedItem((x) => (x === 0 ? 5 : (x = x - 1)));
-          }
-        },
-      })
+      .set(".window--parts", { opacity: 1 })
       .to(".window--parts", {
         opacity: 0,
         filter: "blur(100px)",
         stagger: {
           each: 0.05,
           ease: "linear",
+          from: "end",
         },
-        delay: 0.5,
+        delay: 0.2,
       })
       .set(".window--parts", { filter: "none" });
+  }, [selectedItem]);
+
+  function setNewItems(dir) {
+    let newItems;
+    if (dir === "next") {
+      newItems = selectedItem.map((item) => {
+        return item === 5 ? 0 : (item = item + 1);
+      });
+    } else {
+      newItems = selectedItem.map((item) => {
+        return item === 0 ? 5 : (item = item - 1);
+      });
+    }
+    setSelectedItem(newItems);
+  }
+
+  function playCategoryAnime(dir) {
+    if (categoryTL.isActive()) return;
+    categoryTL.to(".window--parts", {
+      opacity: 1,
+      stagger: {
+        each: 0.05,
+        ease: "linear",
+      },
+      onComplete: () => setNewItems(dir),
+    });
   }
 
   return (
     <div className="flex items-center justify-center bg-[#FAFAFA]">
-      <div className="category w-full max-w-[1150px] px-[16px] py-[50px]">
+      <div className="category w-full max-w-[1150px] px-[16px] py-[50px] md:px-[50px]">
         <div className="flex items-center justify-between">
           <h4 className="text-[23px] font-medium leading-[40px]">
             Browse By Category
           </h4>
           <div className="flex items-center justify-center gap-[10px]">
-            <button className="prev--catBtn transition-opacity hover:opacity-60">
+            <button
+              onClick={() => playCategoryAnime("prev")}
+              className="prev--catBtn transition-opacity hover:opacity-60"
+            >
               <Image
                 width={32}
                 height={32}
@@ -281,7 +287,10 @@ export function HomeSec3() {
                 alt="left arrow category"
               />
             </button>
-            <button className="next--catBtn transition-opacity hover:opacity-60">
+            <button
+              onClick={() => playCategoryAnime("next")}
+              className="next--catBtn transition-opacity hover:opacity-60"
+            >
               <Image
                 width={32}
                 height={32}
@@ -292,30 +301,37 @@ export function HomeSec3() {
           </div>
         </div>
         <div>
-          <div className="category-sm-dv flex items-center justify-center py-[48px] md:hidden">
-            <Link href={secThreeCates[selectedItem].url}>
-              <div className="category--container relative">
-                <div className="window--parts absolute right-0 top-0 h-[50%] w-[50%] rounded-tr-[20px] bg-[#0e0e0e] opacity-0"></div>
-                <div className="window--parts absolute left-0 top-0 h-[50%] w-[50%] rounded-tl-[20px] bg-[#2A2A2A] opacity-0"></div>
-                <div className="window--parts absolute bottom-0 left-0 h-[50%] w-[50%] rounded-bl-[20px] bg-[#575757] opacity-0"></div>
-                <div className="window--parts absolute bottom-0 right-0 h-[50%] w-[50%] rounded-br-[20px] bg-[#7b7b7b] opacity-0"></div>
-                <div className="flex aspect-square h-[128px] w-[163px] flex-col items-center justify-center gap-[10px] rounded-[20px] bg-[#EDEDED]">
-                  <div>
-                    <Image
-                      width={56}
-                      height={56}
-                      src={secThreeCates[selectedItem].iconUrl}
-                      alt={secThreeCates[selectedItem].text + " icons"}
-                    />
+          <div className="flex items-center justify-center gap-[30px] py-[48px] md:gap-[10%]">
+            {selectedItem.map((itemIndex, i) => {
+              return (
+                <Link
+                  className={`transition-transform hover:translate-y-[10px] md:w-[200px] ${i !== 0 ? "hidden md:block" : "w-[50%] md:w-[200px]"}`}
+                  key={itemIndex}
+                  href={secThreeCates[itemIndex].url}
+                >
+                  <div className="category--container relative">
+                    <div className="window--parts absolute right-0 top-0 h-[50%] w-[50%] rounded-tr-[20px] bg-[#0e0e0e] opacity-0"></div>
+                    <div className="window--parts absolute left-0 top-0 h-[50%] w-[50%] rounded-tl-[20px] bg-[#2A2A2A] opacity-0"></div>
+                    <div className="window--parts absolute bottom-0 left-0 h-[50%] w-[50%] rounded-bl-[20px] bg-[#575757] opacity-0"></div>
+                    <div className="window--parts absolute bottom-0 right-0 h-[50%] w-[50%] rounded-br-[20px] bg-[#7b7b7b] opacity-0"></div>
+                    <div className="flex min-h-[128px] flex-col items-center justify-center gap-[10px] rounded-[20px] bg-[#EDEDED] md:aspect-square">
+                      <div>
+                        <Image
+                          width={56}
+                          height={56}
+                          src={secThreeCates[itemIndex].iconUrl}
+                          alt={secThreeCates[itemIndex].text + " icons"}
+                        />
+                      </div>
+                      <div className="text-[18px] font-medium">
+                        {secThreeCates[itemIndex].text}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-[18px] font-medium">
-                    {secThreeCates[selectedItem].text}
-                  </div>
-                </div>
-              </div>
-            </Link>
+                </Link>
+              );
+            })}
           </div>
-          <div className="category-md-dv hidden md:block"></div>
         </div>
       </div>
     </div>
