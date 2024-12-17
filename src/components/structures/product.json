@@ -1,33 +1,50 @@
-{
-  "name": "string",
-  "category": "string",
-  "id": "string",
-  "price": "string",
-  "brand": "string",
-  "discountPercent": "number or ==> 0 for not being in discount list",
-  "isAvailable": "boolean",
-  "isShippingFree": "boolean",
-  "isInstallment": "boolean",
-  "warrantyPeriod": "string or ==> 0 for not being in warranty list",
-  "salesNum": "number",
-  "availableColors": [{ "name": "string", "code": "string ==> #ffffff" }],
-  "specfiction": [{ "title": "string", "description": "string" }],
-  "comments": [
-    {
-      "title": "string",
-      "description": "string",
-      "authorName": "string",
-      "stars": "number ==>  0 <= 4.2 <= 5",
-      "authorImg": "string ==> author imgUrl",
-      "date": "string",
-      "productImg": "string ==> product imgUrl"
-    }
-  ],
-  "questions": [
-    {
-      "title": "string",
-      "date": "string",
-      "answer": "string"
-    }
-  ]
-}
+[
+  {
+    "structre_usage": "structure of products table member",
+    "name": "string",
+    "category": "string",
+    "id": "string",
+    "price": "string",
+    "brand": "string",
+    "discount_percent": "number or ==> 0 for not being in discount list",
+    "is_available": "boolean",
+    "is_shipping_free": "boolean",
+    "is_installment": "boolean",
+    "warranty_period": "string or ==> 0 for not being in warranty list",
+    "sales_num": "number"
+  },
+  {
+    "structre_usage": "structure of available_colors table member",
+    "id": "string",
+    "name": "string",
+    "code": "string ==> #ffffff",
+    "product_id": "string"
+  },
+  {
+    "structre_usage": "structure of specfiction table member",
+    "id": "string",
+    "title": "string",
+    "description": "string",
+    "product_id": "string"
+  },
+  {
+    "structre_usage": "structure of comments table member",
+    "id": "string",
+    "title": "string",
+    "description": "string",
+    "authorName": "string",
+    "stars": "number ==>  0 <= 4.2 <= 5",
+    "authorImg": "string ==> author imgUrl",
+    "date": "string",
+    "productImg": "string ==> product imgUrl",
+    "product_id": "string"
+  },
+  {
+    "structre_usage": "structure of questions table member",
+    "id": "string",
+    "title": "string",
+    "answer": "string",
+    "date": "string",
+    "product_id": "string"
+  }
+]

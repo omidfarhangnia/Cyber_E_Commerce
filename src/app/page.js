@@ -8,7 +8,7 @@ import { sql } from "@vercel/postgres";
 async function getData() {
   try {
     const data = await sql`
-          SELECT * FROM invoicestwo
+          SELECT name, id FROM products
       `;
 
     return data.rows;
@@ -25,7 +25,9 @@ export default async function Home() {
       {/* <HomeSec2 /> */}
       {/* <HomeSec3 /> */}
       <div className="bg-blue-500">hello there</div>
-      <div className="bg-yellow-300">{JSON.stringify(data)}</div>
+      <div className="bg-yellow-300">{data.map((member) => {
+        return <div>{member.name} with id : {member.id}</div>
+      })}</div>
     </div>
   );
 }
