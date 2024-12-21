@@ -3,8 +3,11 @@
 import gsap from "gsap";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { Sec4Skeleton } from "../skeletons/home-skeletons";
+import { getSelectedProducts, ShowData } from "@/actions/data";
 
 export function HomeSec1() {
   const sectionOneRef = useRef();
@@ -335,5 +338,75 @@ export function HomeSec3() {
         </div>
       </div>
     </div>
+  );
+}
+
+const status = [
+  { id: 0, name: "Free Shipping", label: "freeShipping", status: "" },
+  { id: 1, name: "Bestseller", label: "bestSeller", status: "bestSeller" },
+  {
+    id: 2,
+    name: "Highest Warranty period",
+    label: "highestWarrantyPeriod",
+    status: "highestWarrantyPeriod",
+  },
+];
+
+export function HomeSec4() {
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const router = useRouter();
+  const selectedStatus = searchParams.get("selected-status")?.toString() || "";
+
+  function handleClick(status) {
+    const params = new URLSearchParams(searchParams);
+
+    if (status === "") {
+      params.delete("selected-status");
+    } else {
+      params.set("selected-status", status);
+    }
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }
+
+  return (
+    <div className="bg-white px-[16px] py-[56px]">
+      <div className="flex items-center justify-between">
+        {status.map((member) => {
+          return (
+            <div
+              key={member.id}
+              onClick={() => handleClick(member.status)}
+              className={`cursor-pointer select-none border-b-2 border-solid font-medium transition-all hover:border-b-black ${member.status === selectedStatus ? "border-b-black text-black" : "border-b-transparent text-[#8B8B8B]"}`}
+            >
+              {member.name}
+            </div>
+          );
+        })}
+      </div>
+      <Suspense fallback={<Sec4Skeleton />}>
+        <SelectedProducts selectedStatus={selectedStatus} />
+      </Suspense>
+    </div>
+  );
+}
+
+async function SelectedProducts({ selectedStatus }) {
+  const products = await getSelectedProducts(selectedStatus);
+
+  return (
+    <div>
+      products ===
+      {JSON.stringify(products)}
+    </div>
+  );
+}
+
+export async function HomeSec5() {
+  return (
+    <Suspense fallback={<div>loadding....</div>}>
+      <ShowData />
+    </Suspense>
   );
 }

@@ -29,6 +29,45 @@
   .black--btn {
     @apply rounded-[6px] border-[1px] border-solid border-black px-[56px] py-[16px] text-black transition-all hover:bg-black hover:text-[#cccbcd];
   }
+
+  .skeleton--img {
+    @apply h-full w-full object-contain;
+  }
+
+  @keyframes skeletonAnime {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  .skeleton--animation {
+    animation-name: skeletonAnime;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  .skeleton--animation:nth-child(1) {
+    animation-delay: 0;
+  }
+
+  .skeleton--animation:nth-child(2) {
+    animation-delay: 0.3s;
+  }
+
+  .skeleton--animation:nth-child(3) {
+    animation-delay: 0.6s;
+  }
+
+  .skeleton--animation:nth-child(4) {
+    animation-delay: 0.9s;
+  }
 }
 
 @layer utilities {
