@@ -403,10 +403,92 @@ async function SelectedProducts({ selectedStatus }) {
   );
 }
 
-export async function HomeSec5() {
+export function ResponsiveSec5({ data }) {
+  const [windowSize, setWindowSize] = useState();
+
+  useEffect(() => {
+    setWindowSize(window.innerWidth);
+    function setNewWindowSize(e) {
+      setWindowSize(window.innerWidth);
+    }
+
+    window.addEventListener("resize", setNewWindowSize);
+
+    return () => {
+      window.removeEventListener("resize", setNewWindowSize);
+    };
+  }, []);
+
   return (
-    <Suspense fallback={<div>loadding....</div>}>
-      <ShowData />
-    </Suspense>
+    <div className="bg-blue-400">
+      <h1>hello there</h1>
+      {windowSize >= 768 ? (
+        <Sec5LgDevice data={data} />
+      ) : (
+        <Sec5SmDevice data={data} />
+      )}
+    </div>
+  );
+}
+
+function Sec5SmDevice({ data }) {
+  const [selectedPost, setSelectedPost] = useState(1);
+  return (
+    // <div>
+    //   <input
+    //     type="number"
+    //     min={1}
+    //     max={4}
+    //     onChange={(e) => {
+    //       setSelectedPost(e.target.value);
+    //     }}
+    //   />
+    //   <div>{data[selectedPost - 1].title}</div>
+    // </div>
+
+    <div className="relative h-[400px] w-full bg-gradient-to-tr from-[#000000] to-[#F9F9F9]">
+      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
+        <video src="/icons/test.webm" autoPlay loop />
+      </div>
+    </div>
+  );
+}
+
+const skeletonMap = [0, 1, 2, 3];
+function Sec5LgDevice({ data }) {
+  return (
+    // <div className="hidden items-center justify-center bg-[#F9F9F9] md:flex">
+    //   <div className="flex max-w-[2000px] flex-wrap items-center justify-center">
+    //     {skeletonMap.map((skeleton) => {
+    //       return (
+    //         <div key={skeleton} className="w-[50%] py-[30px] lg:w-[25%]">
+    //           <div className="flex flex-col items-center justify-center px-[20px] py-[30px]">
+    //             <div className="skeleton--animation w-[60%] rounded-[30px] border-[5px] border-solid border-[#C7CDD2]">
+    //               <Image
+    //                 width={200}
+    //                 height={200}
+    //                 alt="img logo"
+    //                 src={"/images/skeleton-img.svg"}
+    //                 className="skeleton--img"
+    //               />
+    //             </div>
+    //             <div className="skeleton--animation mt-[30px] h-[30px] w-[80%] rounded-full bg-[#222222]"></div>
+    //             <div className="skeleton--animation mt-[20px] flex h-[50px] w-[70%] flex-wrap justify-between">
+    //               <div className="h-[10px] w-[50%] rounded-full bg-[#767676]"></div>
+    //               <div className="h-[10px] w-[30%] rounded-full bg-[#767676]"></div>
+    //               <div className="h-[10px] w-[90%] rounded-full bg-[#767676]"></div>
+    //               <div className="h-[10px] w-[20%] rounded-full bg-[#767676]"></div>
+    //               <div className="h-[10px] w-[70%] rounded-full bg-[#767676]"></div>
+    //             </div>
+    //             <div className="skeleton--animation mt-[20px] h-[50px] w-[50%] max-w-[200px] rounded-full bg-[#C7CDD2]"></div>
+    //           </div>
+    //         </div>
+    //       );
+    //     })}
+    //   </div>
+    // </div>
+    <div className="h-[400px] w-full bg-gradient-to-tr from-[#2C2C2C] to-[#F9F9F9]">
+      lsls
+    </div>
   );
 }

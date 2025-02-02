@@ -1,20 +1,43 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export function Sec4Skeleton() {
   return <div>skeleton</div>;
 }
 
-const skeletonMap = [0, 1, 2, 3];
 export function SecFiveSkeleton() {
+  const [windowSize, setWindowSize] = useState();
+
+  useEffect(() => {
+    setWindowSize(window.innerWidth);
+    function setNewWindowSize(e) {
+      setWindowSize(window.innerWidth);
+    }
+
+    window.addEventListener("resize", setNewWindowSize);
+
+    return () => {
+      window.removeEventListener("resize", setNewWindowSize);
+    };
+  }, []);
+
   return (
-    <div className="flex items-center justify-center bg-[#F9F9F9]">
-      <div className="flex max-w-[1300px] items-center justify-center gap-[40px] lg:py-[40px]">
+    <div>
+      {windowSize >= 768 ? <Sec5LgSkeleton /> : <Sec5SmSkeleton />}
+    </div>
+  );
+}
+
+const skeletonMap = [0, 1, 2, 3];
+function Sec5LgSkeleton() {
+  return (
+    <div className="hidden items-center justify-center bg-[#F9F9F9] md:flex">
+      <div className="flex max-w-[2000px] flex-wrap items-center justify-center">
         {skeletonMap.map((skeleton) => {
           return (
-            <div
-              key={skeleton}
-              className={`max-w-[450px] ${skeleton !== 0 && "hidden lg:block"}`}
-            >
+            <div key={skeleton} className="w-[50%] py-[30px] lg:w-[25%]">
               <div className="flex flex-col items-center justify-center px-[20px] py-[30px]">
                 <div className="skeleton--animation w-[60%] rounded-[30px] border-[5px] border-solid border-[#C7CDD2]">
                   <Image
@@ -41,4 +64,8 @@ export function SecFiveSkeleton() {
       </div>
     </div>
   );
+}
+
+function Sec5SmSkeleton() {
+  return <div className="bg-red-500">hello secThreeCates</div>;
 }

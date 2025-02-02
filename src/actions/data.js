@@ -27,3 +27,16 @@ export async function getSelectedProducts(selectedStatus) {
   //   throw new Error(err);
   // }
 }
+
+export async function fetchSec5Data(params) {
+  try {
+    const data = await sql`
+      SELECT * FROM popularproducts
+      ORDER BY id ASC
+    `;
+
+    return data.rows;
+  } catch (err) {
+    throw new Error(err);
+  }
+}

@@ -5,12 +5,14 @@ module.exports = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+  safelist: [
+    "bg-[#FFFFFF]",
+    "bg-[#F9F9F9]",
+    "bg-[#EAEAEA]",
+    "bg-[#2C2C2C]"
+  ],
   theme: {
     extend: {
-      colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
-      },
       fontFamily: {
         sans: ["var(--font-montserrat)"],
       },

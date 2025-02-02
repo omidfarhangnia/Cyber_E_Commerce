@@ -49,12 +49,12 @@ export default async function HomeSectionFive() {
           </Link>
         </div>
       </div>
-      {data.map((product) => {
+      {data.map((product, i) => {
         const bgColor = ["bg-[", product.theme_color, "]", " py-[20px] "].join(
           "",
         );
         return (
-          <div className={bgColor}>
+          <div className={bgColor} key={i}>
             <div className="relative flex items-center justify-center">
               <Image
                 width={300}
