@@ -1,32 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
 
 export function Sec4Skeleton() {
   return <div>skeleton</div>;
 }
 
 export function SecFiveSkeleton() {
-  const [windowSize, setWindowSize] = useState();
-
-  useEffect(() => {
-    setWindowSize(window.innerWidth);
-    function setNewWindowSize(e) {
-      setWindowSize(window.innerWidth);
-    }
-
-    window.addEventListener("resize", setNewWindowSize);
-
-    return () => {
-      window.removeEventListener("resize", setNewWindowSize);
-    };
-  }, []);
-
   return (
-    <div>
-      {windowSize >= 768 ? <Sec5LgSkeleton /> : <Sec5SmSkeleton />}
-    </div>
+    <>
+      <Sec5LgSkeleton />
+      <Sec5SmSkeleton />
+    </>
   );
 }
 
@@ -67,5 +52,16 @@ function Sec5LgSkeleton() {
 }
 
 function Sec5SmSkeleton() {
-  return <div className="bg-red-500">hello secThreeCates</div>;
+  return (
+    <div className="relative block md:hidden h-[400px] w-full bg-gradient-to-tr from-[#000000] to-[#F9F9F9]">
+      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
+        <Image
+          width={200}
+          height={200}
+          alt="gear loader"
+          src={"/icons/gear-loader.svg"}
+        />
+      </div>
+    </div>
+  );
 }

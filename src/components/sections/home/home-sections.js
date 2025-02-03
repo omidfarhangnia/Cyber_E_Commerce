@@ -6,7 +6,7 @@ import { useGSAP } from "@gsap/react";
 import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
-import { Sec4Skeleton } from "../skeletons/home-skeletons";
+import { Sec4Skeleton } from "../../skeletons/home-skeletons";
 import { getSelectedProducts, ShowData } from "@/actions/data";
 
 export function HomeSec1() {
@@ -312,7 +312,7 @@ export function HomeSec3() {
                   key={itemIndex}
                   href={secThreeCates[itemIndex].url}
                 >
-                  <div className="category--container relative">
+                  <div className="relative">
                     <div className="window--parts absolute right-0 top-0 h-[50%] w-[50%] rounded-tr-[20px] bg-[#0e0e0e] opacity-0"></div>
                     <div className="window--parts absolute left-0 top-0 h-[50%] w-[50%] rounded-tl-[20px] bg-[#2A2A2A] opacity-0"></div>
                     <div className="window--parts absolute bottom-0 left-0 h-[50%] w-[50%] rounded-bl-[20px] bg-[#575757] opacity-0"></div>
@@ -404,91 +404,181 @@ async function SelectedProducts({ selectedStatus }) {
 }
 
 export function ResponsiveSec5({ data }) {
-  const [windowSize, setWindowSize] = useState();
-
-  useEffect(() => {
-    setWindowSize(window.innerWidth);
-    function setNewWindowSize(e) {
-      setWindowSize(window.innerWidth);
-    }
-
-    window.addEventListener("resize", setNewWindowSize);
-
-    return () => {
-      window.removeEventListener("resize", setNewWindowSize);
-    };
-  }, []);
-
   return (
-    <div className="bg-blue-400">
-      <h1>hello there</h1>
-      {windowSize >= 768 ? (
+    <>
+      <div className="hidden md:block">
         <Sec5LgDevice data={data} />
-      ) : (
-        <Sec5SmDevice data={data} />
-      )}
-    </div>
-  );
-}
-
-function Sec5SmDevice({ data }) {
-  const [selectedPost, setSelectedPost] = useState(1);
-  return (
-    // <div>
-    //   <input
-    //     type="number"
-    //     min={1}
-    //     max={4}
-    //     onChange={(e) => {
-    //       setSelectedPost(e.target.value);
-    //     }}
-    //   />
-    //   <div>{data[selectedPost - 1].title}</div>
-    // </div>
-
-    <div className="relative h-[400px] w-full bg-gradient-to-tr from-[#000000] to-[#F9F9F9]">
-      <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
-        <video src="/icons/test.webm" autoPlay loop />
       </div>
-    </div>
+      <div className="block md:hidden">
+        <Sec5SmDevice data={data} />
+      </div>
+    </>
   );
 }
 
-const skeletonMap = [0, 1, 2, 3];
 function Sec5LgDevice({ data }) {
   return (
-    // <div className="hidden items-center justify-center bg-[#F9F9F9] md:flex">
-    //   <div className="flex max-w-[2000px] flex-wrap items-center justify-center">
-    //     {skeletonMap.map((skeleton) => {
-    //       return (
-    //         <div key={skeleton} className="w-[50%] py-[30px] lg:w-[25%]">
-    //           <div className="flex flex-col items-center justify-center px-[20px] py-[30px]">
-    //             <div className="skeleton--animation w-[60%] rounded-[30px] border-[5px] border-solid border-[#C7CDD2]">
-    //               <Image
-    //                 width={200}
-    //                 height={200}
-    //                 alt="img logo"
-    //                 src={"/images/skeleton-img.svg"}
-    //                 className="skeleton--img"
-    //               />
-    //             </div>
-    //             <div className="skeleton--animation mt-[30px] h-[30px] w-[80%] rounded-full bg-[#222222]"></div>
-    //             <div className="skeleton--animation mt-[20px] flex h-[50px] w-[70%] flex-wrap justify-between">
-    //               <div className="h-[10px] w-[50%] rounded-full bg-[#767676]"></div>
-    //               <div className="h-[10px] w-[30%] rounded-full bg-[#767676]"></div>
-    //               <div className="h-[10px] w-[90%] rounded-full bg-[#767676]"></div>
-    //               <div className="h-[10px] w-[20%] rounded-full bg-[#767676]"></div>
-    //               <div className="h-[10px] w-[70%] rounded-full bg-[#767676]"></div>
-    //             </div>
-    //             <div className="skeleton--animation mt-[20px] h-[50px] w-[50%] max-w-[200px] rounded-full bg-[#C7CDD2]"></div>
-    //           </div>
-    //         </div>
-    //       );
-    //     })}
-    //   </div>
-    // </div>
-    <div className="h-[400px] w-full bg-gradient-to-tr from-[#2C2C2C] to-[#F9F9F9]">
-      lsls
+    <div className="flex flex-wrap justify-center bg-gradient-to-r from-white from-0% to-[#2C2C2C] to-[60%]">
+      {data.map((product) => {
+        const bgColor = [
+          "bg-[",
+          product.theme_color,
+          "]",
+          " lg:w-[25%] w-[50%] max-w-[400px]",
+        ].join("");
+        return (
+          <div className={bgColor} key={product.id}>
+            <div
+              className={`relative flex items-center ${product.id === 4 ? "justify-end" : "justify-center"} w-full`}
+            >
+              <Image
+                width={350}
+                height={350}
+                alt="popular image"
+                className={`object-contain ${product.id === 4 && "object-right"} h-[300px] w-[70%]`}
+                src={product.imgurl}
+              />
+            </div>
+            <div className="flex flex-col items-center px-[32px] pb-[30px] pt-[15px] lg:py-[54px]">
+              <h3
+                className={`select-none text-center text-[23px] lg:text-start lg:text-[30px]`}
+              >
+                {product.title}
+              </h3>
+              <p className="mb-[15px] mt-[25px] w-full overflow-hidden overflow-ellipsis text-nowrap text-justify text-[15px] font-medium text-[#909090]">
+                {product.description}
+              </p>
+              <Link href={"/"}>
+                <button className="black--btn relative">Shop Now</button>
+              </Link>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+const productAnimeTl = new gsap.timeline();
+const initialPostsNum = [3, 0, 1];
+
+function Sec5SmDevice({ data }) {
+  const [postsNum, setPostsNum] = useState(initialPostsNum);
+
+  const prevBg = ["bg-[", data[postsNum[0]].theme_color, "]"].join("");
+  const currentBg = ["bg-[", data[postsNum[1]].theme_color, "]"].join("");
+  const nextBg = ["bg-[", data[postsNum[2]].theme_color, "]"].join("");
+
+  useEffect(() => {
+    productAnimeTl.clear();
+    productAnimeTl
+      .set(".productLoader--parts", { opacity: 1 })
+      .to(".productLoader--parts", {
+        opacity: 0,
+        filter: "blur(100px)",
+        stagger: {
+          each: 0.05,
+          ease: "linear",
+          from: "end",
+        },
+        delay: 0.2,
+      })
+      .set(".productLoader--parts", { filter: "none" })
+      .set(".productLoader--container", { display: "none" });
+  }, [postsNum]);
+
+  function playCategoryAnime(dir) {
+    if (productAnimeTl.isActive()) return;
+    productAnimeTl.set(".productLoader--container", { display: "block" });
+    productAnimeTl.to(".productLoader--parts", {
+      opacity: 1,
+      stagger: {
+        each: 0.05,
+        ease: "linear",
+      },
+      onComplete: () => setNewPostsNum(dir),
+    });
+  }
+
+  function setNewPostsNum(dir) {
+    let newItems;
+    if (dir === "next") {
+      newItems = postsNum.map((item) => {
+        return item === 3 ? 0 : (item = item + 1);
+      });
+    } else {
+      newItems = postsNum.map((item) => {
+        return item === 0 ? 3 : (item = item - 1);
+      });
+    }
+    setPostsNum(newItems);
+  }
+
+  return (
+    <div className={`relative overflow-hidden ${currentBg}`}>
+      <div className="productLoader--container absolute left-0 top-0 z-10 h-full w-full rotate-[135deg] scale-[3] blur-[.15px]">
+        <div className="productLoader--parts absolute right-0 top-0 h-[50%] w-[50%] bg-[#0e0e0e] opacity-0"></div>
+        <div className="productLoader--parts absolute left-0 top-0 h-[50%] w-[50%] bg-[#2A2A2A] opacity-0"></div>
+        <div className="productLoader--parts absolute bottom-0 left-0 h-[50%] w-[50%] bg-[#575757] opacity-0"></div>
+        <div className="productLoader--parts absolute bottom-0 right-0 h-[50%] w-[50%] bg-[#7b7b7b] opacity-0"></div>
+      </div>
+      <div className="min-h-[650px]">
+        <div
+          className={`relative flex items-center ${data[postsNum[1]].id === 4 ? "justify-end" : "justify-center"} w-full`}
+        >
+          <Image
+            width={350}
+            height={350}
+            alt="popular image"
+            className={`object-contain ${data[postsNum[1]].id === 4 && "object-right"} h-[300px] w-[70%]`}
+            src={data[postsNum[1]].imgurl}
+          />
+        </div>
+        <div className="flex flex-col items-center px-[32px] pb-[30px] pt-[15px] lg:py-[54px]">
+          <h3
+            className={`${data[postsNum[1]].id > 2 && "text-white"} select-none text-center text-[23px] lg:text-start lg:text-[30px]`}
+          >
+            {data[postsNum[1]].title}
+          </h3>
+          <p
+            className={`${data[postsNum[1]].id > 2 && "text-[#c9c9c9]"} mb-[15px] mt-[25px] w-full text-justify text-[15px] font-medium text-[#909090]`}
+          >
+            {data[postsNum[1]].description}
+          </p>
+          <Link href={"/"}>
+            <button
+              className={`${data[postsNum[1]].id > 2 ? "white--btn" : "black--btn"} relative`}
+            >
+              Shop Now
+            </button>
+          </Link>
+        </div>
+      </div>
+      <div className="absolute bottom-0 flex h-[50px] w-full justify-between">
+        <button
+          onClick={() => playCategoryAnime("prev")}
+          className={`${prevBg} prev--catBtn w-[20%] rounded-r-full px-[3%]`}
+        >
+          <Image
+            width={32}
+            height={32}
+            src={"/icons/category-left-arrow.svg"}
+            alt="left arrow category"
+          />
+        </button>
+        <button
+          onClick={() => playCategoryAnime("next")}
+          className={`${nextBg} next--catBtn w-[20%] rounded-l-full px-[3%]`}
+        >
+          <Image
+            width={32}
+            height={32}
+            className="ml-auto"
+            src={"/icons/category-right-arrow.svg"}
+            alt="left arrow category"
+          />
+        </button>
+      </div>
     </div>
   );
 }

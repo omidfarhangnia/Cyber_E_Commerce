@@ -7,8 +7,8 @@ module.exports = {
   ],
   safelist: [
     "bg-[#FFFFFF]",
-    "bg-[#F9F9F9]",
-    "bg-[#EAEAEA]",
+    "bg-[#d8d8d8]",
+    "bg-[#696969]",
     "bg-[#2C2C2C]"
   ],
   theme: {
