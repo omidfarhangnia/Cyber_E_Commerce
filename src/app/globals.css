@@ -68,6 +68,43 @@
   .skeleton--animation:nth-child(4) {
     animation-delay: 0.9s;
   }
+
+  @keyframes productAnime {
+    0% {
+      opacity: 1;
+    }
+
+    25% {
+      opacity: 0;
+    }
+
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
+  div[class^="product--window--parts"] {
+    animation-name: productAnime;
+    animation-duration: 8s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+  }
+
+  .product--window--parts__1 {
+    animation-delay: 2s;
+  }
+  .product--window--parts__2 {
+    animation-delay: 4s;
+  }
+  .product--window--parts__3 {
+    animation-delay: 6s;
+  }
+  .product--window--parts__4 {
+    animation-delay: 8s;
+  }
 }
 
 @layer utilities {

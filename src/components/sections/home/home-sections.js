@@ -341,65 +341,39 @@ export function HomeSec3() {
   );
 }
 
-const status = [
-  { id: 0, name: "Free Shipping", label: "freeShipping", status: "" },
-  { id: 1, name: "Bestseller", label: "bestSeller", status: "bestSeller" },
-  {
-    id: 2,
-    name: "Highest Warranty period",
-    label: "highestWarrantyPeriod",
-    status: "highestWarrantyPeriod",
-  },
-];
-
-export function HomeSec4() {
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const router = useRouter();
-  const selectedStatus = searchParams.get("selected-status")?.toString() || "";
-
-  function handleClick(status) {
-    const params = new URLSearchParams(searchParams);
-
-    if (status === "") {
-      params.delete("selected-status");
-    } else {
-      params.set("selected-status", status);
-    }
-
-    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
-  }
+export function ResponsiveSec4({ data }) {
+  const [selectedStatus, setSelectedStatus] = useState("highestDiscount");
 
   return (
-    <div className="bg-white px-[16px] py-[56px]">
-      <div className="flex items-center justify-between">
-        {status.map((member) => {
-          return (
-            <div
-              key={member.id}
-              onClick={() => handleClick(member.status)}
-              className={`cursor-pointer select-none border-b-2 border-solid font-medium transition-all hover:border-b-black ${member.status === selectedStatus ? "border-b-black text-black" : "border-b-transparent text-[#8B8B8B]"}`}
-            >
-              {member.name}
-            </div>
-          );
-        })}
+    <>
+      <div className="relative min-h-[60vh] bg-[#ffffff] px-[16px] py-[55px]">
+        <div className="absolute left-0 top-0 z-10 h-full w-full bg-[#F6F6F6]">
+          <div className="product--window--parts__1 absolute right-0 top-0 h-[50%] w-[50%] bg-[#0e0e0e]"></div>
+          <div className="product--window--parts__2 absolute left-0 top-0 h-[50%] w-[50%] bg-[#2A2A2A]"></div>
+          <div className="product--window--parts__3 absolute bottom-0 left-0 h-[50%] w-[50%] bg-[#575757]"></div>
+          <div className="product--window--parts__4 absolute bottom-0 right-0 h-[50%] w-[50%] bg-[#7b7b7b]"></div>
+        </div>
+        <div className="mb-[30px] flex gap-[30px]">
+          <button onClick={() => setSelectedStatus("highestDiscount")}>
+            highest discount
+          </button>
+          <button onClick={() => setSelectedStatus("highestScore")}>
+            highest score
+          </button>
+          <button onClick={() => setSelectedStatus("bestSeller")}>
+            best seller
+          </button>
+          <button onClick={() => setSelectedStatus("freeShipping")}>
+            free shipping
+          </button>
+        </div>
+        <div>
+          {data[selectedStatus].map((product) => {
+            return <div key={product.id}>{product.name}</div>;
+          })}
+        </div>
       </div>
-      <Suspense fallback={<Sec4Skeleton />}>
-        <SelectedProducts selectedStatus={selectedStatus} />
-      </Suspense>
-    </div>
-  );
-}
-
-async function SelectedProducts({ selectedStatus }) {
-  const products = await getSelectedProducts(selectedStatus);
-
-  return (
-    <div>
-      products ===
-      {JSON.stringify(products)}
-    </div>
+    </>
   );
 }
 
@@ -418,7 +392,7 @@ export function ResponsiveSec5({ data }) {
 
 function Sec5LgDevice({ data }) {
   return (
-    <div className="flex flex-wrap justify-center bg-gradient-to-r from-white from-0% to-[#2C2C2C] to-[60%]">
+    <div className="flex flex-wrap justify-center bg-gradient-to-r from-[#ffffff] from-30% to-[#2C2C2C] to-[60%]">
       {data.map((product) => {
         const bgColor = [
           "bg-[",
