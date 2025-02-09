@@ -222,15 +222,15 @@ const secThreeCates = [
   },
 ];
 
-const categoryTL = gsap.timeline();
+const categoryTl = gsap.timeline();
 let initialItems = [0, 1, 2];
 
 export function HomeSec3() {
   const [selectedItem, setSelectedItem] = useState(initialItems);
 
   useEffect(() => {
-    categoryTL.clear();
-    categoryTL
+    categoryTl.clear();
+    categoryTl
       .set(".window--parts", { opacity: 1 })
       .to(".window--parts", {
         opacity: 0,
@@ -260,8 +260,8 @@ export function HomeSec3() {
   }
 
   function playCategoryAnime(dir) {
-    if (categoryTL.isActive()) return;
-    categoryTL.to(".window--parts", {
+    if (categoryTl.isActive()) return;
+    categoryTl.to(".window--parts", {
       opacity: 1,
       stagger: {
         each: 0.05,
@@ -341,35 +341,90 @@ export function HomeSec3() {
   );
 }
 
+const productStatusTl = new gsap.timeline();
+
 export function ResponsiveSec4({ data }) {
   const [selectedStatus, setSelectedStatus] = useState("highestDiscount");
 
+  function playProductUnderlineAnime(newStatus) {
+    if (productAnimeTl.isActive()) return;
+    productAnimeTl
+      .to(`.${selectedStatus}--underline`, {
+        scaleX: 0,
+        duration: 0.1,
+      })
+      .to(`.${newStatus}--underline`, {
+        scale: 1,
+        duration: 0.1,
+      })
+      .set(`.${selectedStatus}--underline`, {
+        delay: 0.005,
+        onComplete: () => {
+          setSelectedStatus(newStatus);
+          productStatusTl.clear();
+        },
+      });
+  }
+
   return (
     <>
-      <div className="relative min-h-[60vh] bg-[#ffffff] px-[16px] py-[55px]">
-        <div className="absolute left-0 top-0 z-10 h-full w-full bg-[#F6F6F6]">
-          <div className="product--window--parts__1 absolute right-0 top-0 h-[50%] w-[50%] bg-[#0e0e0e]"></div>
-          <div className="product--window--parts__2 absolute left-0 top-0 h-[50%] w-[50%] bg-[#2A2A2A]"></div>
-          <div className="product--window--parts__3 absolute bottom-0 left-0 h-[50%] w-[50%] bg-[#575757]"></div>
-          <div className="product--window--parts__4 absolute bottom-0 right-0 h-[50%] w-[50%] bg-[#7b7b7b]"></div>
+      <div className="bg-[#ffffff] px-[16px] py-[55px]">
+        <div className="mb-[32px] flex flex-wrap items-center justify-start gap-x-[30px] gap-y-[10px]">
+          <button
+            className={`relative w-[40%] text-start font-semibold capitalize ${selectedStatus !== "highestDiscount" && "text-[#8B8B8B]"}`}
+            onClick={() => playProductUnderlineAnime("highestDiscount")}
+          >
+            <div className="relative inline">
+              highest discount
+              <div
+                className={`highestDiscount--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "highestDiscount" && "scale-x-0"}`}
+              ></div>
+            </div>
+          </button>
+          <button
+            className={`relative w-[40%] text-start font-semibold capitalize ${selectedStatus !== "highestScore" && "text-[#8B8B8B]"}`}
+            onClick={() => playProductUnderlineAnime("highestScore")}
+          >
+            <div className="relative inline">
+              highest score
+              <div
+                className={`highestScore--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "highestScore" && "scale-x-0"}`}
+              ></div>
+            </div>
+          </button>
+          <button
+            className={`relative w-[40%] text-start font-semibold capitalize ${selectedStatus !== "bestSeller" && "text-[#8B8B8B]"}`}
+            onClick={() => playProductUnderlineAnime("bestSeller")}
+          >
+            <div className="relative inline">
+              best seller
+              <div
+                className={`bestSeller--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "bestSeller" && "scale-x-0"}`}
+              ></div>
+            </div>
+          </button>
+          <button
+            className={`relative w-[40%] text-start font-semibold capitalize ${selectedStatus !== "freeShipping" && "text-[#8B8B8B]"}`}
+            onClick={() => playProductUnderlineAnime("freeShipping")}
+          >
+            <div className="relative inline">
+              free shipping
+              <div
+                className={`freeShipping--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "freeShipping" && "scale-x-0"}`}
+              ></div>
+            </div>
+          </button>
         </div>
-        <div className="mb-[30px] flex gap-[30px]">
-          <button onClick={() => setSelectedStatus("highestDiscount")}>
-            highest discount
-          </button>
-          <button onClick={() => setSelectedStatus("highestScore")}>
-            highest score
-          </button>
-          <button onClick={() => setSelectedStatus("bestSeller")}>
-            best seller
-          </button>
-          <button onClick={() => setSelectedStatus("freeShipping")}>
-            free shipping
-          </button>
-        </div>
-        <div>
+        <div className="flex flex-wrap">
           {data[selectedStatus].map((product) => {
-            return <div key={product.id}>{product.name}</div>;
+            return (
+              <div key={product.id}>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+              </div>
+            );
           })}
         </div>
       </div>

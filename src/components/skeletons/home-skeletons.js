@@ -3,7 +3,16 @@
 import Image from "next/image";
 
 export function Sec4Skeleton() {
-  return <div></div>;
+  return (
+    <div className="relative min-h-[60vh]">
+      {/* <div className="absolute left-0 top-0 z-10 h-full w-full bg-[#F6F6F6]">
+        <div className="product--window--parts__1 absolute right-0 top-0 h-[50%] w-[50%] bg-[#0e0e0e]"></div>
+        <div className="product--window--parts__2 absolute left-0 top-0 h-[50%] w-[50%] bg-[#2A2A2A]"></div>
+        <div className="product--window--parts__3 absolute bottom-0 left-0 h-[50%] w-[50%] bg-[#575757]"></div>
+        <div className="product--window--parts__4 absolute bottom-0 right-0 h-[50%] w-[50%] bg-[#7b7b7b]"></div>
+      </div> */}
+    </div>
+  );
 }
 
 export function Sec5Skeleton() {
