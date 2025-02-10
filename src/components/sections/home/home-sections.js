@@ -368,67 +368,163 @@ export function ResponsiveSec4({ data }) {
 
   return (
     <>
-      <div className="bg-[#ffffff] px-[16px] py-[55px]">
-        <div className="mb-[32px] flex flex-wrap items-center justify-start gap-x-[30px] gap-y-[10px]">
-          <button
-            className={`relative w-[40%] text-start font-semibold capitalize ${selectedStatus !== "highestDiscount" && "text-[#8B8B8B]"}`}
-            onClick={() => playProductUnderlineAnime("highestDiscount")}
-          >
-            <div className="relative inline">
-              highest discount
-              <div
-                className={`highestDiscount--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "highestDiscount" && "scale-x-0"}`}
-              ></div>
-            </div>
-          </button>
-          <button
-            className={`relative w-[40%] text-start font-semibold capitalize ${selectedStatus !== "highestScore" && "text-[#8B8B8B]"}`}
-            onClick={() => playProductUnderlineAnime("highestScore")}
-          >
-            <div className="relative inline">
-              highest score
-              <div
-                className={`highestScore--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "highestScore" && "scale-x-0"}`}
-              ></div>
-            </div>
-          </button>
-          <button
-            className={`relative w-[40%] text-start font-semibold capitalize ${selectedStatus !== "bestSeller" && "text-[#8B8B8B]"}`}
-            onClick={() => playProductUnderlineAnime("bestSeller")}
-          >
-            <div className="relative inline">
-              best seller
-              <div
-                className={`bestSeller--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "bestSeller" && "scale-x-0"}`}
-              ></div>
-            </div>
-          </button>
-          <button
-            className={`relative w-[40%] text-start font-semibold capitalize ${selectedStatus !== "freeShipping" && "text-[#8B8B8B]"}`}
-            onClick={() => playProductUnderlineAnime("freeShipping")}
-          >
-            <div className="relative inline">
-              free shipping
-              <div
-                className={`freeShipping--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "freeShipping" && "scale-x-0"}`}
-              ></div>
-            </div>
-          </button>
-        </div>
-        <div className="flex flex-wrap">
-          {data[selectedStatus].map((product) => {
-            return (
-              <div key={product.id}>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
+      <div className="flex w-full items-center justify-center bg-[#ffffff]">
+        <div className="max-w-[1300px] px-[16px] py-[55px]">
+          <div className="mb-[32px] flex flex-wrap items-center justify-start gap-x-[30px] gap-y-[10px]">
+            <button
+              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0 ${selectedStatus !== "highestDiscount" && "text-[#8B8B8B]"}`}
+              onClick={() => playProductUnderlineAnime("highestDiscount")}
+            >
+              <div className="relative inline">
+                highest discount
+                <div
+                  className={`highestDiscount--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "highestDiscount" && "scale-x-0"}`}
+                ></div>
               </div>
-            );
-          })}
+            </button>
+            <button
+              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0 ${selectedStatus !== "highestScore" && "text-[#8B8B8B]"}`}
+              onClick={() => playProductUnderlineAnime("highestScore")}
+            >
+              <div className="relative inline">
+                highest score
+                <div
+                  className={`highestScore--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "highestScore" && "scale-x-0"}`}
+                ></div>
+              </div>
+            </button>
+            <button
+              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0 ${selectedStatus !== "bestSeller" && "text-[#8B8B8B]"}`}
+              onClick={() => playProductUnderlineAnime("bestSeller")}
+            >
+              <div className="relative inline">
+                best seller
+                <div
+                  className={`bestSeller--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "bestSeller" && "scale-x-0"}`}
+                ></div>
+              </div>
+            </button>
+            <button
+              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0 ${selectedStatus !== "freeShipping" && "text-[#8B8B8B]"}`}
+              onClick={() => playProductUnderlineAnime("freeShipping")}
+            >
+              <div className="relative inline">
+                free shipping
+                <div
+                  className={`freeShipping--underline absolute bottom-[-5px] left-0 h-[2px] w-full bg-[#000000] ${selectedStatus !== "freeShipping" && "scale-x-0"}`}
+                ></div>
+              </div>
+            </button>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-[10px] gap-y-[15px]">
+            {data[selectedStatus].map((product) => {
+              return <Product key={product.id} product={product} />;
+            })}
+          </div>
         </div>
       </div>
     </>
+  );
+}
+
+function Product({ product }) {
+  const [isLiked, setIsLiked] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+
+  function handleLikeProduct() {
+    // auth condition
+    setIsLiked(!isLiked);
+  }
+
+  function handleSaveProduct() {
+    // auth condition
+    setIsSaved(!isSaved);
+  }
+
+  function handleBuyProduct() {
+    // auth condition
+  }
+
+  return (
+    <div className="flex w-[90%] min-w-[160px] max-w-[240px] flex-col items-center rounded-[9px] bg-[#F6F6F6] px-[10px] py-[25px] md:max-w-[300px] md:px-[20px]">
+      <div className="mb-[15px] flex w-full items-center justify-between">
+        <div className="cursor-pointer" onClick={handleSaveProduct}>
+          <Image
+            width={32}
+            height={32}
+            alt="save icon"
+            src={
+              isSaved ? "/icons/save-active.svg" : "/icons/save-inactive.svg"
+            }
+          />
+        </div>
+        <div className="cursor-pointer" onClick={handleLikeProduct}>
+          <Image
+            width={32}
+            height={32}
+            alt="like icon"
+            src={
+              isLiked ? "/icons/like-active.svg" : "/icons/like-inactive.svg"
+            }
+          />
+        </div>
+      </div>
+      <Link
+        href={`./product/${product.id}`}
+        className="flex flex-col items-center"
+      >
+        <div className="mb-[15px]">
+          <Image
+            width={160}
+            height={160}
+            className="rounded-[10px] md:h-[200px] md:w-[200px]"
+            alt="product image"
+            src={product.img_url}
+          />
+        </div>
+        <div>
+          <h3 className="w-[200px] overflow-hidden text-ellipsis text-nowrap text-center text-[18px] font-medium md:text-[24px]">
+            {product.name}
+          </h3>
+        </div>
+        <div>
+          {product.discount_percent === 0 ? (
+            <div className="my-[10px] text-[25px] font-bold md:text-[30px]">
+              ${product.price}
+            </div>
+          ) : (
+            <div className="flex items-center gap-[20px]">
+              <div className="relative my-[10px] font-bold opacity-[.8] md:text-[23]">
+                $
+                {Math.ceil(
+                  product.price +
+                    (product.price * product.discount_percent) / 100,
+                )}
+                <div className="absolute left-[-15%] top-[42%] h-[2px] w-[140%] rotate-[-10deg] bg-red-500"></div>
+              </div>
+              <div className="my-[10px] text-[25px] font-bold md:text-[30px]">
+                ${product.price}
+              </div>
+            </div>
+          )}
+        </div>
+      </Link>
+      <button
+        onClick={handleBuyProduct}
+        className="flex items-center gap-[5px] rounded-full bg-black px-[25px] py-[10px] text-white md:justify-center md:px-[35px] md:py-[5px]"
+      >
+        <span className="font-semiboldbold text-[20px] md:text-[22px]">
+          Buy Now
+        </span>
+        <Image
+          width={32}
+          height={32}
+          alt="product image"
+          className="md:h-[40px] md:w-[40px]"
+          src={"/icons/shopping-cart.svg"}
+        />
+      </button>
+    </div>
   );
 }
 
