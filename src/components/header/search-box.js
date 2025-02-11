@@ -18,7 +18,7 @@ export function handleSearchBoxAction(
   const tl = gsap.timeline();
   if (isSearchBoxOpened.current) {
     tl.to(".searchBox--container > div", {
-      y: "-60vh",
+      y: "-100vh",
       duration: 0.3,
       ease: "expo",
     })
@@ -32,7 +32,7 @@ export function handleSearchBoxAction(
         "<",
       )
       .set(".searchBox--container", {
-        bottom: "100%",
+        top: "-600%",
       })
       .set(".searchBox--container > div", {
         y: "0",
@@ -44,7 +44,7 @@ export function handleSearchBoxAction(
       });
   } else {
     tl.to(".searchBox--container", {
-      bottom: 0,
+      top: 0,
       duration: 0.5,
       ease: "expo",
     }).to(
@@ -105,7 +105,7 @@ export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
   }
 
   return (
-    <div className="searchBox--container fixed bottom-full z-50 h-[100vh] w-full bg-[rgba(0,0,0,0)]">
+    <div className="searchBox--container fixed top-[-600%] z-50 h-[100vh] w-full bg-[rgba(0,0,0,0)]">
       <div className="relative flex h-[60%] min-h-[450px] w-full flex-col items-center gap-[30px] rounded-b-[50%] bg-[#F6F6F6] pt-[7%]">
         <div
           className="absolute right-[20px] top-[20px]"
@@ -138,7 +138,7 @@ export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
             Search
           </button>
         </div>
-        <div className="w-[55%]">
+        <div className="w-[55%] max-w-[1000px]">
           <div className="flex items-center justify-between">
             <div className="flex select-none items-center gap-[10px]">
               <Image

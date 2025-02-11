@@ -6,7 +6,6 @@ import Burger from "@/components/header/burger";
 import { useEffect, useRef } from "react";
 import SearchBox from "@/components/header/search-box";
 import Footer from "@/components/footer/footer";
-// import PageChanger from "@/components/sections/page-changer";
 
 export default function Template({ children }) {
   const isBurgerPlayed = useRef(false);
@@ -29,7 +28,6 @@ export default function Template({ children }) {
         isAnimePlaying={isAnimePlaying}
       />
       {children}
-      {/* <PageChanger /> */}
       <Footer />
       <Burger isBurgerPlayed={isBurgerPlayed} isAnimePlaying={isAnimePlaying} />
       <SearchBox
