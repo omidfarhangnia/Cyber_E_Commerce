@@ -72,49 +72,51 @@ export function handleBurgerAction(isBurgerPlayed, isAnimePlaying) {
 export default function Header(props) {
   return (
     <>
-      <div className="flex items-center justify-center bg-white">
-        <header className="grid w-full max-w-[1150px] grid-cols-2 content-between items-center px-5 py-8 md:px-10 lg:grid-cols-12 lg:px-4">
-          <div className="lg:col-start-1 lg:col-end-2">
-            <Link href={"/"}>
-              <Image
-                width={90}
-                height={30}
-                className="h-auto w-auto"
-                src={"/logo/black-logo.svg"}
-                alt="logo image"
-                priority
-              />
-            </Link>
+      <div>
+        <div className="flex items-center justify-center bg-white">
+          <header className="grid w-full max-w-[1150px] grid-cols-2 content-between items-center px-5 py-8 md:px-10 lg:grid-cols-12 lg:px-4">
+            <div className="lg:col-start-1 lg:col-end-2">
+              <Link href={"/"}>
+                <Image
+                  width={90}
+                  height={30}
+                  className="h-auto w-auto"
+                  src={"/logo/black-logo.svg"}
+                  alt="logo image"
+                  priority
+                />
+              </Link>
+            </div>
+            <NavLinks {...props} />
+          </header>
+        </div>
+        <div className="hidden bg-[#2E2E2E] lg:block">
+          <div className="mx-auto flex max-w-[1128px] items-center justify-between px-[20px]">
+            {categories.map((category) => {
+              return (
+                <div className="relative" key={category.id}>
+                  <Link
+                    href={category.url}
+                    className="group mx-auto flex items-center gap-[6px] transition-all hover:translate-y-[-2px]"
+                  >
+                    <Image
+                      width={30}
+                      height={30}
+                      alt="link icons"
+                      className="opacity-50 group-hover:opacity-80"
+                      src={category.svg}
+                    />
+                    <span className="py-[7px] font-medium leading-[32px] text-[#969696] group-hover:text-[#e5e5e5]">
+                      {category.label}
+                    </span>
+                  </Link>
+                  {category.id !== 5 && (
+                    <div className="absolute right-[-36px] top-[8px] h-[30px] w-[2px] bg-[#969696]"></div>
+                  )}
+                </div>
+              );
+            })}
           </div>
-          <NavLinks {...props} />
-        </header>
-      </div>
-      <div className="hidden bg-[#2E2E2E] lg:block">
-        <div className="mx-auto flex max-w-[1128px] items-center justify-between px-[20px]">
-          {categories.map((category) => {
-            return (
-              <div className="relative" key={category.id}>
-                <Link
-                  href={category.url}
-                  className="group mx-auto flex items-center gap-[6px] transition-all hover:translate-y-[-2px]"
-                >
-                  <Image
-                    width={30}
-                    height={30}
-                    alt="link icons"
-                    className="opacity-50 group-hover:opacity-80"
-                    src={category.svg}
-                  />
-                  <span className="py-[7px] font-medium leading-[32px] text-[#969696] group-hover:text-[#e5e5e5]">
-                    {category.label}
-                  </span>
-                </Link>
-                {category.id !== 5 && (
-                  <div className="absolute right-[-36px] top-[8px] h-[30px] w-[2px] bg-[#969696]"></div>
-                )}
-              </div>
-            );
-          })}
         </div>
       </div>
     </>

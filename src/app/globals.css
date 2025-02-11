@@ -105,6 +105,27 @@
   .product--window--parts__4 {
     animation-delay: 8s;
   }
+
+  .linearGradient--bg {
+    background: linear-gradient(130deg, #000428, #004e92);
+    background-size: 200% 200%;
+
+    -webkit-animation: linearGradient--anime 20s ease infinite;
+    -moz-animation: linearGradient--anime 20s ease infinite;
+    animation: linearGradient--anime 20s ease infinite;
+  }
+  
+  @keyframes linearGradient--anime {
+    0% {
+      background-position: 10% 0%;
+    }
+    50% {
+      background-position: 91% 100%;
+    }
+    100% {
+      background-position: 10% 0%;
+    }
+  }
 }
 
 @layer utilities {
