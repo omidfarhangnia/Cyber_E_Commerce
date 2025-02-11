@@ -624,7 +624,7 @@ function Sec5LgDevice({ data }) {
             "bg-[",
             product.theme_color,
             "]",
-            " lg:w-[25%] w-[50%] max-w-[400px] devices",
+            " lg:w-[25%] w-[50%] flex flex-col justify-between max-w-[400px] devices",
           ].join("");
           return (
             <div className={bgColor} key={product.id}>
