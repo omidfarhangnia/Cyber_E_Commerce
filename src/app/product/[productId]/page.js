@@ -1,8 +1,10 @@
+import Product from "@/components/global_components";
 import { sql } from "@vercel/postgres";
 import Image from "next/image";
 import Link from "next/link";
+import { Suspense } from "react";
 
-async function getProductData(id) {
+async function fetchProductData(id) {
   try {
     const product = await sql`
     SELECT * FROM products
@@ -14,7 +16,7 @@ async function getProductData(id) {
   }
 }
 
-async function getProductSpec(id) {
+async function fetchProductSpec(id) {
   try {
     const specifiction = await sql`
         SELECT * FROM specification
@@ -26,7 +28,7 @@ async function getProductSpec(id) {
   }
 }
 
-async function getProductComments(id) {
+async function fetchProductComments(id) {
   try {
     const specifiction = await sql`
         SELECT * FROM comments
@@ -38,10 +40,33 @@ async function getProductComments(id) {
   }
 }
 
+async function fetchRelatedProducts(product) {
+  try {
+    const relatedProducts = await sql`
+        SELECT * FROM products
+        WHERE category = ${product.category} AND id != ${product.id}
+        LIMIT 4
+        `;
+    return relatedProducts.rows;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
+async function fetchQuestions(id) {
+  try {
+    const questions = await sql`
+        SELECT * FROM questions
+        WHERE product_id = ${id}
+        `;
+    return questions.rows;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
+
 export default async function Page({ params }) {
-  const product = await getProductData(params.productId);
-  const productSpec = await getProductSpec(params.productId);
-  const productComments = await getProductComments(params.productId);
+  const product = await fetchProductData(params.productId);
 
   if (product?.name === "") return <div>loading....</div>;
 
@@ -49,8 +74,18 @@ export default async function Page({ params }) {
     <div className="flex items-center justify-center bg-[#ffffff]">
       <div className="flex w-full max-w-[1150px] flex-col justify-between px-[15px] py-[40px]">
         <BreakCrumbs product={product} />
-        <Product product={product} productSpec={productSpec} />
-        <Reviews product={product} productComments={productComments} />
+        <Suspense fallback={<div>loading...</div>}>
+          <ProductData product={product} />
+        </Suspense>
+        <Suspense fallback={<div>loading...</div>}>
+          <Reviews product={product} />
+        </Suspense>
+        <Suspense fallback={<div>loading...</div>}>
+          <Questions id={product.id} />
+        </Suspense>
+        <Suspense fallback={<div>loading...</div>}>
+          <RelatedProducts product={product} />
+        </Suspense>
       </div>
     </div>
   );
@@ -140,7 +175,9 @@ function BreakCrumbs({ product }) {
   );
 }
 
-function Product({ product, productSpec }) {
+async function ProductData({ product }) {
+  const productSpec = await fetchProductSpec(product.id);
+
   return (
     <div className="flex flex-wrap items-center justify-between gap-[20px]">
       <div className="flex w-full items-center justify-center md:w-[50%]">
@@ -182,22 +219,28 @@ function Product({ product, productSpec }) {
         <div className="mb-[30px] w-full">
           {productSpec.length !== 0 ? (
             <table className="overflow-x-auto border-[2px] border-solid border-black">
-              <tr className="h-[50px] text-start odd:bg-[#F4F4F4]">
-                <th className="border-r-solid w-[40%] border-r-2 border-r-black pl-[15px] text-start">
-                  title
-                </th>
-                <th className="pl-[10px] text-start">description</th>
-              </tr>
-              {productSpec.map((spec) => {
-                return (
-                  <tr className="odd:bg-[#F4F4F4]">
-                    <td className="border-r-solid w-[40%] border-r-2 border-r-black pl-[10px]">
-                      {spec.title}
-                    </td>
-                    <td className="p-[10px] text-center">{spec.description}</td>
-                  </tr>
-                );
-              })}
+              <thead>
+                <tr className="h-[50px] text-start odd:bg-[#F4F4F4]">
+                  <th className="border-r-solid w-[40%] border-r-2 border-r-black pl-[15px] text-start">
+                    title
+                  </th>
+                  <th className="pl-[10px] text-start">description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productSpec.map((spec, i) => {
+                  return (
+                    <tr key={i} className="odd:bg-[#F4F4F4]">
+                      <td className="border-r-solid w-[40%] border-r-2 border-r-black pl-[10px]">
+                        {spec.title}
+                      </td>
+                      <td className="p-[10px] text-center">
+                        {spec.description}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
           ) : (
             <div>
@@ -268,7 +311,9 @@ function Product({ product, productSpec }) {
   );
 }
 
-function Reviews({ product, productComments }) {
+async function Reviews({ product }) {
+  const productComments = await fetchProductComments(product.id);
+
   return (
     <div>
       <h3>Reviews</h3>
@@ -301,7 +346,7 @@ function Reviews({ product, productComments }) {
 function ProductComment({ comment }) {
   return (
     <div>
-      <div className="flex flex-wrap">
+      <div className="flex">
         <Image
           width={60}
           height={60}
@@ -326,6 +371,46 @@ function ProductComment({ comment }) {
           />
         </div>
       )}
+    </div>
+  );
+}
+
+async function RelatedProducts({ product }) {
+  const relatedProducts = await fetchRelatedProducts(product);
+
+  return (
+    <div className="flex flex-wrap">
+      {relatedProducts.map((product) => {
+        return <Product product={product} key={product.id} />;
+      })}
+    </div>
+  );
+}
+
+async function Questions({ id }) {
+  const questions = await fetchQuestions(id);
+
+  return (
+    <div>
+      {questions.length === 0 ? (
+        <div>there is no questions</div>
+      ) : (
+        questions.map((question) => {
+          return <ProductQuestion key={question.id} question={question} />;
+        })
+      )}
+    </div>
+  );
+}
+
+function ProductQuestion({ question }) {
+  return (
+    <div>
+      <div>
+        <div>{question.title}</div>
+        <div>{question.date}</div>
+      </div>
+      <p>{question.answer}</p>
     </div>
   );
 }
