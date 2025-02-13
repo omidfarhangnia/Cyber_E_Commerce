@@ -1,4 +1,4 @@
-import Product from "@/components/global_components";
+import { Product, ProductForm } from "@/components/global-components";
 import { sql } from "@vercel/postgres";
 import Image from "next/image";
 import Link from "next/link";
@@ -72,7 +72,7 @@ export default async function Page({ params }) {
 
   return (
     <div className="flex items-center justify-center bg-[#ffffff]">
-      <div className="flex w-full max-w-[1150px] flex-col justify-between px-[15px] py-[40px]">
+      <div className="flex w-full max-w-[1200px] flex-col justify-between px-[15px] py-[40px]">
         <BreakCrumbs product={product} />
         <Suspense fallback={<div>loading...</div>}>
           <ProductData product={product} />
@@ -91,7 +91,7 @@ export default async function Page({ params }) {
   );
 }
 
-function ProductStar({ score, id = "" }) {
+function ProductStar({ score, id = "", size = 40 }) {
   const starLength = new Array(5).fill(0);
   return (
     <div className="flex">
@@ -99,8 +99,8 @@ function ProductStar({ score, id = "" }) {
         return (
           <svg
             key={i}
-            width="40"
-            height="40"
+            width={size}
+            height={size}
             viewBox="0 0 24 24"
             fill="#FFB547"
             xmlns="http://www.w3.org/2000/svg"
@@ -315,23 +315,20 @@ async function Reviews({ product }) {
   const productComments = await fetchProductComments(product.id);
 
   return (
-    <div>
-      <h3>Reviews</h3>
-      <div>
-        <div>
-          <div>{product.score}</div>
-          <div>of {product.sales_num} reviews</div>
+    <div className="mb-[30px] mt-[120px] flex flex-col items-center">
+      <h3 className="my-[10px] text-center text-[24px] font-medium">Reviews</h3>
+      <div className="flex flex-col items-center justify-between">
+        <div className="mb-[10px] flex items-baseline justify-center gap-[5px]">
+          <div className="text-[56px]">{product.score}</div>
+          <div className="text-[#303030]"> of {product.sales_num} reviews</div>
         </div>
-        <ProductStar score={product.score} />
+        <ProductStar score={product.score} size={35} />
       </div>
-      <form action={"#"}>
-        <textarea />
-      </form>
-      <div>
+      <ProductForm id={product.id} />
+      <div className="w-full">
         {productComments.length === 0 ? (
-          <div>
-            <div>there is no comment</div>
-            <div>{product.id}</div>
+          <div className="flex min-h-[calc(200px_+_3vh)] w-full items-center justify-center rounded-[30px] bg-[#F4F4F4] text-[calc(18px_+_1vw)] font-bold text-[#4E4E4E]">
+            there is no comment
           </div>
         ) : (
           productComments.map((comment, i) => {
@@ -345,27 +342,34 @@ async function Reviews({ product }) {
 
 function ProductComment({ comment }) {
   return (
-    <div>
-      <div className="flex">
+    <div className="my-[30px] flex flex-col gap-[20px] rounded-[15px] bg-[#f4f4f4] p-[20px]">
+      <div className="flex flex-wrap items-center gap-[20px]">
         <Image
           width={60}
           height={60}
           alt="author image"
           src={comment.author_img}
+          className="box-content rounded-full border-[3px] border-solid border-black"
         />
-        <h6>{comment.author_name}</h6>
-        <div>{comment.score}</div>
-        <ProductStar score={comment.score} id={comment.id} />
+        <div>
+          <h6 className="text-[18px] font-medium">{comment.author_name}</h6>
+          <ProductStar score={comment.score} size={20} id={comment.id} />
+        </div>
       </div>
       <div>
-        <div>{comment.title}</div>
-        <p>{comment.description}</p>
+        <div className="mb-[10px] text-[20px] font-semibold">
+          {comment.title}
+        </div>
+        <p className="text-justify text-[14px] text-[#212121]">
+          {comment.description}
+        </p>
       </div>
       {comment.product_img !== null && (
-        <div>
+        <div className="w-full">
           <Image
-            width={100}
-            height={100}
+            width={250}
+            height={250}
+            className="mx-auto"
             alt="product image"
             src={comment.product_img}
           />
@@ -379,10 +383,15 @@ async function RelatedProducts({ product }) {
   const relatedProducts = await fetchRelatedProducts(product);
 
   return (
-    <div className="flex flex-wrap">
-      {relatedProducts.map((product) => {
-        return <Product product={product} key={product.id} />;
-      })}
+    <div className="w-full">
+      <h3 className="my-[10px] mb-[30px] text-center text-[24px] font-medium">
+        related products
+      </h3>
+      <div className="flex flex-wrap items-center justify-center gap-x-[10px] gap-y-[15px] [&>div]:lg:w-[24%]">
+        {relatedProducts.map((product) => {
+          return <Product product={product} key={product.id} />;
+        })}
+      </div>
     </div>
   );
 }
@@ -391,9 +400,15 @@ async function Questions({ id }) {
   const questions = await fetchQuestions(id);
 
   return (
-    <div>
+    <div className="mb-[60px]">
+      <h3 className="my-[10px] text-center text-[24px] font-medium">
+        Questions
+      </h3>
+
       {questions.length === 0 ? (
-        <div>there is no questions</div>
+        <div className="flex min-h-[calc(200px_+_3vh)] w-full items-center justify-center rounded-[30px] bg-[#F4F4F4] text-[calc(18px_+_1vw)] font-bold text-[#4E4E4E]">
+          there is no question
+        </div>
       ) : (
         questions.map((question) => {
           return <ProductQuestion key={question.id} question={question} />;
@@ -405,12 +420,14 @@ async function Questions({ id }) {
 
 function ProductQuestion({ question }) {
   return (
-    <div>
-      <div>
-        <div>{question.title}</div>
-        <div>{question.date}</div>
+    <div className="my-[30px] flex flex-col gap-[20px] rounded-[15px] bg-[#f4f4f4] p-[20px]">
+      <div className="flex flex-col">
+        <div className="text-[18px] font-medium">{question.title}</div>
+        <div className="self-end text-[14px] text-[#212121]">
+          {question.date}
+        </div>
       </div>
-      <p>{question.answer}</p>
+      <p className="text-justify">{question.answer}</p>
     </div>
   );
 }

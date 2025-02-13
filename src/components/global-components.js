@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useActionState, useState } from "react";
+import { sendNewComment } from "./global-components-sr";
 
-export default function Product({ product }) {
+export function Product({ product }) {
   const [isLiked, setIsLiked] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
 
@@ -130,5 +131,76 @@ export default function Product({ product }) {
         />
       </button>
     </div>
+  );
+}
+
+export function ProductForm({ id }) {
+  const [errorMessage, formAction, isPending] = useActionState(sendNewComment);
+  const [score, setScore] = useState(0);
+
+  return (
+    <form
+      action={formAction}
+      className="my-[30px] w-full rounded-[15px] bg-[#f4f4f4] p-[20px]"
+    >
+      <h4 className="mb-[20px] text-[18px] font-medium capitalize">
+        leave a comment
+      </h4>
+      <div className="mb-[20px] flex flex-col">
+        <label
+          htmlFor="commentTitle"
+          className="ml-[5px] font-medium capitalize text-[#303030]"
+        >
+          title
+        </label>
+        <input
+          required
+          type="text"
+          id="commentTitle"
+          className="rounded-[5px] border-[1px] border-solid border-[#303030] bg-transparent px-[10px] py-[4px] focus:outline-none"
+        />
+      </div>
+      <div className="mb-[20px] flex items-center justify-between">
+        <label
+          htmlFor="commentTitle"
+          className="ml-[5px] font-medium capitalize text-[#303030]"
+        >
+          score
+        </label>
+        <input
+          required
+          type="number"
+          min={0}
+          max={5}
+          step={0.1}
+          value={score}
+          onChange={(e) => setScore(e.target.value)}
+          id="commentScore"
+          className="w-[60%] rounded-[5px] border-[1px] border-solid border-[#303030] bg-transparent px-[10px] py-[4px] text-center focus:outline-none"
+        />
+      </div>
+      <div className="mb-[20px] flex flex-col">
+        <label
+          htmlFor="commentDescription"
+          className="ml-[5px] font-medium capitalize text-[#303030]"
+        >
+          description
+        </label>
+        <textarea
+          required
+          id="commentDescription"
+          className="w-full resize-none rounded-[5px] border-[1px] border-solid border-[#303030] bg-transparent p-[10px] px-[10px] py-[4px] focus:outline-none"
+          cols={15}
+          rows={6}
+        />
+      </div>
+      <div>
+        <input
+          type="submit"
+          className="w-full cursor-pointer rounded-[5px] border-[1px] border-solid border-[#303030] py-[10px] text-[20px] font-semibold capitalize hover:bg-[#d9d9d9] hover:transition-all"
+          value="submit"
+        />
+      </div>
+    </form>
   );
 }
