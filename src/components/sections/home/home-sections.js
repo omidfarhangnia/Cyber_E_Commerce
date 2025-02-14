@@ -490,7 +490,7 @@ function Sec5LgDevice({ data }) {
 
   return (
     <div className="section_5lg">
-      <div className="flex flex-wrap justify-center bg-gradient-to-r from-[#ffffff] from-30% to-[#2C2C2C] to-[60%]">
+      <div className="flex flex-wrap justify-center bg-gradient-to-r from-[#ffffff] from-[30%] to-[#2C2C2C] to-[60%]">
         {data.map((product) => {
           const bgColor = [
             "bg-[",

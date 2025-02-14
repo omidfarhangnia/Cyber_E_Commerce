@@ -1,4 +1,9 @@
-import { Product, ProductForm } from "@/components/global-components";
+import {
+  Product,
+  ProductCommentContainer,
+  ProductForm,
+  ProductQuestionContainer,
+} from "@/components/global-components";
 import { sql } from "@vercel/postgres";
 import Image from "next/image";
 import Link from "next/link";
@@ -179,19 +184,21 @@ async function ProductData({ product }) {
   const productSpec = await fetchProductSpec(product.id);
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-[20px]">
-      <div className="flex w-full items-center justify-center md:w-[50%]">
+    <div className="flex flex-wrap items-center justify-center gap-[20px] md:items-stretch md:gap-[calc(40px_+_2vw)] md:py-[40px]">
+      <div className="flex w-full max-w-[330px] items-center justify-center md:w-[45%] md:max-w-[400px] md:items-start">
         <Image
           width={300}
           height={300}
           alt="product image"
           src={product.img_url}
-          className="rounded-[20px]"
+          className="w-full rounded-[20px] md:object-contain"
         />
       </div>
-      <div className="flex w-full flex-col items-center capitalize md:w-[50%]">
-        <h1 className="text-center text-[25px] font-bold">{product.name}</h1>
-        <div className="mt-[20px] flex w-[85%] items-center justify-between font-semibold text-[#4a4a4a]">
+      <div className="flex w-full flex-col items-center capitalize md:w-[50%] md:max-w-[500px]">
+        <h1 className="text-center text-[25px] font-bold md:text-[35px]">
+          {product.name}
+        </h1>
+        <div className="mt-[20px] flex w-[85%] items-center justify-between font-semibold text-[#4a4a4a] md:w-[60%]">
           <div>sales number : {product.sales_num}</div>
           <div>{product.score}/5</div>
         </div>
@@ -315,34 +322,39 @@ async function Reviews({ product }) {
   const productComments = await fetchProductComments(product.id);
 
   return (
-    <div className="mb-[30px] mt-[120px] flex flex-col items-center">
-      <h3 className="my-[10px] text-center text-[24px] font-medium">Reviews</h3>
-      <div className="flex flex-col items-center justify-between">
-        <div className="mb-[10px] flex items-baseline justify-center gap-[5px]">
-          <div className="text-[56px]">{product.score}</div>
-          <div className="text-[#303030]"> of {product.sales_num} reviews</div>
+    <div className="mb-[100px] mt-[120px] flex flex-col items-center">
+      <div className="md:flex md:w-[60%] md:flex-wrap md:items-center md:justify-between">
+        <h3 className="my-[10px] text-center text-[24px] font-medium md:text-[45px]">
+          Reviews
+        </h3>
+        <div className="flex flex-col items-center justify-between">
+          <div className="mb-[10px] flex items-baseline justify-center gap-[5px]">
+            <div className="text-[56px]">{product.score}</div>
+            <div className="text-[#303030]">
+              {" "}
+              of {product.sales_num} reviews
+            </div>
+          </div>
+          <ProductStar score={product.score} size={35} />
         </div>
-        <ProductStar score={product.score} size={35} />
       </div>
       <ProductForm id={product.id} />
-      <div className="w-full">
+      <div className="flex w-full items-center justify-center">
         {productComments.length === 0 ? (
-          <div className="flex min-h-[calc(200px_+_3vh)] w-full items-center justify-center rounded-[30px] bg-[#F4F4F4] text-[calc(18px_+_1vw)] font-bold text-[#4E4E4E]">
+          <div className="flex min-h-[calc(200px_+_3vh)] w-full items-center justify-center rounded-[30px] bg-[#F4F4F4] text-[calc(18px_+_1vw)] font-bold text-[#4E4E4E] md:mt-[60px] md:w-[70%]">
             there is no comment
           </div>
         ) : (
-          productComments.map((comment, i) => {
-            return <ProductComment key={i} comment={comment} />;
-          })
+          <ProductCommentContainer comments={productComments} />
         )}
       </div>
     </div>
   );
 }
 
-function ProductComment({ comment }) {
+export function ProductComment({ comment }) {
   return (
-    <div className="my-[30px] flex flex-col gap-[20px] rounded-[15px] bg-[#f4f4f4] p-[20px]">
+    <div className="my-[30px] flex max-w-[500px] flex-col gap-[20px] rounded-[15px] bg-[#f4f4f4] p-[20px]">
       <div className="flex flex-wrap items-center gap-[20px]">
         <Image
           width={60}
@@ -401,26 +413,26 @@ async function Questions({ id }) {
 
   return (
     <div className="mb-[60px]">
-      <h3 className="my-[10px] text-center text-[24px] font-medium">
+      <h3 className="my-[10px] text-center text-[24px] font-medium md:text-[45px]">
         Questions
       </h3>
 
-      {questions.length === 0 ? (
-        <div className="flex min-h-[calc(200px_+_3vh)] w-full items-center justify-center rounded-[30px] bg-[#F4F4F4] text-[calc(18px_+_1vw)] font-bold text-[#4E4E4E]">
-          there is no question
-        </div>
-      ) : (
-        questions.map((question) => {
-          return <ProductQuestion key={question.id} question={question} />;
-        })
-      )}
+      <div className="flex w-full flex-wrap items-center justify-center gap-[50px]">
+        {questions.length === 0 ? (
+          <div className="flex min-h-[calc(200px_+_3vh)] w-full items-center justify-center rounded-[30px] bg-[#F4F4F4] text-[calc(18px_+_1vw)] font-bold text-[#4E4E4E]">
+            there is no question
+          </div>
+        ) : (
+          <ProductQuestionContainer questions={questions} />
+        )}
+      </div>
     </div>
   );
 }
 
-function ProductQuestion({ question }) {
+export function ProductQuestion({ question }) {
   return (
-    <div className="my-[30px] flex flex-col gap-[20px] rounded-[15px] bg-[#f4f4f4] p-[20px]">
+    <div className="my-[30px] flex flex-col gap-[20px] rounded-[15px] bg-[#f4f4f4] p-[20px] md:max-w-[500px]">
       <div className="flex flex-col">
         <div className="text-[18px] font-medium">{question.title}</div>
         <div className="self-end text-[14px] text-[#212121]">
