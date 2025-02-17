@@ -211,7 +211,6 @@ export function ProductForm({ id }) {
 }
 
 const commentViewTl = new gsap.timeline();
-
 export function ProductCommentContainer({ comments }) {
   const [viewMore, setViewMore] = useState(false);
 
@@ -223,55 +222,47 @@ export function ProductCommentContainer({ comments }) {
           height: "auto",
           duration: 0.5,
           marginBottom: "200px",
-          maxHeight: "1500px",
-        })
-        .to(
-          ".commentViewContainer",
-          {
-            duration: 1,
-            bottom: "-100px",
-            height: "100px",
-            onComplete: () => {
-              setViewMore(!viewMore);
-              gsap.set(".commentContainer", { overflow: "visible" });
-              commentViewTl.clear();
-            },
+          onComplete: () => {
+            gsap.set(".commentContainer", { overflow: "visible" });
           },
-          "-=.5",
-        );
+        })
+        .to(".commentViewContainer", {
+          duration: 0.3,
+          bottom: "-100px",
+          height: "100px",
+          onComplete: () => {
+            setViewMore(!viewMore);
+            commentViewTl.clear();
+          },
+        });
     } else {
       commentViewTl
         .to(".commentContainer", {
-          height: "auto",
+          height: "300px",
           duration: 0.5,
-          marginBottom: "0",
-          maxHeight: "800px",
+          marginBottom: "100px",
           onStart: () => {
             gsap.set(".commentContainer", { overflow: "hidden" });
           },
         })
-        .to(
-          ".commentViewContainer",
-          {
-            duration: 1,
-            bottom: "0",
-            height: "250px",
-            onComplete: () => {
-              setViewMore(!viewMore);
-              commentViewTl.clear();
-            },
+        .to(".commentViewContainer", {
+          duration: 0.3,
+          bottom: "0",
+          height: "250px",
+          onComplete: () => {
+            setViewMore(!viewMore);
+            commentViewTl.clear();
           },
-          "-=.5",
-        );
+        });
     }
   }
 
   return (
-    <div className="commentContainer relative flex h-auto max-h-[800px] w-full flex-wrap items-center justify-center overflow-hidden md:gap-x-[40px]">
+    <div className="commentContainer relative flex h-[300px] min-h-[300px] w-full flex-wrap items-center justify-center overflow-hidden md:gap-x-[40px]">
       {comments.map((comment, i) => {
         return <ProductComment key={i} comment={comment} />;
       })}
-      <div className="commentViewContainer absolute bottom-0 flex h-[250px] w-full items-end justify-center bg-gradient-to-t from-[#ffffff] from-[50%] to-[#ffffff00]">
+      <div className="commentViewContainer absolute bottom-0 flex h-[250px] w-full select-none items-end justify-center bg-gradient-to-t from-[#ffffff] from-[50%] to-[#ffffff00]">
         <button
           onClick={handleClickBtn}
           className="white--btn border-black text-[24px] font-semibold text-black"
@@ -295,55 +286,47 @@ export function ProductQuestionContainer({ questions }) {
           height: "auto",
           duration: 0.5,
           marginBottom: "200px",
-          maxHeight: "auto",
-        })
-        .to(
-          ".questionViewContainer",
-          {
-            duration: 1,
-            bottom: "-100px",
-            height: "100px",
-            onComplete: () => {
-              setViewMore(!viewMore);
-              gsap.set(".questionContainer", { overflow: "visible" });
-              questionViewTl.clear();
-            },
+          onComplete: () => {
+            gsap.set(".questionContainer", { overflow: "visible" });
           },
-          "-=.5",
-        );
+        })
+        .to(".questionViewContainer", {
+          duration: 0.3,
+          bottom: "-100px",
+          height: "100px",
+          onComplete: () => {
+            setViewMore(!viewMore);
+            questionViewTl.clear();
+          },
+        });
     } else {
       questionViewTl
         .to(".questionContainer", {
-          height: "auto",
+          height: "300px",
           duration: 0.5,
-          marginBottom: "0",
+          marginBottom: "100px",
           onStart: () => {
             gsap.set(".questionContainer", { overflow: "hidden" });
           },
         })
-        .to(
-          ".questionViewContainer",
-          {
-            duration: 1,
-            bottom: "0",
-            height: "250px",
-            maxHeight: "800px",
-            onComplete: () => {
-              setViewMore(!viewMore);
-              questionViewTl.clear();
-            },
+        .to(".questionViewContainer", {
+          duration: 0.3,
+          bottom: "0",
+          height: "250px",
+          onComplete: () => {
+            setViewMore(!viewMore);
+            questionViewTl.clear();
           },
-          "-=.5",
-        );
+        });
     }
   }
 
   return (
-    <div className="questionContainer relative flex h-auto max-h-[800px] w-full flex-wrap items-center justify-center overflow-hidden md:gap-x-[40px]">
+    <div className="questionContainer relative flex h-[300px] w-full flex-wrap items-center justify-center overflow-hidden md:gap-x-[40px]">
       {questions.map((question, i) => {
         return <ProductQuestion key={i} question={question} />;
       })}
-      <div className="questionViewContainer absolute bottom-0 flex h-[250px] w-full items-end justify-center bg-gradient-to-t from-[#ffffff] from-[50%] to-[#ffffff00]">
+      <div className="questionViewContainer absolute bottom-0 flex h-[250px] w-full select-none items-end justify-center bg-gradient-to-t from-[#ffffff] from-[50%] to-[#ffffff00]">
         <button
           onClick={handleClickBtn}
           className="white--btn border-black text-[24px] font-semibold text-black"
