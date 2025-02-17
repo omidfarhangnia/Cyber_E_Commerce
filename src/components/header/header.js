@@ -4,7 +4,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import NavLinks from "./nav-link";
 import Link from "next/link";
-import { categories } from "./nav-link";
+import { categories } from "@/app/category/page";
 
 export function handleBurgerAction(isBurgerPlayed, isAnimePlaying) {
   // checking for avoiding multiplay animations

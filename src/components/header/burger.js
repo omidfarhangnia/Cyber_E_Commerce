@@ -4,8 +4,9 @@ import "@/components/burger_style.css";
 import { handleBurgerAction } from "./header";
 import Image from "next/image";
 import Link from "next/link";
-import { links, categories } from "./nav-link";
+import { links } from "./nav-link";
 import { usePathname } from "next/navigation";
+import { categories } from "@/app/category/page";
 
 export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
   const pathname = usePathname();

@@ -4,6 +4,7 @@ import {
   ProductForm,
   ProductQuestionContainer,
 } from "@/components/global-components";
+import { GlobalSkeleton } from "@/components/skeletons/home-skeletons";
 import { sql } from "@vercel/postgres";
 import Image from "next/image";
 import Link from "next/link";
@@ -79,16 +80,16 @@ export default async function Page({ params }) {
     <div className="flex items-center justify-center bg-[#ffffff]">
       <div className="flex w-full max-w-[1200px] flex-col justify-between px-[15px] py-[40px]">
         <BreakCrumbs product={product} />
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense fallback={<GlobalSkeleton />}>
           <ProductData product={product} />
         </Suspense>
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense fallback={<GlobalSkeleton />}>
           <Reviews product={product} />
         </Suspense>
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense fallback={<GlobalSkeleton />}>
           <Questions id={product.id} />
         </Suspense>
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense fallback={<GlobalSkeleton />}>
           <RelatedProducts product={product} />
         </Suspense>
       </div>

@@ -285,9 +285,11 @@ export function HomeSec3() {
     <div className="flex items-center justify-center bg-[#FAFAFA]">
       <div className="category w-full max-w-[1150px] px-[16px] py-[50px] md:px-[50px]">
         <div className="flex items-center justify-between">
-          <h4 className="text-[23px] font-medium leading-[40px]">
-            Browse By Category
-          </h4>
+          <Link href={"/category/"}>
+            <h4 className="text-[23px] font-medium leading-[40px]">
+              Browse By Category
+            </h4>
+          </Link>
           <div className="flex items-center justify-center gap-[10px]">
             <button
               onClick={() => playCategoryAnime("prev")}

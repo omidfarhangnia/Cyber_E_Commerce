@@ -86,3 +86,9 @@ function Sec5SmSkeleton() {
     </div>
   );
 }
+
+export function GlobalSkeleton() {
+  return (
+    <div className="globalSkeleton--anime my-[40px] h-[400px] w-full rounded-[50px]"></div>
+  );
+}

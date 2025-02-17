@@ -114,7 +114,7 @@
     -moz-animation: linearGradient--anime 20s ease infinite;
     animation: linearGradient--anime 20s ease infinite;
   }
-  
+
   @keyframes linearGradient--anime {
     0% {
       background-position: 10% 0%;
@@ -125,6 +125,15 @@
     100% {
       background-position: 10% 0%;
     }
+  }
+
+  .globalSkeleton--anime {
+    background: linear-gradient(90deg, #2e2e2e, #a8aaae, #f4f4f4);
+    background-size: 200% 200%;
+
+    -webkit-animation: linearGradient--anime 20s ease infinite;
+    -moz-animation: linearGradient--anime 20s ease infinite;
+    animation: linearGradient--anime 20s ease infinite;
   }
 }
 
