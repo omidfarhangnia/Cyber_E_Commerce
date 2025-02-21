@@ -1,3 +1,5 @@
+"use client";
+
 import { usePathname, useSearchParams } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { categories, CategoriesLgDevice, CategoriesSmDevice } from "./page";

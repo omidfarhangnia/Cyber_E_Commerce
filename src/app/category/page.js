@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
-import { useRouter } from "next/navigation";
 import SearchSelectedCategory from "./search";
 
 export const categories = [
@@ -45,10 +43,12 @@ export const categories = [
 ];
 
 export default function Page({ searchParams }) {
+  const { selected } = searchParams;
+
   return (
     <div className="flex h-full items-center justify-center bg-[#ffffff]">
       <div className="flex w-full max-w-[1200px] flex-col justify-between px-[15px] py-[40px]">
-        <div>{JSON.stringify(searchParams)}</div>
+        <div>{JSON.stringify(selected)}</div>
         <SearchSelectedCategory searchParams={searchParams} />
       </div>
     </div>
@@ -56,11 +56,17 @@ export default function Page({ searchParams }) {
 }
 
 export function CategoriesSmDevice({ category, handleSearch, searchParams }) {
-  //   const products = fetchProductsFromCategroy();
+  const [data, setData] = useState([]);
+
+  const fetchProducts = async (category) => {
+    const res = await fetch(`/api/products?category=${category}`);
+    const newData = await res.json();
+    setData(newData);
+  };
 
   return (
     <div className="flex bg-[#2E2E2E] px-[15px] py-[20px] md:hidden">
-      <div>{JSON.stringify(searchParams)}</div>
+      <div>{JSON.stringify(data)}</div>
       <div>
         <Link
           className="rounded-full font-semibold text-[#d6d6d6] transition-all hover:text-white"
@@ -71,7 +77,7 @@ export function CategoriesSmDevice({ category, handleSearch, searchParams }) {
         </Link>
         <div
           onClick={() => {
-            handleSearch(String(category.label).toLowerCase());
+            fetchProducts(String(category.label).toLowerCase());
           }}
         >
           open

@@ -4,9 +4,13 @@ import gsap from "gsap";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/all";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Product } from "@/components/global-components";
+import {
+  Sec4Skeleton,
+  Sec5Skeleton,
+} from "@/components/skeletons/home-skeletons";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -356,8 +360,14 @@ export function HomeSec3() {
 
 const productStatusTl = new gsap.timeline();
 
-export function ResponsiveSec4({ data }) {
+export function HomeSec4() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState("highestDiscount");
+
+  useEffect(() => {
+    fetchSelectedProducts(selectedStatus);
+  }, [selectedStatus]);
 
   useGSAP(
     () => {
@@ -397,10 +407,18 @@ export function ResponsiveSec4({ data }) {
       });
   }
 
+  async function fetchSelectedProducts(selectedCat) {
+    setLoading(true);
+    const res = await fetch(`/api/section4?selectedCat=${selectedCat}`);
+    const data = await res.json();
+    setProducts(data);
+    setLoading(false);
+  }
+
   return (
     <>
       <div className="section_4 flex w-full items-center justify-center bg-[#ffffff]">
-        <div className="max-w-[1300px] px-[16px] py-[55px]">
+        <div className="w-full max-w-[1300px] px-[16px] py-[55px]">
           <div className="mb-[32px] flex flex-wrap items-center justify-start gap-x-[30px] gap-y-[10px]">
             <button
               className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0 ${selectedStatus !== "highestDiscount" && "text-[#8B8B8B]"}`}
@@ -447,10 +465,14 @@ export function ResponsiveSec4({ data }) {
               </div>
             </button>
           </div>
-          <div className="products__container flex flex-wrap items-center justify-center gap-x-[10px] gap-y-[15px]">
-            {data[selectedStatus].map((product) => {
-              return <Product key={product.id} product={product} />;
-            })}
+          <div className="products__container flex w-full flex-wrap items-center justify-center gap-x-[10px] gap-y-[15px]">
+            {loading ? (
+              <Sec4Skeleton />
+            ) : (
+              products.map((product) => {
+                return <Product key={product.id} product={product} />;
+              })
+            )}
           </div>
         </div>
       </div>
@@ -458,15 +480,36 @@ export function ResponsiveSec4({ data }) {
   );
 }
 
-export function ResponsiveSec5({ data }) {
+export function HomeSec5() {
+  const [product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    setLoading(true);
+    const res = await fetch("/api/section5");
+    const data = await res.json();
+    setProduct(data);
+    setLoading(false);
+  }
+
   return (
     <>
-      <div className="hidden md:block">
-        <Sec5LgDevice data={data} />
-      </div>
-      <div className="block md:hidden">
-        <Sec5SmDevice data={data} />
-      </div>
+      {loading ? (
+        <Sec5Skeleton />
+      ) : (
+        <div>
+          <div className="hidden md:block">
+            <Sec5LgDevice data={product} />
+          </div>
+          <div className="block md:hidden">
+            <Sec5SmDevice data={product} />
+          </div>
+        </div>
+      )}
     </>
   );
 }
@@ -540,13 +583,12 @@ function Sec5LgDevice({ data }) {
 
 const productAnimeTl = new gsap.timeline();
 const initialPostsNum = [3, 0, 1];
-
 function Sec5SmDevice({ data }) {
   const [postsNum, setPostsNum] = useState(initialPostsNum);
 
-  const prevBg = ["bg-[", data[postsNum[0]].theme_color, "]"].join("");
-  const currentBg = ["bg-[", data[postsNum[1]].theme_color, "]"].join("");
-  const nextBg = ["bg-[", data[postsNum[2]].theme_color, "]"].join("");
+  const prevBg = ["bg-[", data[postsNum[0]]?.theme_color, "]"].join("");
+  const currentBg = ["bg-[", data[postsNum[1]]?.theme_color, "]"].join("");
+  const nextBg = ["bg-[", data[postsNum[2]]?.theme_color, "]"].join("");
 
   useEffect(() => {
     productAnimeTl.clear();
@@ -594,71 +636,75 @@ function Sec5SmDevice({ data }) {
   }
 
   return (
-    <div className={`relative overflow-hidden ${currentBg}`}>
-      <div className="productLoader--container absolute left-0 top-0 z-10 h-full w-full rotate-[135deg] scale-[3] blur-[.15px]">
-        <div className="productLoader--parts absolute right-0 top-0 h-[50%] w-[50%] bg-[#0e0e0e] opacity-0"></div>
-        <div className="productLoader--parts absolute left-0 top-0 h-[50%] w-[50%] bg-[#2A2A2A] opacity-0"></div>
-        <div className="productLoader--parts absolute bottom-0 left-0 h-[50%] w-[50%] bg-[#575757] opacity-0"></div>
-        <div className="productLoader--parts absolute bottom-0 right-0 h-[50%] w-[50%] bg-[#7b7b7b] opacity-0"></div>
-      </div>
-      <div className="min-h-[650px]">
-        <div
-          className={`relative flex items-center ${data[postsNum[1]].id === 4 ? "justify-end" : "justify-center"} w-full`}
-        >
-          <Image
-            width={350}
-            height={350}
-            alt="popular image"
-            className={`object-contain ${data[postsNum[1]].id === 4 && "object-right"} h-[300px] w-[70%]`}
-            src={data[postsNum[1]].imgurl}
-          />
-        </div>
-        <div className="flex flex-col items-center px-[32px] pb-[30px] pt-[15px] lg:py-[54px]">
-          <h3
-            className={`${data[postsNum[1]].id > 2 && "text-white"} select-none text-center text-[23px] lg:text-start lg:text-[30px]`}
-          >
-            {data[postsNum[1]].title}
-          </h3>
-          <p
-            className={`${data[postsNum[1]].id > 2 && "text-[#c9c9c9]"} mb-[15px] mt-[25px] w-full text-justify text-[15px] font-medium text-[#909090]`}
-          >
-            {data[postsNum[1]].description}
-          </p>
-          <Link href={"/"}>
-            <button
-              className={`${data[postsNum[1]].id > 2 ? "white--btn" : "black--btn"} relative`}
+    <div>
+      {data[postsNum[1]] && (
+        <div className={`relative overflow-hidden ${currentBg}`}>
+          <div className="productLoader--container absolute left-0 top-0 z-10 h-full w-full rotate-[135deg] scale-[3] blur-[.15px]">
+            <div className="productLoader--parts absolute right-0 top-0 h-[50%] w-[50%] bg-[#0e0e0e] opacity-0"></div>
+            <div className="productLoader--parts absolute left-0 top-0 h-[50%] w-[50%] bg-[#2A2A2A] opacity-0"></div>
+            <div className="productLoader--parts absolute bottom-0 left-0 h-[50%] w-[50%] bg-[#575757] opacity-0"></div>
+            <div className="productLoader--parts absolute bottom-0 right-0 h-[50%] w-[50%] bg-[#7b7b7b] opacity-0"></div>
+          </div>
+          <div className="min-h-[650px]">
+            <div
+              className={`relative flex items-center ${data[postsNum[1]].id === 4 ? "justify-end" : "justify-center"} w-full`}
             >
-              Shop Now
+              <Image
+                width={350}
+                height={350}
+                alt="popular image"
+                className={`object-contain ${data[postsNum[1]].id === 4 && "object-right"} h-[300px] w-[70%]`}
+                src={data[postsNum[1]].imgurl}
+              />
+            </div>
+            <div className="flex flex-col items-center px-[32px] pb-[30px] pt-[15px] lg:py-[54px]">
+              <h3
+                className={`${data[postsNum[1]].id > 2 && "text-white"} select-none text-center text-[23px] lg:text-start lg:text-[30px]`}
+              >
+                {data[postsNum[1]]?.title}
+              </h3>
+              <p
+                className={`${data[postsNum[1]].id > 2 && "text-[#c9c9c9]"} mb-[15px] mt-[25px] w-full text-justify text-[15px] font-medium text-[#909090]`}
+              >
+                {data[postsNum[1]]?.description}
+              </p>
+              <Link href={"/"}>
+                <button
+                  className={`${data[postsNum[1]].id > 2 ? "white--btn" : "black--btn"} relative`}
+                >
+                  Shop Now
+                </button>
+              </Link>
+            </div>
+          </div>
+          <div className="absolute bottom-0 flex h-[50px] w-full justify-between">
+            <button
+              onClick={() => playCategoryAnime("prev")}
+              className={`${prevBg} prev--catBtn w-[20%] rounded-r-full px-[3%]`}
+            >
+              <Image
+                width={32}
+                height={32}
+                className="h-auto"
+                src={"/icons/category-left-arrow.svg"}
+                alt="left arrow category"
+              />
             </button>
-          </Link>
+            <button
+              onClick={() => playCategoryAnime("next")}
+              className={`${nextBg} next--catBtn w-[20%] rounded-l-full px-[3%]`}
+            >
+              <Image
+                width={32}
+                height={32}
+                className="ml-auto"
+                src={"/icons/category-right-arrow.svg"}
+                alt="left arrow category"
+              />
+            </button>
+          </div>
         </div>
-      </div>
-      <div className="absolute bottom-0 flex h-[50px] w-full justify-between">
-        <button
-          onClick={() => playCategoryAnime("prev")}
-          className={`${prevBg} prev--catBtn w-[20%] rounded-r-full px-[3%]`}
-        >
-          <Image
-            width={32}
-            height={32}
-            className="h-auto"
-            src={"/icons/category-left-arrow.svg"}
-            alt="left arrow category"
-          />
-        </button>
-        <button
-          onClick={() => playCategoryAnime("next")}
-          className={`${nextBg} next--catBtn w-[20%] rounded-l-full px-[3%]`}
-        >
-          <Image
-            width={32}
-            height={32}
-            className="ml-auto"
-            src={"/icons/category-right-arrow.svg"}
-            alt="left arrow category"
-          />
-        </button>
-      </div>
+      )}
     </div>
   );
 }
