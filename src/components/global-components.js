@@ -2,13 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useActionState, useEffect, useState } from "react";
-import { sendNewComment } from "./global-components-sr";
+import { useState } from "react";
 import {
   ProductComment,
   ProductQuestion,
 } from "@/app/product/[productId]/page";
 import gsap from "gsap";
+import { useRouter } from "next/navigation";
 
 export function Product({ product }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -51,9 +51,6 @@ export function Product({ product }) {
 
   function handleBuyProduct(e) {
     // auth condition
-    const tl = new gsap.timeline();
-    console.log(e.target);
-    // tl.to(e.target);
   }
 
   return (
@@ -140,17 +137,61 @@ export function Product({ product }) {
 }
 
 export function ProductForm({ id }) {
-  const [errorMessage, formAction, isPending] = useActionState(sendNewComment);
-  const [score, setScore] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [formData, setFormData] = useState({
+    productId: id,
+    title: "",
+    score: 0,
+    description: "",
+  });
+  const [successMessage, setSuccessMessage] = useState({
+    isOk: false,
+    message: "",
+  });
+  const router = useRouter();
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    // if auth and adding name
+    setLoading(true);
+    setSuccessMessage({ isOk: false, message: "" });
+    const res = await fetch(`/api/product/formAction`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
+    const data = await res.json();
+    setLoading(false);
+
+    if (res.ok) {
+      setSuccessMessage({ isOk: true, message: "Message added successfully!" });
+      router.replace(`/product/${id}`);
+      setFormData({
+        ...formData,
+        title: "",
+        score: 0,
+        description: "",
+      });
+    } else {
+      setSuccessMessage({ isOk: false, message: "Error adding message." });
+    }
+  }
 
   return (
     <form
-      action={formAction}
+      onSubmit={handleSubmit}
       className="my-[30px] w-full max-w-[500px] rounded-[15px] bg-[#f4f4f4] p-[20px]"
     >
-      <h4 className="mb-[20px] text-[18px] font-medium capitalize">
-        leave a comment
-      </h4>
+      <div className="mb-[20px] flex items-center justify-between">
+        <h4 className="text-[18px] font-medium capitalize">leave a comment</h4>
+        {successMessage.message && (
+          <h5
+            className={`text-[12px] text-gray-700 ${successMessage.isOk ? "text-green-600" : "text-red-600"}`}
+          >
+            {successMessage.message}
+          </h5>
+        )}
+      </div>
       <div className="mb-[20px] flex flex-col">
         <label
           htmlFor="commentTitle"
@@ -159,6 +200,8 @@ export function ProductForm({ id }) {
           title
         </label>
         <input
+          value={formData.title}
+          onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           required
           type="text"
           id="commentTitle"
@@ -178,8 +221,8 @@ export function ProductForm({ id }) {
           min={0}
           max={5}
           step={0.1}
-          value={score}
-          onChange={(e) => setScore(e.target.value)}
+          value={formData.score}
+          onChange={(e) => setFormData({ ...formData, score: e.target.value })}
           id="commentScore"
           className="w-[60%] rounded-[5px] border-[1px] border-solid border-[#303030] bg-transparent px-[10px] py-[4px] text-center focus:outline-none"
         />
@@ -193,6 +236,10 @@ export function ProductForm({ id }) {
         </label>
         <textarea
           required
+          value={formData.description}
+          onChange={(e) =>
+            setFormData({ ...formData, description: e.target.value })
+          }
           id="commentDescription"
           className="w-full resize-none rounded-[5px] border-[1px] border-solid border-[#303030] bg-transparent p-[10px] px-[10px] py-[4px] focus:outline-none"
           cols={15}
@@ -202,7 +249,8 @@ export function ProductForm({ id }) {
       <div>
         <input
           type="submit"
-          className="w-full cursor-pointer rounded-[5px] border-[1px] border-solid border-[#303030] py-[10px] text-[20px] font-semibold capitalize hover:bg-[#d9d9d9] hover:transition-all"
+          disabled={loading}
+          className="w-full cursor-pointer rounded-[5px] border-[1px] border-solid border-[#303030] py-[10px] text-[20px] font-semibold capitalize hover:bg-[#d9d9d9] hover:transition-all disabled:cursor-auto disabled:opacity-50 disabled:hover:bg-transparent"
           value="submit"
         />
       </div>

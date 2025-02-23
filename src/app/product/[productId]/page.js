@@ -355,7 +355,7 @@ async function Reviews({ product }) {
 
 export function ProductComment({ comment }) {
   return (
-    <div className="my-[30px] flex max-w-[500px] flex-col gap-[20px] rounded-[15px] bg-[#f4f4f4] p-[20px]">
+    <div className="my-[30px] flex max-w-[500px] lg:min-h-[450px] w-full flex-col gap-[20px] rounded-[15px] bg-[#f4f4f4] p-[20px]">
       <div className="flex flex-wrap items-center gap-[20px]">
         <Image
           width={60}
