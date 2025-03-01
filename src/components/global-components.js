@@ -87,6 +87,7 @@ export function Product({ product }) {
             height={160}
             className="rounded-[10px] md:h-[200px] md:w-[200px]"
             alt="product image"
+            priority
             src={product.img_url}
           />
         </div>

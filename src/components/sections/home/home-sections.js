@@ -498,7 +498,7 @@ export function HomeSec5() {
 
   return (
     <>
-      {loading ? (
+      {loading && product.length !== 0 ? (
         <Sec5Skeleton />
       ) : (
         <div>
