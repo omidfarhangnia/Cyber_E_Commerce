@@ -12,9 +12,9 @@ import { useRouter } from "next/navigation";
 
 export function Product({ product }) {
   const [isLiked, setIsLiked] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
 
   function handleLikeProduct(e) {
+    e.stopPropagation();
     // auth condition
 
     setIsLiked(!isLiked);
@@ -34,49 +34,13 @@ export function Product({ product }) {
     });
   }
 
-  function handleSaveProduct(e) {
-    // auth condition
-    setIsSaved(!isSaved);
-    const tl = new gsap.timeline();
-    tl.to(e.target, {
-      duration: 0.2,
-      scale: 1.2,
-      ease: "expo",
-    }).to(e.target, {
-      scale: 1,
-      duration: 0.2,
-      ease: "expo",
-    });
-  }
-
   function handleBuyProduct(e) {
+    e.stopPropagation();
     // auth condition
   }
 
   return (
-    <div className="products flex w-[90%] min-w-[160px] max-w-[240px] flex-col items-center rounded-[9px] bg-[#F6F6F6] px-[10px] py-[25px] hover:bg-[#e1e1e1] hover:transition-colors md:max-w-[300px] md:px-[20px]">
-      <div className="mb-[15px] flex w-full items-center justify-between">
-        <div className="cursor-pointer" onClick={handleSaveProduct}>
-          <Image
-            width={32}
-            height={32}
-            alt="save icon"
-            src={
-              isSaved ? "/icons/save-active.svg" : "/icons/save-inactive.svg"
-            }
-          />
-        </div>
-        <div className="cursor-pointer" onClick={handleLikeProduct}>
-          <Image
-            width={32}
-            height={32}
-            alt="like icon"
-            src={
-              isLiked ? "/icons/like-active.svg" : "/icons/like-inactive.svg"
-            }
-          />
-        </div>
-      </div>
+    <div className="products flex w-[90%] min-w-[160px] max-w-[240px] flex-col items-center rounded-[9px] border-[1px] border-solid border-black px-[10px] py-[25px] hover:bg-[#f4f4f4] hover:transition-colors md:max-w-[300px] md:px-[20px]">
       <Link
         href={`./product/${product.id}`}
         className="flex flex-col items-center"
@@ -92,13 +56,13 @@ export function Product({ product }) {
           />
         </div>
         <div>
-          <h3 className="w-[200px] overflow-hidden text-ellipsis text-nowrap text-center text-[18px] font-medium md:text-[24px]">
+          <h3 className="mt-[10px] w-[200px] overflow-hidden text-ellipsis text-nowrap text-center font-medium md:text-[18px]">
             {product.name}
           </h3>
         </div>
         <div>
           {product.discount_percent === 0 ? (
-            <div className="my-[10px] text-[25px] font-bold md:text-[30px]">
+            <div className="my-[10px] text-[23px] font-bold md:text-[28px]">
               ${product.price}
             </div>
           ) : (
@@ -118,21 +82,31 @@ export function Product({ product }) {
           )}
         </div>
       </Link>
-      <button
-        onClick={handleBuyProduct}
-        className="flex items-center gap-[5px] rounded-full bg-black px-[25px] py-[10px] text-white md:justify-center md:px-[35px] md:py-[5px]"
-      >
-        <span className="font-semiboldbold text-[20px] md:text-[22px]">
-          Buy Now
-        </span>
-        <Image
-          width={32}
-          height={32}
-          alt="product image"
-          className="md:h-[40px] md:w-[40px]"
-          src={"/icons/shopping-cart.svg"}
-        />
-      </button>
+      <div className="mb-[15px] mt-[10px] flex w-full items-center justify-center gap-[15px]">
+        <div className="cursor-pointer" onClick={handleLikeProduct}>
+          <Image
+            width={32}
+            height={32}
+            alt="like icon"
+            src={
+              isLiked ? "/icons/like-active.svg" : "/icons/like-inactive.svg"
+            }
+          />
+        </div>
+        <button
+          onClick={handleBuyProduct}
+          className="flex items-center gap-[5px] rounded-full bg-black px-[25px] py-[2px] text-white transition-all hover:bg-gray-900 md:justify-center md:px-[35px] md:py-[5px]"
+        >
+          <span className="font-semiboldbold md:text-[20px]">Buy Now</span>
+          <Image
+            width={32}
+            height={32}
+            alt="product image"
+            className="md:h-[35px] md:w-[35px]"
+            src={"/icons/shopping-cart.svg"}
+          />
+        </button>
+      </div>
     </div>
   );
 }

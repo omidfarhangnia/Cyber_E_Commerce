@@ -135,6 +135,37 @@
     -moz-animation: linearGradient--anime 20s ease infinite;
     animation: linearGradient--anime 20s ease infinite;
   }
+
+  @keyframes dotAnime {
+    0% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+
+    100% {
+      transform: translateY(0);
+    }
+  }
+
+  span[class*="loading--dot--anime"] {
+    animation-name: dotAnime;
+    animation-duration: 1.2s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+  }
+
+  .loading--dot--anime__1 {
+    animation-delay: 0;
+  }
+  .loading--dot--anime__2 {
+    animation-delay: 0.25s;
+  }
+  .loading--dot--anime__3 {
+    animation-delay: 0.5s;
+  }
 }
 
 @layer utilities {

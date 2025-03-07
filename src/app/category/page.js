@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import gsap from "gsap";
@@ -46,10 +46,10 @@ export const categories = [
 ];
 
 export default function Page() {
-  const [selecedCat, setSelectedCat] = useState("phone");
+  const [selecedCat, setSelectedCat] = useState("none");
   return (
-    <div className="flex h-full items-center justify-center bg-[#ffffff]">
-      <div className="flex w-full max-w-[1200px] flex-col justify-between px-[15px] py-[40px]">
+    <div className="flex h-full items-center justify-center bg-[#ffffff] px-[20px]">
+      <div className="flex w-full max-w-[1200px] flex-col items-center justify-center px-[15px] py-[40px]">
         {categories.map((category) => {
           return (
             <Categories
@@ -73,15 +73,9 @@ function Categories({ category, selecedCat, setSelectedCat }) {
     currentPage: 1,
     lastPage: null,
   });
+  const catRef = useRef(null);
   const labelLowerCase = String(category.label).toLowerCase();
-  // const pageArr = [...Array(pageNum.lastPage).keys()];
-  const pageArr = [...Array(10).keys()];
-
-  useEffect(() => {
-    if (selecedCat === labelLowerCase) {
-      getProductsFromSelectedCat();
-    }
-  }, []);
+  const pageArr = [...Array(pageNum.lastPage).keys()];
 
   async function getProductsFromSelectedCat(newPage = 1) {
     setLoading(true);
@@ -118,6 +112,9 @@ function Categories({ category, selecedCat, setSelectedCat }) {
           duration: 0.5,
           ease: "expo.in",
           onComplete: () => {
+            if (catRef.current) {
+              catRef.current.scrollIntoView({ behavior: "smooth" });
+            }
             categoryTl.clear();
           },
         },
@@ -129,10 +126,13 @@ function Categories({ category, selecedCat, setSelectedCat }) {
   }
 
   return (
-    <div onClick={handleClick} className="flex flex-col px-[15px] py-[20px]">
-      <div className="mb-[20px] flex w-full items-center justify-between">
+    <div
+      ref={catRef}
+      className={`flex w-full max-w-[900px] flex-col rounded-[30px] p-[20px] md:p-[30px] ${labelLowerCase === selecedCat && "bg-[#f5f5f5]"}`}
+    >
+      <div className="mb-[20px] flex w-full items-center justify-between md:mb-[40px]">
         <Link
-          className="select-none rounded-full font-semibold text-black underline underline-offset-4 transition-all hover:text-gray-700"
+          className="select-none rounded-full text-[18px] font-semibold text-black underline underline-offset-4 hover:no-underline md:text-[calc(18px_+_0.5vw)]"
           href={category.url}
         >
           {category.label}
@@ -140,69 +140,92 @@ function Categories({ category, selecedCat, setSelectedCat }) {
         <div
           className={`border-[1px] ${labelLowerCase}--arrow border-solid border-black hover:bg-gray-300 hover:transition-all`}
         >
-          <Image width="30" height="30" alt="arrow" src={"/icons/arrow.svg"} />
+          <Image
+            onClick={handleClick}
+            width="30"
+            height="30"
+            alt="arrow"
+            className="md:h-[35px] md:w-[35px]"
+            src={"/icons/arrow.svg"}
+          />
         </div>
       </div>
       {labelLowerCase === selecedCat && (
         <div className="flex items-center justify-center">
           {loading ? (
-            <div>loading...</div>
+            <div className="h-[200px] w-full content-center text-center text-[30px] uppercase md:text-[40px]">
+              loading{" "}
+              <span className="loading--dot--anime__1 inline-block h-[.3em] w-[.3em] rounded-full bg-[#2e2e2e]"></span>{" "}
+              <span className="loading--dot--anime__2 inline-block h-[.3em] w-[.3em] rounded-full bg-[#a8aaae]"></span>{" "}
+              <span className="loading--dot--anime__3 inline-block h-[.3em] w-[.3em] rounded-full bg-[#d8d8d8]"></span>
+            </div>
           ) : (
-            <div className="flex w-full flex-col items-center justify-center gap-[30px]">
+            <div
+              className={`mt-[20px] flex w-full flex-wrap items-center justify-center gap-[30px]`}
+            >
               {products.map((product) => {
-                // return <Product key={product.id} product={product} />;
-                return <div key={product.id}>{product.name}</div>;
+                return <Product key={product.id} product={product} />;
               })}
-              <div className="flex w-full max-w-[400px] bg-blue-500">
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    getProductsFromSelectedCat(pageNum.currentPage - 1);
-                  }}
-                  disabled={pageNum.currentPage === 1}
-                  className="disabled:opacity-50"
-                >
-                  <Image
-                    width={30}
-                    height={30}
-                    alt="prev icon"
-                    src={"/icons/previous.svg"}
-                  />
-                </button>
-                <div className="flex items-center gap-[20px] px-[20px]">
-                  {pageArr.map((i) => {
-                    return (
-                      <div key={i} className="">
-                        {(i <= 5 || i === pageArr.length - 1) && (
-                          <div
-                            className="bg-red-500"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              getProductsFromSelectedCat(i + 1);
-                            }}
-                          >
-                            {i === 5 ? <span>...</span> : <span>{i + 1}</span>}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
+              <div className="mb-[20px] mt-[10px] w-full md:mt-[20px]">
+                <div className="mx-auto flex max-w-[400px] justify-center rounded-full border-[1px] border-solid border-black bg-white py-[10px]">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      getProductsFromSelectedCat(pageNum.currentPage - 1);
+                    }}
+                    disabled={pageNum.currentPage === 1}
+                    className="disabled:opacity-25"
+                  >
+                    <Image
+                      width={30}
+                      height={30}
+                      alt="prev icon"
+                      className="h-[23px] w-[23px] md:h-[30px] md:w-[30px]"
+                      src={"/icons/previous.svg"}
+                    />
+                  </button>
+                  <div className="flex items-center gap-[20px] px-[20px]">
+                    {pageArr.map((i) => {
+                      return (
+                        <div
+                          key={i}
+                          className={`${
+                            !(
+                              i >= pageNum.currentPage - 3 &&
+                              i <= pageNum.currentPage + 1
+                            ) && "hidden"
+                          } flex h-[30px] w-[30px] cursor-pointer select-none items-center justify-center rounded-full border-[1px] border-solid border-black text-[18px] ${
+                            i === pageNum.currentPage - 1
+                              ? "bg-gray-400"
+                              : "bg-gray-100"
+                          }`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            getProductsFromSelectedCat(i + 1);
+                          }}
+                        >
+                          <span>{i + 1}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      getProductsFromSelectedCat(pageNum.currentPage + 1);
+                    }}
+                    disabled={pageNum.currentPage === pageNum.lastPage}
+                    className="disabled:opacity-25"
+                  >
+                    <Image
+                      width={30}
+                      height={30}
+                      alt="prev icon"
+                      className="h-[23px] w-[23px] md:h-[30px] md:w-[30px]"
+                      src={"/icons/next.svg"}
+                    />
+                  </button>
                 </div>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    getProductsFromSelectedCat(pageNum.currentPage + 1);
-                  }}
-                  disabled={pageNum.currentPage === pageNum.lastPage}
-                  className="disabled:opacity-50"
-                >
-                  <Image
-                    width={30}
-                    height={30}
-                    alt="prev icon"
-                    src={"/icons/next.svg"}
-                  />
-                </button>
               </div>
             </div>
           )}
