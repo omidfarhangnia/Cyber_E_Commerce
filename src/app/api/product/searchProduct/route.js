@@ -3,26 +3,20 @@ import { pool } from "@/lib/db";
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url);
-  const selectedCat = searchParams.get("selectedCat");
+  const productName = searchParams.get("productName") || "";
   const page = parseInt(searchParams.get("pageNum") || "1", 10);
-  const pageSize = 2;
+  const pageSize = 100;
   const offset = (page - 1) * pageSize;
-
-  if (!selectedCat) {
-    return NextResponse.json(
-      { error: "Category is required" },
-      { status: 400 },
-    );
-  }
 
   try {
     const amount = await pool.query(
-      "SELECT COUNT(*) FROM products WHERE category = $1",
-      [selectedCat],
+      "SELECT COUNT(*) FROM products WHERE name ILIKE $1",
+      [`%${productName}%`],
     );
+
     const result = await pool.query(
-      "SELECT * FROM products WHERE category = $1 LIMIT $2 OFFSET $3",
-      [selectedCat, pageSize, offset],
+      "SELECT * FROM products WHERE name ILIKE $1 LIMIT $2 OFFSET $3",
+      [`%${productName}%`, pageSize, offset],
     );
 
     return NextResponse.json({

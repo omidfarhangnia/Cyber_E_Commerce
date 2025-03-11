@@ -70,12 +70,12 @@ function Categories({ category, selecedCat, setSelectedCat }) {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [pageNum, setPageNum] = useState({
-    currentPage: 1,
-    lastPage: null,
+    current: 1,
+    last: null,
   });
   const catRef = useRef(null);
   const labelLowerCase = String(category.label).toLowerCase();
-  const pageArr = [...Array(pageNum.lastPage).keys()];
+  const pageArr = [...Array(pageNum.last).keys()];
 
   async function getProductsFromSelectedCat(newPage = 1) {
     setLoading(true);
@@ -84,7 +84,7 @@ function Categories({ category, selecedCat, setSelectedCat }) {
     );
     const data = await res.json();
     setProducts(data.products);
-    setPageNum({ currentPage: newPage, lastPage: data.productNum });
+    setPageNum({ current: newPage, last: data.lastPageNum });
     setLoading(false);
   }
 
@@ -171,9 +171,9 @@ function Categories({ category, selecedCat, setSelectedCat }) {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      getProductsFromSelectedCat(pageNum.currentPage - 1);
+                      getProductsFromSelectedCat(pageNum.current - 1);
                     }}
-                    disabled={pageNum.currentPage === 1}
+                    disabled={pageNum.current === 1}
                     className="disabled:opacity-25"
                   >
                     <Image
@@ -191,11 +191,11 @@ function Categories({ category, selecedCat, setSelectedCat }) {
                           key={i}
                           className={`${
                             !(
-                              i >= pageNum.currentPage - 3 &&
-                              i <= pageNum.currentPage + 1
+                              i >= pageNum.current - 3 &&
+                              i <= pageNum.current + 1
                             ) && "hidden"
                           } flex h-[30px] w-[30px] cursor-pointer select-none items-center justify-center rounded-full border-[1px] border-solid border-black text-[18px] ${
-                            i === pageNum.currentPage - 1
+                            i === pageNum.current - 1
                               ? "bg-gray-400"
                               : "bg-gray-100"
                           }`}
@@ -212,9 +212,9 @@ function Categories({ category, selecedCat, setSelectedCat }) {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      getProductsFromSelectedCat(pageNum.currentPage + 1);
+                      getProductsFromSelectedCat(pageNum.current + 1);
                     }}
-                    disabled={pageNum.currentPage === pageNum.lastPage}
+                    disabled={pageNum.current === pageNum.last}
                     className="disabled:opacity-25"
                   >
                     <Image
