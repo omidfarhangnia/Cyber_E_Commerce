@@ -21,7 +21,7 @@ export default function Template({ children }) {
   }, []);
 
   return (
-    <div className="font-sf-md project--template relative min-h-[100vh] flex flex-col justify-between w-full overflow-hidden bg-black">
+    <div className="font-sf-md project--template relative min-h-[100vh] flex flex-col justify-between w-full overflow-hidden bg-[#ffffff]">
       <Header
         isBurgerPlayed={isBurgerPlayed}
         isSearchBoxOpened={isSearchBoxOpened}

@@ -5,7 +5,7 @@ export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const productName = searchParams.get("productName") || "";
   const page = parseInt(searchParams.get("pageNum") || "1", 10);
-  const pageSize = 5;
+  const pageSize = 4;
   const offset = (page - 1) * pageSize;
 
   if (!productName) {

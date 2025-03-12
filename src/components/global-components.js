@@ -42,7 +42,7 @@ export function Product({ product }) {
   return (
     <div className="products flex w-[90%] min-w-[160px] max-w-[240px] flex-col items-center rounded-[9px] border-[1px] border-solid border-black px-[10px] py-[25px] hover:bg-[#f4f4f4] hover:transition-colors md:max-w-[300px] md:px-[20px]">
       <Link
-        href={`./product/${product.id}`}
+        href={`/product/${product.id}`}
         className="flex flex-col items-center"
       >
         <div className="mb-[15px]">
