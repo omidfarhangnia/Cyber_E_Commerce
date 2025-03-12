@@ -5,8 +5,15 @@ export async function GET(req) {
   const { searchParams } = new URL(req.url);
   const productName = searchParams.get("productName") || "";
   const page = parseInt(searchParams.get("pageNum") || "1", 10);
-  const pageSize = 100;
+  const pageSize = 5;
   const offset = (page - 1) * pageSize;
+
+  if (!productName) {
+    return NextResponse.json({
+      products: [],
+      lastPageNum: 0,
+    });
+  }
 
   try {
     const amount = await pool.query(
@@ -19,10 +26,12 @@ export async function GET(req) {
       [`%${productName}%`, pageSize, offset],
     );
 
+    console.log(Math.floor(amount.rows[0].count / pageSize));
     return NextResponse.json({
       products: result.rows,
       lastPageNum: parseInt(
-        amount.rows[0].count / pageSize + (amount.rows[0].count % pageSize),
+        Math.floor(amount.rows[0].count / pageSize) +
+          (amount.rows[0].count % pageSize > 0 ? 1 : 0),
         10,
       ),
     });

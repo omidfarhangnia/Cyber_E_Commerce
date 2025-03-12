@@ -22,19 +22,22 @@ export default function Page({ params: paramsPromise }) {
     current: 1,
     last: null,
   });
+  const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
     async function fetchProducts() {
+      setLoading(true);
       const data = await getProductData(searchQuery, pageNum.current);
       setProducts(data.products);
       setPageNum({
         ...pageNum,
         last: data.lastPageNum,
       });
+      setLoading(false);
     }
     fetchProducts();
-  }, [searchQuery, pageNum]);
+  }, [searchQuery]);
 
   function handleSearch(e) {
     e.preventDefault();
@@ -43,8 +46,19 @@ export default function Page({ params: paramsPromise }) {
     }
   }
 
+  async function handleChangePage(newPage) {
+    setLoading(true);
+    const data = await getProductData(searchQuery, newPage);
+    setProducts(data.products);
+    setPageNum({
+      current: newPage,
+      last: data.lastPageNum,
+    });
+    setLoading(false);
+  }
+
   return (
-    <div className="h-[50vh] w-full bg-blue-500">
+    <div className="min-h-[50vh] w-full bg-blue-500">
       <div style={{ textAlign: "center", padding: "20px" }}>
         <h1>Search Products</h1>
         <form onSubmit={handleSearch}>
@@ -64,13 +78,9 @@ export default function Page({ params: paramsPromise }) {
         </form>
         <div className="flex w-[500px] justify-between">
           <button
-            disabled={pageNum.current === 0}
-            onClick={() =>
-              setPageNum({
-                ...pageNum,
-                current: pageNum - 1,
-              })
-            }
+            disabled={pageNum.current === 1}
+            onClick={() => handleChangePage(pageNum.current - 1)}
+            className="disabled:bg-red-500"
           >
             prev
           </button>
@@ -78,25 +88,27 @@ export default function Page({ params: paramsPromise }) {
             {pageNum.current}/{pageNum.last}
           </span>
           <button
-            onClick={() =>
-              setPageNum({
-                ...pageNum,
-                current: pageNum + 1,
-              })
-            }
-            className=""
+            disabled={pageNum.current >= pageNum.last}
+            onClick={() => handleChangePage(pageNum.current + 1)}
+            className="disabled:bg-red-500"
           >
             next
           </button>
         </div>
 
-        <div style={{ marginTop: "20px" }}>
-          {products.length > 0 ? (
-            products.map((product, index) => (
-              <div key={index}>{product.name}</div>
-            ))
+        <div>
+          {loading ? (
+            "loadding........"
           ) : (
-            <p>No products found.</p>
+            <div style={{ marginTop: "20px" }}>
+              {products.length > 0 ? (
+                products.map((product, index) => (
+                  <div key={index}>{product.name}</div>
+                ))
+              ) : (
+                <p>No products found.</p>
+              )}
+            </div>
           )}
         </div>
       </div>
