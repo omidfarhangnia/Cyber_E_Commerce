@@ -44,12 +44,12 @@ async function SelectedCat({ selectedCat }) {
 
   return (
     <div className="flex flex-col justify-center gap-y-[50px] p-[30px] md:gap-y-[100px]">
-      {productCat.brands.map((members) => {
+      {productCat.brands.map((members, i) => {
         const selectedBrandProducts = productCat.products.filter(
           (product) => product.brand === members.brand,
         );
         return (
-          <div className="">
+          <div className="" key={i}>
             <div className="mb-[30px] flex items-center gap-[30px] py-[15px] pl-[15px]">
               <h2 className="select-none text-[25px] font-semibold md:text-[35px]">
                 {members.brand}

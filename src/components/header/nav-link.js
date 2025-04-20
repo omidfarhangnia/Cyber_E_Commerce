@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { handleBurgerAction } from "./header";
 import { usePathname } from "next/navigation";
 import { handleSearchBoxAction } from "./search-box";
+import { useSession } from "next-auth/react";
 
 export const links = [
   {
@@ -35,7 +35,7 @@ export default function NavLinks({
   isSearchBoxOpened,
   isAnimePlaying,
 }) {
-  const [auth, setAuth] = useState(true);
+  const { data: session, status } = useSession();
   const pathname = usePathname();
 
   return (
@@ -82,18 +82,16 @@ export default function NavLinks({
             </Link>
           );
         })}
-        {!auth ? (
-          // user before auth
+        {!session ? (
           <>
-            <Link href="/blog" className="nav--links hover:border-black">
+            <Link href="/sign-up" className="nav--links hover:border-black">
               sign up
             </Link>
-            <Link href="/blog" className="nav--links hover:border-black">
-              log in
+            <Link href="/sign-in" className="nav--links hover:border-black">
+              sign in
             </Link>
           </>
         ) : (
-          // user after auth
           <>
             <Link href="/" className="nav--links hover:border-black">
               log out
