@@ -88,22 +88,22 @@
 
   div[class^="product--window--parts"] {
     animation-name: productAnime;
-    animation-duration: 8s;
+    animation-duration: 1s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
   }
 
   .product--window--parts__1 {
-    animation-delay: 2s;
+    animation-delay: 0.25s;
   }
   .product--window--parts__2 {
-    animation-delay: 4s;
+    animation-delay: 0.5s;
   }
   .product--window--parts__3 {
-    animation-delay: 6s;
+    animation-delay: 0.75s;
   }
   .product--window--parts__4 {
-    animation-delay: 8s;
+    animation-delay: 1s;
   }
 
   .linearGradient--bg {
