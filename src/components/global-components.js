@@ -367,5 +367,9 @@ export function SignOutBtn() {
     await signOut();
   }
 
-  return <button onClick={handleSignOut}>sign out</button>;
+  return (
+    <button className="nav--links hover:border-black" onClick={handleSignOut}>
+      sign out
+    </button>
+  );
 }

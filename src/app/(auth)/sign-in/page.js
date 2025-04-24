@@ -1,12 +1,14 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
-  const router = useRouter();
+  const { data: session, status } = useSession();
+  if (session) redirect("/");
+
   const [email, setEmail] = useState("omidfnia@gmail.com");
   const [password, setPassword] = useState("1234");
 
@@ -18,10 +20,7 @@ export default function Page() {
       password,
     });
 
-    if (res?.ok) {
-      router.refresh();
-      router.push("/");
-    } else {
+    if (!res?.ok) {
       throw new Error("invalided email and password");
     }
   }

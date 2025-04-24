@@ -2,6 +2,7 @@ import Credentials from "next-auth/providers/credentials";
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "./prisma";
+import bcrypt from "bcryptjs";
 
 export const { handlers, signIn, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -18,7 +19,12 @@ export const { handlers, signIn, auth } = NextAuth({
           },
         });
 
-        if (!user || user.password !== credentials.password) {
+        const isValid = bcrypt.compare(
+          credentials.password,
+          user?.password,
+        );
+
+        if (!isValid) {
           throw new Error("invalid credentials");
         }
 

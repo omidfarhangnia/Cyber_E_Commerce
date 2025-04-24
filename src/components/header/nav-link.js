@@ -71,11 +71,11 @@ export default function NavLinks({
           <div className="text-[#656565]">Search</div>
         </div>
       </div>
-      <nav className="hidden items-center justify-between gap-[30px] ps-[20px] lg:col-start-5 lg:col-end-13 lg:flex xl:col-start-5">
+      <nav className="hidden items-center justify-between gap-[30px] ps-[20px] text-[15px] lg:col-start-5 lg:col-end-13 lg:flex xl:col-start-5">
         {links.map((link) => {
           return (
             <Link
-              className={`${pathname === link.url && "font-bold"} nav--links hover:border-black`}
+              className={`${pathname === link.url && "font-semibold"} nav--links hover:border-black`}
               href={link.url}
               key={link.id}
             >
@@ -85,36 +85,42 @@ export default function NavLinks({
         })}
         {!session ? (
           <>
-            <Link href="/sign-up" className="nav--links hover:border-black">
+            <Link
+              href="/sign-up"
+              className={`${pathname === "/sign-up" && "font-semibold"} nav--links hover:border-black`}
+            >
               sign up
             </Link>
-            <Link href="/sign-in" className="nav--links hover:border-black">
+            <Link
+              href="/sign-in"
+              className={`${pathname === "/sign-in" && "font-semibold"} nav--links hover:border-black`}
+            >
               sign in
             </Link>
           </>
         ) : (
           <>
             <SignOutBtn />
-            <Link href="/">
+            <Link href="/" className="nav--links hover:border-black">
               <Image
-                width={32}
-                height={32}
+                width={28}
+                height={28}
                 alt="favorite icon"
                 src="/icons/favorites.svg"
               />
             </Link>
-            <Link href="/">
+            <Link href="/" className="nav--links hover:border-black">
               <Image
-                width={32}
-                height={32}
+                width={28}
+                height={28}
                 alt="favorite icon"
                 src="/icons/cart.svg"
               />
             </Link>
-            <Link href="/">
+            <Link href="/" className="nav--links hover:border-black">
               <Image
-                width={32}
-                height={32}
+                width={28}
+                height={28}
                 alt="favorite icon"
                 src="/icons/user.svg"
               />
