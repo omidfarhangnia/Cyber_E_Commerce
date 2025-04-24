@@ -9,6 +9,7 @@ import {
 } from "@/app/product/[productId]/page";
 import gsap from "gsap";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
 
 export function Product({ product }) {
   const [isLiked, setIsLiked] = useState(false);
@@ -359,4 +360,12 @@ export function ProductQuestionContainer({ questions }) {
       </div>
     </div>
   );
+}
+
+export function SignOutBtn() {
+  async function handleSignOut() {
+    await signOut();
+  }
+
+  return <button onClick={handleSignOut}>sign out</button>;
 }

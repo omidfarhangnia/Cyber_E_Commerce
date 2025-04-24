@@ -6,6 +6,7 @@ import { handleBurgerAction } from "./header";
 import { usePathname } from "next/navigation";
 import { handleSearchBoxAction } from "./search-box";
 import { useSession } from "next-auth/react";
+import { SignOutBtn } from "../global-components";
 
 export const links = [
   {
@@ -93,9 +94,7 @@ export default function NavLinks({
           </>
         ) : (
           <>
-            <Link href="/" className="nav--links hover:border-black">
-              log out
-            </Link>
+            <SignOutBtn />
             <Link href="/">
               <Image
                 width={32}
