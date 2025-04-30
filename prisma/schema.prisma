@@ -11,6 +11,7 @@ model User {
   id            String    @id @default(cuid())
   email         String    @unique
   password      String
+  favorites     String?   @default("[]")
   emailVerified DateTime?
   image         String?
   createdAt     DateTime  @default(now())

@@ -8,15 +8,15 @@ import {
   ProductQuestion,
 } from "@/app/product/[productId]/page";
 import gsap from "gsap";
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 export function Product({ product }) {
+  const { data: session, update } = useSession();
+
   const [isLiked, setIsLiked] = useState(false);
 
   function handleLikeProduct(e) {
     e.stopPropagation();
-    // auth condition
 
     setIsLiked(!isLiked);
     const tl = new gsap.timeline();
@@ -32,6 +32,23 @@ export function Product({ product }) {
       scale: 1,
       duration: 0.2,
       ease: "bounce",
+      onComplete: async () => {
+        const res = await fetch("/api/like-product", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            productId: product.id,
+            email: session.user.email,
+            favorites: session.user.favorites,
+          }),
+        });
+
+        if (res.ok) {
+          location.reload();
+        } else {
+          throw new Error("liked failed");
+        }
+      },
     });
   }
 
@@ -41,72 +58,81 @@ export function Product({ product }) {
   }
 
   return (
-    <div className="products flex w-[90%] min-w-[160px] max-w-[240px] flex-col items-center rounded-[9px] border-[1px] border-solid border-black px-[10px] py-[25px] hover:bg-[#f4f4f4] hover:transition-colors md:max-w-[300px] md:px-[20px]">
-      <Link
-        href={`/product/${product.id}`}
-        className="flex flex-col items-center"
-      >
-        <div className="mb-[15px]">
-          <Image
-            width={160}
-            height={160}
-            className="rounded-[10px] md:h-[200px] md:w-[200px]"
-            alt="product image"
-            priority
-            src={product.img_url}
-          />
-        </div>
-        <div>
-          <h3 className="mt-[10px] w-[200px] overflow-hidden text-ellipsis text-nowrap text-center font-medium md:text-[18px]">
-            {product.name}
-          </h3>
-        </div>
-        <div>
-          {product.discount_percent === 0 ? (
-            <div className="my-[10px] text-[23px] font-bold md:text-[28px]">
-              ${product.price}
-            </div>
-          ) : (
-            <div className="flex items-center gap-[20px]">
-              <div className="relative my-[10px] font-bold opacity-[.8] md:text-[23]">
-                $
-                {Math.ceil(
-                  product.price +
-                    (product.price * product.discount_percent) / 100,
-                )}
-                <div className="absolute left-[-15%] top-[42%] h-[2px] w-[140%] rotate-[-10deg] bg-red-500"></div>
-              </div>
-              <div className="my-[10px] text-[25px] font-bold md:text-[30px]">
+    <div>
+      <h1>{JSON.stringify(session?.user.favorites)}</h1>
+
+      <div className="products flex w-[90%] min-w-[160px] max-w-[240px] flex-col items-center rounded-[9px] border-[1px] border-solid border-black px-[10px] py-[25px] hover:bg-[#f4f4f4] hover:transition-colors md:max-w-[300px] md:px-[20px]">
+        <Link
+          href={`/product/${product.id}`}
+          className="flex flex-col items-center"
+        >
+          <div className="mb-[15px]">
+            <Image
+              width={160}
+              height={160}
+              className="rounded-[10px] md:h-[200px] md:w-[200px]"
+              alt="product image"
+              priority
+              src={product.img_url}
+            />
+          </div>
+          <div>
+            <h3 className="mt-[10px] w-[200px] overflow-hidden text-ellipsis text-nowrap text-center font-medium md:text-[18px]">
+              {product.name}
+            </h3>
+          </div>
+          <div>
+            {product.discount_percent === 0 ? (
+              <div className="my-[10px] text-[23px] font-bold md:text-[28px]">
                 ${product.price}
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="flex items-center gap-[20px]">
+                <div className="relative my-[10px] font-bold opacity-[.8] md:text-[23]">
+                  $
+                  {Math.ceil(
+                    product.price +
+                      (product.price * product.discount_percent) / 100,
+                  )}
+                  <div className="absolute left-[-15%] top-[42%] h-[2px] w-[140%] rotate-[-10deg] bg-red-500"></div>
+                </div>
+                <div className="my-[10px] text-[25px] font-bold md:text-[30px]">
+                  ${product.price}
+                </div>
+              </div>
+            )}
+          </div>
+        </Link>
+        <div className="mb-[15px] mt-[10px] flex w-full items-center justify-center gap-[15px]">
+          <button
+            disabled={!session && true}
+            className="cursor-pointer disabled:opacity-50"
+            onClick={handleLikeProduct}
+            title={!session ? "You Need To Sign In First" : ""}
+          >
+            <Image
+              width={32}
+              height={32}
+              alt="like icon"
+              src={
+                isLiked ? "/icons/like-active.svg" : "/icons/like-inactive.svg"
+              }
+            />
+          </button>
+          <button
+            onClick={handleBuyProduct}
+            className="flex items-center gap-[5px] rounded-full bg-black px-[25px] py-[2px] text-white transition-all hover:bg-gray-900 md:justify-center md:px-[35px] md:py-[5px]"
+          >
+            <span className="font-semiboldbold md:text-[20px]">Buy Now</span>
+            <Image
+              width={32}
+              height={32}
+              alt="product image"
+              className="md:h-[35px] md:w-[35px]"
+              src={"/icons/shopping-cart.svg"}
+            />
+          </button>
         </div>
-      </Link>
-      <div className="mb-[15px] mt-[10px] flex w-full items-center justify-center gap-[15px]">
-        <div className="cursor-pointer" onClick={handleLikeProduct}>
-          <Image
-            width={32}
-            height={32}
-            alt="like icon"
-            src={
-              isLiked ? "/icons/like-active.svg" : "/icons/like-inactive.svg"
-            }
-          />
-        </div>
-        <button
-          onClick={handleBuyProduct}
-          className="flex items-center gap-[5px] rounded-full bg-black px-[25px] py-[2px] text-white transition-all hover:bg-gray-900 md:justify-center md:px-[35px] md:py-[5px]"
-        >
-          <span className="font-semiboldbold md:text-[20px]">Buy Now</span>
-          <Image
-            width={32}
-            height={32}
-            alt="product image"
-            className="md:h-[35px] md:w-[35px]"
-            src={"/icons/shopping-cart.svg"}
-          />
-        </button>
       </div>
     </div>
   );

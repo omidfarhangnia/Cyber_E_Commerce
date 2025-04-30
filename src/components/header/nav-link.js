@@ -101,7 +101,10 @@ export default function NavLinks({
         ) : (
           <>
             <SignOutBtn />
-            <Link href="/" className="nav--links hover:border-black">
+            <Link
+              href="/favorites"
+              className={`${pathname === "/favorites" && "opacity-95"} nav--links opacity-60 hover:border-black`}
+            >
               <Image
                 width={28}
                 height={28}
@@ -109,7 +112,10 @@ export default function NavLinks({
                 src="/icons/favorites.svg"
               />
             </Link>
-            <Link href="/" className="nav--links hover:border-black">
+            <Link
+              href="/shopping-cart"
+              className={`${pathname === "/shopping-cart" && "opacity-95"} nav--links opacity-60 hover:border-black`}
+            >
               <Image
                 width={28}
                 height={28}
@@ -117,7 +123,10 @@ export default function NavLinks({
                 src="/icons/cart.svg"
               />
             </Link>
-            <Link href="/" className="nav--links hover:border-black">
+            <Link
+              href="/profile"
+              className={`${pathname === "/profile" && "opacity-95"} nav--links opacity-60 hover:border-black`}
+            >
               <Image
                 width={28}
                 height={28}

@@ -19,7 +19,7 @@ export const { handlers, signIn, auth } = NextAuth({
           },
         });
 
-        const isValid = bcrypt.compare(
+        const isValid = await bcrypt.compare(
           credentials.password,
           user?.password,
         );
@@ -32,6 +32,35 @@ export const { handlers, signIn, auth } = NextAuth({
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+      }
+
+      const updatedData = await prisma.user.findUnique({
+        where: {
+          email: token.email,
+        },
+      });
+
+      if (updatedData) {
+        token.email = updatedData.email;
+        token.favorites = updatedData.favorites;
+      }
+
+      return token;
+    },
+    async session({ session, token }) {
+      if (token && session.user) {
+        session.user.id = token.id;
+        session.user.email = token.email;
+        session.user.favorites = token.favorites;
+      }
+
+      return session;
+    },
+  },
   session: {
     strategy: "jwt",
   },
