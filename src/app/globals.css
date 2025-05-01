@@ -166,6 +166,23 @@
   .loading--dot--anime__3 {
     animation-delay: 0.5s;
   }
+
+  .bg-glass {
+    backdrop-filter: blur(1px);
+    -webkit-backdrop-filter: blur(1px);
+  }
+  .box-anime {
+    animation: boxAnime 500s linear infinite;
+  }
+
+  @keyframes boxAnime {
+    0% {
+      rotate: 0;
+    }
+    100% {
+      rotate: 360deg;
+    }
+  }
 }
 
 @layer utilities {
