@@ -2,23 +2,56 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ProductComment,
   ProductQuestion,
 } from "@/app/product/[productId]/page";
 import gsap from "gsap";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export function Product({ product }) {
   const { data: session, update } = useSession();
-
   const [isLiked, setIsLiked] = useState(false);
 
-  function handleLikeProduct(e) {
+  useEffect(() => {
+    if (session?.user?.favorites) {
+      try {
+        const favorites = JSON.parse(session.user.favorites);
+        setIsLiked(favorites.includes(product.id));
+      } catch (error) {
+        console.error("Failed to parse favorites:", error);
+        setIsLiked(false);
+      }
+    } else {
+      setIsLiked(false);
+    }
+  }, [session, product.id]);
+
+  async function handleLikeProduct(e) {
     e.stopPropagation();
 
-    setIsLiked(!isLiked);
+    setIsLiked((prevIsLiked) => !prevIsLiked);
+
+    // const res = await fetch("/api/like-product", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     productId: product.id,
+    //     email: session.user.email,
+    //     favorites: session.user.favorites,
+    //     status: isLiked ? "remove" : "add",
+    //   }),
+    // });
+
+    // if (res.ok) {
+    //   location.reload();
+    // } else {
+    //   console.log("liked failed");
+    //   setIsLiked((prevIsLiked) => !prevIsLiked);
+    // }
+
     const tl = new gsap.timeline();
     tl.to(e.target, {
       y: -10,
@@ -40,13 +73,15 @@ export function Product({ product }) {
             productId: product.id,
             email: session.user.email,
             favorites: session.user.favorites,
+            status: isLiked ? "remove" : "add",
           }),
         });
 
         if (res.ok) {
           location.reload();
         } else {
-          throw new Error("liked failed");
+          console.log("liked failed");
+          setIsLiked((prevIsLiked) => !prevIsLiked);
         }
       },
     });
@@ -58,9 +93,7 @@ export function Product({ product }) {
   }
 
   return (
-    <div>
-      <h1>{JSON.stringify(session?.user.favorites)}</h1>
-
+    <>
       <div className="products flex w-[90%] min-w-[160px] max-w-[240px] flex-col items-center rounded-[9px] border-[1px] border-solid border-black px-[10px] py-[25px] hover:bg-[#f4f4f4] hover:transition-colors md:max-w-[300px] md:px-[20px]">
         <Link
           href={`/product/${product.id}`}
@@ -134,7 +167,7 @@ export function Product({ product }) {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
