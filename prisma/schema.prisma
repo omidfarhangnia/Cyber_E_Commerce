@@ -12,6 +12,7 @@ model User {
   email         String    @unique
   password      String
   favorites     String?   @default("[]")
+  shopping_cart String?   @default("[]")
   emailVerified DateTime?
   image         String?
   createdAt     DateTime  @default(now())

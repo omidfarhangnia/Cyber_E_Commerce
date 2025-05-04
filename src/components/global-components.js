@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   ProductComment,
   ProductQuestion,
@@ -14,6 +14,9 @@ import { useRouter } from "next/navigation";
 export function Product({ product }) {
   const { data: session, update } = useSession();
   const [isLiked, setIsLiked] = useState(false);
+  const [isInCart, setIsInCart] = useState(false);
+  const [animeLoading, setAnimeLoading] = useState(false);
+  const btnRef = useRef();
 
   useEffect(() => {
     if (session?.user?.favorites) {
@@ -27,32 +30,28 @@ export function Product({ product }) {
     } else {
       setIsLiked(false);
     }
+
+    if (session?.user?.shopping_cart) {
+      try {
+        const shopping_cart = JSON.parse(session.user.shopping_cart);
+        setIsInCart(shopping_cart.includes(product.id));
+      } catch (error) {
+        console.error("failed to parse favorites:", error);
+        setIsInCart(false);
+      }
+    } else {
+      setIsInCart(false);
+    }
   }, [session, product.id]);
 
   async function handleLikeProduct(e) {
     e.stopPropagation();
 
+    if (animeLoading) return;
     setIsLiked((prevIsLiked) => !prevIsLiked);
 
-    // const res = await fetch("/api/like-product", {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({
-    //     productId: product.id,
-    //     email: session.user.email,
-    //     favorites: session.user.favorites,
-    //     status: isLiked ? "remove" : "add",
-    //   }),
-    // });
-
-    // if (res.ok) {
-    //   location.reload();
-    // } else {
-    //   console.log("liked failed");
-    //   setIsLiked((prevIsLiked) => !prevIsLiked);
-    // }
-
     const tl = new gsap.timeline();
+    setAnimeLoading(true);
     tl.to(e.target, {
       y: -10,
       rotateZ: -10,
@@ -83,13 +82,110 @@ export function Product({ product }) {
           console.log("liked failed");
           setIsLiked((prevIsLiked) => !prevIsLiked);
         }
+        setAnimeLoading(false);
       },
     });
   }
 
   function handleBuyProduct(e) {
     e.stopPropagation();
-    // auth condition
+
+    if (animeLoading) return;
+
+    const tl = new gsap.timeline();
+    const btnShoppingCart = btnRef.current.querySelector("img");
+    const btnAddText = btnRef.current.querySelector(".addSpan");
+    const btnRemoveText = btnRef.current.querySelector(".removeSpan");
+
+    async function handleToggleCart() {
+      const res = await fetch("/api/add-to-cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId: product.id,
+          email: session.user.email,
+          shopping_cart: session.user.shopping_cart,
+          status: isInCart ? "remove" : "add",
+        }),
+      });
+
+      if (res.ok) {
+        location.reload();
+      } else {
+        console.log("liked failed");
+        setIsInCart((prevIsInCart) => !prevIsInCart);
+      }
+    }
+
+    setIsInCart(!isInCart);
+
+    if (!isInCart) {
+      // add to cart
+      tl.to(btnShoppingCart, {
+        x: "100px",
+        duration: 0.7,
+        ease: "expo",
+      })
+        .to(
+          btnAddText,
+          {
+            x: "250%",
+            duration: 0.4,
+            ease: "expo",
+          },
+          "-=.4",
+        )
+        .set(btnShoppingCart, {
+          x: "-200px",
+        })
+        .to(btnShoppingCart, {
+          x: "10px",
+          duration: 0.4,
+          ease: "expo.out",
+        })
+        .set(btnRemoveText, {
+          display: "inline",
+        })
+        .to(btnRemoveText, {
+          opacity: "1",
+          duration: 0.4,
+          ease: "expo.out",
+          onComplete: handleToggleCart,
+        });
+    } else {
+      // remove from cart
+      tl.to(btnShoppingCart, {
+        x: "100px",
+        duration: 0.7,
+        ease: "expo",
+      })
+        .to(
+          btnRemoveText,
+          {
+            x: "250%",
+            duration: 0.4,
+            ease: "expo",
+          },
+          "-=.4",
+        )
+        .set(btnShoppingCart, {
+          x: "-200px",
+        })
+        .to(btnShoppingCart, {
+          x: "0",
+          duration: 0.4,
+          ease: "expo.out",
+        })
+        .set(btnAddText, {
+          display: "inline",
+        })
+        .to(btnAddText, {
+          opacity: "1",
+          duration: 0.4,
+          ease: "expo.out",
+          onComplete: handleToggleCart,
+        });
+    }
   }
 
   return (
@@ -139,7 +235,7 @@ export function Product({ product }) {
         <div className="mb-[15px] mt-[10px] flex w-full items-center justify-center gap-[15px]">
           <button
             disabled={!session && true}
-            className="cursor-pointer disabled:opacity-50"
+            className="cursor-pointer disabled:cursor-default disabled:opacity-50"
             onClick={handleLikeProduct}
             title={!session ? "You Need To Sign In First" : ""}
           >
@@ -153,10 +249,22 @@ export function Product({ product }) {
             />
           </button>
           <button
+            ref={btnRef}
             onClick={handleBuyProduct}
-            className="flex items-center gap-[5px] rounded-full bg-black px-[25px] py-[2px] text-white transition-all hover:bg-gray-900 md:justify-center md:px-[35px] md:py-[5px]"
+            disabled={!session && true}
+            title={!session ? "You Need To Sign In First" : ""}
+            className="relative flex w-[80%] items-center gap-[5px] overflow-hidden rounded-full bg-black px-[25px] py-[2px] text-[14px] capitalize text-white transition-all hover:bg-gray-900 disabled:cursor-default disabled:opacity-50 md:justify-center md:px-[35px] md:py-[5px]"
           >
-            <span className="font-semiboldbold md:text-[20px]">Buy Now</span>
+            <span
+              className={`addSpan ${isInCart && "absolute left-[30%] hidden opacity-0"}`}
+            >
+              Buy Now
+            </span>
+            <span
+              className={`removeSpan ${!isInCart && "absolute left-[20%] hidden opacity-0"}`}
+            >
+              remove now
+            </span>
             <Image
               width={32}
               height={32}

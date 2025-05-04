@@ -47,6 +47,7 @@ export const { handlers, signIn, auth } = NextAuth({
       if (updatedData) {
         token.email = updatedData.email;
         token.favorites = updatedData.favorites;
+        token.shopping_cart = updatedData.shopping_cart;
       }
 
       return token;
@@ -56,6 +57,7 @@ export const { handlers, signIn, auth } = NextAuth({
         session.user.id = token.id;
         session.user.email = token.email;
         session.user.favorites = token.favorites;
+        session.user.shopping_cart = token.shopping_cart;
       }
 
       return session;

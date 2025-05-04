@@ -303,18 +303,6 @@ async function ProductData({ product }) {
             />
           </div>
         </div>
-        <Link
-          href={"/"}
-          className="white--btn mt-[20px] w-full border-black text-center text-black"
-        >
-          Add to Wishlist
-        </Link>
-        <Link
-          href={"/"}
-          className="black--btn mt-[20px] w-full bg-black text-center text-white"
-        >
-          Add to Card
-        </Link>
       </div>
     </div>
   );

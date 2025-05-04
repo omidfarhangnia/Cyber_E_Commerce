@@ -2,22 +2,22 @@ import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
-  const { productId, email, favorites, status } = await req.json();
+  const { productId, email, shopping_cart, status } = await req.json();
 
-  let updatedFavoritesArr;
-  const prevFavorites = JSON.parse(favorites);
+  let updatedCartArr;
+  const prevCart = JSON.parse(shopping_cart);
 
   if (status === "add") {
-    const newFavorites = [productId];
-    updatedFavoritesArr = newFavorites.concat(prevFavorites);
+    const newCart = [productId];
+    updatedCartArr = newCart.concat(prevCart);
   } else {
-    updatedFavoritesArr = prevFavorites.filter((id) => id !== productId);
+    updatedCartArr = prevCart.filter((id) => id !== productId);
   }
 
   try {
     const updatedUser = await prisma.user.update({
       where: { email },
-      data: { favorites: JSON.stringify(updatedFavoritesArr) },
+      data: { shopping_cart: JSON.stringify(updatedCartArr) },
     });
 
     return NextResponse.json({
