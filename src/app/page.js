@@ -5,7 +5,6 @@ import {
   HomeSec4,
   HomeSec5,
 } from "@/components/sections/home/home-sections";
-import dynamic from "next/dynamic";
 
 export default async function Home() {
   return (

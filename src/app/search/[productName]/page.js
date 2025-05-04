@@ -107,7 +107,6 @@ export default function Page({ params: paramsPromise }) {
               {products.length > 0 ? (
                 products.map((product) => (
                   <Product key={product.id} product={product} />
-                  // <div key={product.id}>{product.name}</div>
                 ))
               ) : (
                 <p className="text-[20px] text-slate-600 lg:text-[30px]">

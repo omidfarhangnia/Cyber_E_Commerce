@@ -10,8 +10,8 @@ export default function Page() {
   if (session) redirect("/");
 
   const router = useRouter();
-  const [email, setEmail] = useState("random@gmail.com");
-  const [password, setPassword] = useState("1234");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();

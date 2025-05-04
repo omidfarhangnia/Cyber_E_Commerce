@@ -37,6 +37,7 @@ export default function Footer() {
             className="h-auto w-auto"
             alt="white logo"
             src={"/logo/white-logo.svg"}
+            priority
           />
           <p className="mt-[16px] text-center text-[13px] font-semibold leading-[24px] text-[#CFCFCF] md:text-start">
             We are a residential interior design firm located in Portland. Our
