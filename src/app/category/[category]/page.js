@@ -21,18 +21,20 @@ async function fetchProductCat(selectedCat) {
 }
 
 export default async function Page({ params }) {
+  const { category } = await params;
+
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-[1200px] py-[30px] md:py-[90px]">
         <div className="mx-auto flex w-[80%] max-w-[800px] items-center justify-center">
           <span className="inline-block h-[2.5px] w-full bg-black"></span>
           <h1 className="mx-[20px] text-center text-[25px] font-bold capitalize md:text-[40px]">
-            {params.category}
+            {category}
           </h1>
           <span className="inline-block h-[2.5px] w-full bg-black"></span>
         </div>
         <Suspense fallback={<Sec4Skeleton />}>
-          <SelectedCat selectedCat={params?.category} />
+          <SelectedCat selectedCat={category} />
         </Suspense>
       </div>
     </div>

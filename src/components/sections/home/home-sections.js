@@ -3,7 +3,7 @@
 import gsap from "gsap";
 import Image from "next/image";
 import { useGSAP } from "@gsap/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { Product } from "@/components/global-components";
 import {
@@ -54,7 +54,6 @@ export function HomeSec1() {
             alt="this is iphone image"
             className="relative h-auto w-auto object-contain lg:ml-auto"
             src="/images/iphone-image.webp"
-            priority
           />
         </div>
       </div>
@@ -145,10 +144,9 @@ export function HomeSec2() {
               className={`flex ${section.position} flex-col md:flex-row md:justify-evenly ${section.bgClass} items-center px-[15px] py-[40px]`}
             >
               <Image
-                priority
                 width={section.width}
                 height={section.height}
-                className={`object-contain md:w-[200px] md:justify-self-stretch ${section.imgClass}`}
+                className={`h-auto w-auto object-contain md:w-[200px] md:justify-self-stretch ${section.imgClass}`}
                 alt={section.header}
                 src={section.imgUrl}
               />
@@ -180,28 +178,28 @@ export function HomeSec2() {
 const secThreeCates = [
   {
     iconUrl: "/icons/phones-black.svg",
-    text: "Phones",
-    url: "/category/phones",
+    text: "Phone",
+    url: "/category/phone",
   },
   {
     iconUrl: "/icons/smart-watches-black.svg",
-    text: "Smart Watches",
-    url: "/category/smart-watches",
+    text: "Smart Watch",
+    url: "/category/smartwatch",
   },
   {
     iconUrl: "/icons/cameras-black.svg",
     text: "Cameras",
-    url: "/category/cameras",
+    url: "/category/camera",
   },
   {
     iconUrl: "/icons/headphones-black.svg",
-    text: "Headphones",
-    url: "/category/headphones",
+    text: "Headphone",
+    url: "/category/headphone",
   },
   {
     iconUrl: "/icons/computers-black.svg",
-    text: "Computers",
-    url: "/category/computers",
+    text: "Computer",
+    url: "/category/computer",
   },
   {
     iconUrl: "/icons/gaming-black.svg",
@@ -470,7 +468,7 @@ export function HomeSec5() {
       {loading && product.length !== 0 ? (
         <Sec5Skeleton />
       ) : (
-        <div>
+        <div className="select-none">
           <div className="hidden md:block">
             <Sec5LgDevice data={product} />
           </div>
@@ -536,12 +534,15 @@ const productAnimeTl = new gsap.timeline();
 const initialPostsNum = [3, 0, 1];
 function Sec5SmDevice({ data }) {
   const [postsNum, setPostsNum] = useState(initialPostsNum);
+  const isSlideMovedRef = useRef(false);
 
   const prevBg = ["bg-[", data[postsNum[0]]?.theme_color, "]"].join("");
   const currentBg = ["bg-[", data[postsNum[1]]?.theme_color, "]"].join("");
   const nextBg = ["bg-[", data[postsNum[2]]?.theme_color, "]"].join("");
 
   useEffect(() => {
+    if (!isSlideMovedRef.current) return;
+
     productAnimeTl.clear();
     productAnimeTl
       .set(".productLoader--parts", { opacity: 1 })
@@ -560,6 +561,8 @@ function Sec5SmDevice({ data }) {
   }, [postsNum]);
 
   function playCategoryAnime(dir) {
+    // stoping gsap for rendering animation before user clicking
+    if (!isSlideMovedRef.current) isSlideMovedRef.current = true;
     if (productAnimeTl.isActive()) return;
     productAnimeTl.set(".productLoader--container", { display: "block" });
     productAnimeTl.to(".productLoader--parts", {

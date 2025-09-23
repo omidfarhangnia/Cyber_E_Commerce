@@ -31,7 +31,6 @@ export default function Burger({ isBurgerPlayed, isAnimePlaying }) {
                   className="h-auto w-auto"
                   src={"/logo/black-logo.svg"}
                   alt="logo image"
-                  priority
                 />
               </Link>
               <div

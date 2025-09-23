@@ -193,6 +193,7 @@ async function ProductData({ product }) {
           height={300}
           alt="product image"
           src={product.img_url}
+          priority
           className="w-full rounded-[20px] md:object-contain"
         />
       </div>
