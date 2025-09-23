@@ -21,8 +21,9 @@
     "next-auth": "^5.0.0-beta.26",
     "pg": "^8.13.3",
     "pool": "^0.4.1",
-    "react": "19.0.0-rc-66855b96-20241106",
-    "react-dom": "19.0.0-rc-66855b96-20241106"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.6.0"
   },
   "devDependencies": {
     "postcss": "^8",

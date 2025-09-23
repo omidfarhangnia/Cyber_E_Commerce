@@ -10,6 +10,7 @@ import {
 import gsap from "gsap";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 export function Product({ product }) {
   const { data: session, update } = useSession();
@@ -77,7 +78,7 @@ export function Product({ product }) {
         });
 
         if (res.ok) {
-          location.reload();
+          update();
         } else {
           console.log("liked failed");
           setIsLiked((prevIsLiked) => !prevIsLiked);
@@ -188,6 +189,19 @@ export function Product({ product }) {
     }
   }
 
+  const notify = () =>
+    toast.custom(
+      <div className="rounded-[10px] bg-[#f4f4f4] px-[40px] py-[20px] text-[20px] capitalize">
+        💡 please sign in first.
+      </div>,
+      {
+        id: "sign-in-toast",
+        duration: 2500,
+        position: "bottom-right",
+        removeDelay: 500,
+      },
+    );
+
   return (
     <>
       <div className="products flex w-[90%] min-w-[160px] max-w-[240px] flex-col items-center rounded-[9px] border-[1px] border-solid border-black px-[10px] py-[25px] hover:bg-[#f4f4f4] hover:transition-colors md:max-w-[300px] md:px-[20px]">
@@ -201,7 +215,6 @@ export function Product({ product }) {
               height={160}
               className="rounded-[10px] md:h-[200px] md:w-[200px]"
               alt="product image"
-              priority
               src={product.img_url}
             />
           </div>
@@ -234,9 +247,14 @@ export function Product({ product }) {
         </Link>
         <div className="mb-[15px] mt-[10px] flex w-full items-center justify-center gap-[15px]">
           <button
-            disabled={!session && true}
             className="cursor-pointer disabled:cursor-default disabled:opacity-50"
-            onClick={handleLikeProduct}
+            onClick={(e) => {
+              if (session) {
+                handleLikeProduct(e);
+              } else {
+                notify();
+              }
+            }}
             title={!session ? "You Need To Sign In First" : ""}
           >
             <Image
@@ -250,8 +268,13 @@ export function Product({ product }) {
           </button>
           <button
             ref={btnRef}
-            onClick={handleBuyProduct}
-            disabled={!session && true}
+            onClick={(e) => {
+              if (session) {
+                handleBuyProduct(e);
+              } else {
+                notify();
+              }
+            }}
             title={!session ? "You Need To Sign In First" : ""}
             className="relative flex w-[80%] items-center gap-[5px] overflow-hidden rounded-full bg-black px-[25px] py-[2px] text-[14px] capitalize text-white transition-all hover:bg-gray-900 disabled:cursor-default disabled:opacity-50 md:justify-center md:px-[35px] md:py-[5px]"
           >
