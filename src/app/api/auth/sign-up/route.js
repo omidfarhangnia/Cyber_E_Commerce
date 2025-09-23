@@ -3,10 +3,9 @@ import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 
 export async function POST(request) {
-  const { email, password } = await request.json();
-  const hashedPassword = await bcrypt.hash(password, 10);
-
   try {
+    const { email, password } = await request.json();
+    const hashedPassword = await bcrypt.hash(password, 10);
     await prisma.user.create({
       data: {
         email,
@@ -14,8 +13,14 @@ export async function POST(request) {
       },
     });
 
-    return NextResponse.json("use created successfully");
+    return NextResponse.json(
+      { message: "User created successfully." },
+      { status: 201 },
+    );
   } catch (error) {
-    throw new Error("sign up failed");
+    return NextResponse.json(
+      { message: "an unexpected error occured." },
+      { status: 500 },
+    );
   }
 }

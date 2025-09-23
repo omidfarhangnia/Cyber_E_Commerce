@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export function Sec4Skeleton() {
   return (
-    <div className="relative w-full min-h-[60vh]">
+    <div className="relative min-h-[60vh] w-full">
       <div className="absolute left-0 top-0 z-10 h-full w-full bg-[#F6F6F6]">
         <div className="product--window--parts__1 absolute right-0 top-0 h-[50%] w-[50%] bg-[#0e0e0e]"></div>
         <div className="product--window--parts__2 absolute left-0 top-0 h-[50%] w-[50%] bg-[#2A2A2A]"></div>
@@ -62,7 +62,7 @@ function Sec5LgSkeleton() {
 
 function Sec5SmSkeleton() {
   return (
-    <div className="bg-white py-[30px] lg:w-[25%]">
+    <div className="bg-white py-[30px] md:hidden lg:w-[25%]">
       <div className="flex flex-col items-center justify-center px-[20px] py-[30px]">
         <div className="skeleton--animation w-[60%] rounded-[30px] border-[5px] border-solid border-[#C7CDD2]">
           <Image

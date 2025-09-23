@@ -465,7 +465,7 @@ export function HomeSec5() {
 
   return (
     <>
-      {loading && product.length !== 0 ? (
+      {loading ? (
         <Sec5Skeleton />
       ) : (
         <div className="select-none">

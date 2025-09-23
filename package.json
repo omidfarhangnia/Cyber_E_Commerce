@@ -11,25 +11,25 @@
     "db:reset": "prisma migrate reset && prisma migrate dev"
   },
   "dependencies": {
-    "@auth/prisma-adapter": "^2.9.0",
-    "@gsap/react": "^2.1.1",
-    "@prisma/client": "^6.6.0",
+    "@auth/prisma-adapter": "^2.10.0",
+    "@gsap/react": "^2.1.2",
+    "@prisma/client": "^6.5.0",
     "@vercel/postgres": "^0.10.0",
     "bcryptjs": "^3.0.2",
-    "gsap": "^3.12.5",
+    "gsap": "^3.13.0",
     "next": "15.0.3",
-    "next-auth": "^5.0.0-beta.26",
-    "pg": "^8.13.3",
+    "next-auth": "5.0.0-beta.29",
+    "pg": "^8.16.3",
     "pool": "^0.4.1",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-hot-toast": "^2.6.0"
   },
   "devDependencies": {
-    "postcss": "^8",
-    "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.8",
-    "prisma": "^6.6.0",
-    "tailwindcss": "^3.4.1"
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "prettier-plugin-tailwindcss": "^0.6.14",
+    "prisma": "^6.16.2",
+    "tailwindcss": "^3.4.17"
   }
 }
