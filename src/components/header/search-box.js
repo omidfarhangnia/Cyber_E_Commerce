@@ -105,7 +105,7 @@ export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
 
   return (
     <div className="searchBox--container fixed top-[-600%] z-50 h-[100vh] w-full bg-[rgba(0,0,0,0)]">
-      <div className="relative flex h-[60%] min-h-[450px] w-full flex-col items-center gap-[30px] rounded-b-[50%] bg-[#F6F6F6] pt-[7%]">
+      <div className="relative flex h-[60%] min-h-[450px] w-full flex-col items-center justify-center gap-[30px] rounded-b-[30%] bg-[#F6F6F6] pt-[7%] md:rounded-b-[50%]">
         <div
           className="absolute right-[20px] top-[20px]"
           onClick={() => {
@@ -119,8 +119,13 @@ export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
             alt="close icon"
           />
         </div>
-        <div className="flex w-[80%] items-center justify-center gap-[20px]">
+        <div className="flex w-[80%] flex-wrap items-center justify-center gap-[20px] pt-[50px] md:pt-0">
           <input
+            onKeyDown={(e) => {
+              if (e.key !== "Enter") return;
+              if (!inputText.length) return;
+              handleSearch();
+            }}
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Product"
@@ -137,16 +142,16 @@ export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
             Search
           </button>
         </div>
-        <div className="w-[55%] max-w-[1000px]">
-          <div className="flex items-center justify-between">
-            <div className="flex select-none items-center gap-[10px]">
+        <div className="w-full max-w-[1000px] px-[5%]">
+          <div className="flex items-center justify-between capitalize">
+            <div className="flex select-none items-center justify-center gap-[10px]">
               <Image
                 src={"/icons/history.svg"}
-                width={22}
-                height={22}
+                width={20}
+                height={20}
                 alt="search icon"
               />
-              <h3 className="text-[20px] capitalize" onClick={handleSearch}>
+              <h3 className="capitalize md:text-[20px]" onClick={handleSearch}>
                 search history
               </h3>
             </div>
@@ -159,8 +164,8 @@ export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
                 <Image
                   alt="rubbish bin"
                   src={"/icons/rubbish-bin.svg"}
-                  width={22}
-                  height={22}
+                  width={20}
+                  height={20}
                 />
               </div>
             )}
@@ -179,7 +184,7 @@ export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
                 />
               </div>
             ) : (
-              <div className="mt-[15px] flex flex-wrap gap-[20px]">
+              <div className="mt-[20px] flex flex-wrap justify-center gap-[5px] md:gap-[20px]">
                 {searchHistory?.map((member, i) => {
                   return (
                     <div
