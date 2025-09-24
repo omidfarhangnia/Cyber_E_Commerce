@@ -1,70 +1,58 @@
-import gsap from "gsap";
-import { redirect } from "next/navigation";
+"use client";
+
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { useRouter } from "next/navigation";
+gsap.registerPlugin(useGSAP);
 
-export function handleSearchBoxAction(
-  isSearchBoxOpened,
-  isAnimePlaying,
-  isRedirectPorpuse = false,
-  pathname = "",
-) {
-  // checking for avoiding multiplay animations
-  if (isAnimePlaying.current) return;
-  isAnimePlaying.current = true;
-
-  // starting animation function
-  const tl = gsap.timeline();
-  if (isSearchBoxOpened.current) {
-    tl.to(".searchBox--container > div", {
-      y: "-100vh",
-      duration: 0.3,
-      ease: "expo",
-    })
-      .to(
-        ".searchBox--container",
-        {
-          background: "rgba(0,0,0,0)",
-          duration: 0.6,
-          ease: "expo.in",
-        },
-        "<",
-      )
-      .set(".searchBox--container", {
-        top: "-600%",
-      })
-      .set(".searchBox--container > div", {
-        y: "0",
-        onComplete: () => {
-          if (isRedirectPorpuse) {
-            redirect(pathname);
-          }
-        },
-      });
-  } else {
-    tl.to(".searchBox--container", {
-      top: 0,
-      duration: 0.5,
-      ease: "expo",
-    }).to(
-      ".searchBox--container",
-      {
-        background: "rgba(0,0,0,0.6)",
-        duration: 0.6,
-        ease: "expo.in",
-      },
-      "<",
-    );
-  }
-
-  // resetting the ref values
-  isSearchBoxOpened.current = !isSearchBoxOpened.current;
-  isAnimePlaying.current = false;
-}
-
-export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
+export default function SearchBox({ isSearchOpen, setIsSearchOpen }) {
+  const router = useRouter();
   const [inputText, setInputText] = useState("");
   const [searchHistory, setSearchHistory] = useState([]);
+  const containerRef = useRef(null);
+  const timelineRef = useRef(null);
+
+  useGSAP(
+    () => {
+      timelineRef.current = gsap.timeline({
+        paused: true,
+        onReverseComplete: () => {
+          gsap.set(containerRef.current, { display: "none" });
+        },
+      });
+
+      timelineRef.current
+        .set(containerRef.current, { display: "block" })
+        .to(containerRef.current, {
+          top: 0,
+          duration: 0.5,
+          ease: "expo",
+        })
+        .to(
+          containerRef.current,
+          {
+            background: "rgba(0,0,0,0.6)",
+            duration: 0.6,
+            ease: "expo.in",
+          },
+          "<",
+        );
+    },
+    { scope: containerRef },
+  );
+
+  useEffect(() => {
+    if (timelineRef.current && !timelineRef.current.isActive()) {
+      if (isSearchOpen) {
+        timelineRef.current.play(0);
+      } else {
+        gsap.set(containerRef.current, { display: "block" });
+        timelineRef.current.reverse();
+      }
+    }
+  }, [isSearchOpen]);
 
   useEffect(() => {
     const searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
@@ -73,44 +61,39 @@ export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
     }
   }, []);
 
-  function handleSearch() {
+  function handleSearch(searchedTitle = null) {
+    const query = (searchedTitle || inputText).trim();
+    if (!query) return;
+
     // set data on local storage
-    const searchHistory = JSON.parse(localStorage.getItem("searchHistory"));
-    if (searchHistory) {
-      if (searchHistory.length >= 10) {
-        searchHistory.unshift(inputText);
-        searchHistory.pop();
-      } else {
-        searchHistory.unshift(inputText);
-      }
-      localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-    } else {
-      localStorage.setItem("searchHistory", JSON.stringify([inputText]));
-    }
-    setSearchHistory(JSON.parse(localStorage.getItem("searchHistory")));
-    // redirect to search page
-    handleSearchBoxAction(
-      isSearchBoxOpened,
-      isAnimePlaying,
-      true,
-      `/search/${inputText}`,
-    );
+    const newHistory = [
+      query,
+      ...searchHistory.filter((item) => item !== query),
+    ].slice(0, 10);
+    localStorage.setItem("searchHistory", JSON.stringify(newHistory));
+    setSearchHistory(newHistory);
+
+    setIsSearchOpen(false);
     setInputText("");
+    // redirect to search page
+    router.push(`/search/${query}`);
   }
 
   function handleClearHistory() {
-    localStorage.setItem("searchHistory", "[]");
+    localStorage.removeItem("searchHistory");
     setSearchHistory([]);
   }
 
   return (
-    <div className="searchBox--container fixed top-[-600%] z-50 h-[100vh] w-full bg-[rgba(0,0,0,0)]">
+    <div
+      ref={containerRef}
+      style={{ display: "none" }}
+      className="searchBox--container fixed top-[-600%] z-50 h-[100vh] w-full bg-[rgba(0,0,0,0)]"
+    >
       <div className="relative flex h-[60%] min-h-[450px] w-full flex-col items-center justify-center gap-[30px] rounded-b-[30%] bg-[#F6F6F6] pt-[7%] md:rounded-b-[50%]">
         <div
-          className="absolute right-[20px] top-[20px]"
-          onClick={() => {
-            handleSearchBoxAction(isSearchBoxOpened, isAnimePlaying);
-          }}
+          className="absolute right-[20px] top-[20px] cursor-pointer"
+          onClick={() => setIsSearchOpen(false)}
         >
           <Image
             src={"/icons/close.svg"}
@@ -185,21 +168,17 @@ export default function SearchBox({ isSearchBoxOpened, isAnimePlaying }) {
               </div>
             ) : (
               <div className="mt-[20px] flex flex-wrap justify-center gap-[5px] md:gap-[20px]">
-                {searchHistory?.map((member, i) => {
+                {searchHistory?.map((searchedTitle, i) => {
                   return (
                     <div
                       key={i}
                       onClick={() => {
-                        handleSearchBoxAction(
-                          isSearchBoxOpened,
-                          isAnimePlaying,
-                          true,
-                          `/search/${member}`,
-                        );
+                        if (!searchedTitle.length) return;
+                        handleSearch(searchedTitle);
                       }}
                       className="history--box"
                     >
-                      {member}
+                      {searchedTitle}
                       <div className="w-[30px]">
                         <Image
                           width={30}

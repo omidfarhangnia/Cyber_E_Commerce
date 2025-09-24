@@ -64,8 +64,10 @@ function InitialLoader() {
 
 export default function Template({ children }) {
   const [isLoading, setIsLoading] = useState(true);
+  //
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  //
   const isBurgerPlayed = useRef(false);
-  const isSearchBoxOpened = useRef(false);
   const isAnimePlaying = useRef(false);
 
   useEffect(() => {
@@ -113,7 +115,7 @@ export default function Template({ children }) {
         <div className="font-sf-md project--template relative flex min-h-[100vh] w-full flex-col justify-between overflow-hidden bg-[#ffffff]">
           <Header
             isBurgerPlayed={isBurgerPlayed}
-            isSearchBoxOpened={isSearchBoxOpened}
+            setIsSearchOpen={setIsSearchOpen}
             isAnimePlaying={isAnimePlaying}
           />
           {children}
@@ -124,8 +126,8 @@ export default function Template({ children }) {
             isAnimePlaying={isAnimePlaying}
           />
           <SearchBox
-            isSearchBoxOpened={isSearchBoxOpened}
-            isAnimePlaying={isAnimePlaying}
+            isSearchOpen={isSearchOpen}
+            setIsSearchOpen={setIsSearchOpen}
           />
         </div>
       )}

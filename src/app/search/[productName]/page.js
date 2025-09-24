@@ -25,7 +25,7 @@ export default function Page({ params: paramsPromise }) {
   const searchParams = useSearchParams();
 
   const params = use(paramsPromise);
-  const productName = params.productName;
+  const productName = decodeURIComponent(params.productName);
   const currentPage = Number(searchParams.get("page")) || 1;
   const [searchQuery, setSearchQuery] = useState(productName);
   const [lastPage, setLastPage] = useState(null);
