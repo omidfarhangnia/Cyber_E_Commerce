@@ -151,12 +151,14 @@ export function HomeSec2() {
                 src={section.imgUrl}
               />
               <div className="md:w-[50%] lg:w-[60%]">
-                <h3
+                <h2
                   className={`mt-[24px] ${!section.isLight && "text-white"} text-center text-[34px] leading-[40px] lg:text-start lg:text-[30px]`}
                 >
                   {section.header}
-                </h3>
-                <p className="mt-[8px] text-center font-medium leading-[24px] text-[#909090] lg:text-start lg:text-[14px]">
+                </h2>
+                <p
+                  className={`mt-[8px] text-center font-medium leading-[24px] ${section.id === 1 ? "text-[#ffffff]" : "text-[#000000]"} lg:text-start lg:text-[14px]`}
+                >
                   {section.prag}
                 </p>
                 {section.id === 3 && (
@@ -262,9 +264,9 @@ export function HomeSec3() {
       <div className="category w-full max-w-[1150px] px-[16px] py-[50px] md:px-[50px]">
         <div className="flex items-center justify-between">
           <Link href={"/category/"}>
-            <h4 className="text-[23px] font-medium leading-[40px]">
+            <h3 className="text-[23px] font-medium leading-[40px]">
               Browse By Category
-            </h4>
+            </h3>
           </Link>
           <div className="flex items-center justify-center gap-[10px]">
             <button
@@ -384,7 +386,7 @@ export function HomeSec4() {
         <div className="w-full max-w-[1300px] px-[16px] py-[55px]">
           <div className="mb-[32px] flex flex-wrap items-center justify-start gap-x-[30px] gap-y-[10px]">
             <button
-              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0 ${selectedStatus !== "highestDiscount" && "text-[#8B8B8B]"}`}
+              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0`}
               onClick={() => playProductUnderlineAnime("highestDiscount")}
             >
               <div className="relative inline">
@@ -395,7 +397,7 @@ export function HomeSec4() {
               </div>
             </button>
             <button
-              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0 ${selectedStatus !== "highestScore" && "text-[#8B8B8B]"}`}
+              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0`}
               onClick={() => playProductUnderlineAnime("highestScore")}
             >
               <div className="relative inline">
@@ -406,7 +408,7 @@ export function HomeSec4() {
               </div>
             </button>
             <button
-              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0 ${selectedStatus !== "bestSeller" && "text-[#8B8B8B]"}`}
+              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0`}
               onClick={() => playProductUnderlineAnime("bestSeller")}
             >
               <div className="relative inline">
@@ -417,7 +419,7 @@ export function HomeSec4() {
               </div>
             </button>
             <button
-              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0 ${selectedStatus !== "freeShipping" && "text-[#8B8B8B]"}`}
+              className={`relative w-[40%] min-w-[150px] text-start font-semibold capitalize md:w-auto md:min-w-0`}
               onClick={() => playProductUnderlineAnime("freeShipping")}
             >
               <div className="relative inline">
@@ -511,7 +513,7 @@ function Sec5LgDevice({ data }) {
                 >
                   {product.title}
                 </h3>
-                <p className="mb-[15px] mt-[25px] w-full overflow-hidden overflow-ellipsis text-nowrap text-justify text-[15px] font-medium text-[#909090]">
+                <p className="mb-[15px] mt-[25px] w-full overflow-hidden overflow-ellipsis text-nowrap text-justify text-[15px] font-medium text-[#000000]">
                   {product.description}
                 </p>
                 <Link href={"/"}>
@@ -618,7 +620,7 @@ function Sec5SmDevice({ data }) {
                 {data[postsNum[1]]?.title}
               </h3>
               <p
-                className={`${data[postsNum[1]].id > 2 && "text-[#c9c9c9]"} mb-[15px] mt-[25px] w-full text-justify text-[15px] font-medium text-[#909090]`}
+                className={`${data[postsNum[1]].id > 2 && "text-[#ffffff]"} mb-[15px] mt-[25px] w-full text-justify text-[15px] font-medium text-[#000000]`}
               >
                 {data[postsNum[1]]?.description}
               </p>

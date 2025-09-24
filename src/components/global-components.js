@@ -111,7 +111,7 @@ export function Product({ product }) {
       });
 
       if (res.ok) {
-        location.reload();
+        update();
       } else {
         console.log("liked failed");
         setIsInCart((prevIsInCart) => !prevIsInCart);
