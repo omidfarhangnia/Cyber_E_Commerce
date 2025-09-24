@@ -44,11 +44,12 @@ export default function SearchBox({ isSearchOpen, setIsSearchOpen }) {
   );
 
   useEffect(() => {
-    if (timelineRef.current && !timelineRef.current.isActive()) {
+    if (timelineRef.current) {
       if (isSearchOpen) {
-        timelineRef.current.play(0);
+        if (!timelineRef.current.isActive()) {
+          timelineRef.current.play(0);
+        }
       } else {
-        gsap.set(containerRef.current, { display: "block" });
         timelineRef.current.reverse();
       }
     }

@@ -1,73 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import gsap from "gsap";
 import NavLinks from "./nav-link";
 import Link from "next/link";
 import { categories } from "@/app/category/page";
-
-export function handleBurgerAction(isBurgerPlayed, isAnimePlaying) {
-  // checking for avoiding multiplay animations
-  if (isAnimePlaying.current) return;
-  isAnimePlaying.current = true;
-
-  // starting animation function
-  const tl = gsap.timeline();
-  if (isBurgerPlayed.current) {
-    tl.to(".nav-links-sm", {
-      opacity: 0,
-      duration: 0.3,
-    })
-      .to(
-        ".divider-container",
-        {
-          bottom: "150%",
-          duration: 2.5,
-        },
-        "startLabel",
-      )
-      .to(
-        ".divider-container",
-        {
-          x: 0,
-          duration: 1.5,
-          onComplete: () => {
-            document.querySelector(".divider-container").style.display = "none";
-          },
-        },
-        "startLabel",
-      );
-  } else {
-    tl.to(
-      ".divider-container",
-      {
-        bottom: "-40vh",
-        duration: 2.5,
-        onStart: () => {
-          document.querySelector(".divider-container").style.display = "flex";
-        },
-      },
-      "startLabel",
-    )
-      .to(
-        ".divider-container",
-        {
-          x: "-500vw",
-          duration: 1.5,
-          delay: 0.5,
-        },
-        "startLabel",
-      )
-      .to(".nav-links-sm", {
-        opacity: 1,
-        duration: 0.5,
-      });
-  }
-
-  // resetting the ref values
-  isBurgerPlayed.current = !isBurgerPlayed.current;
-  isAnimePlaying.current = false;
-}
 
 export default function Header(props) {
   return (

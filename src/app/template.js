@@ -1,12 +1,12 @@
 "use client";
 
-import Header, { handleBurgerAction } from "@/components/header/header";
+import { useEffect, useState } from "react";
+import Header from "@/components/header/header";
 import Burger from "@/components/header/burger";
-
-import { useEffect, useRef, useState } from "react";
 import SearchBox from "@/components/header/search-box";
 import Footer from "@/components/footer/footer";
 import { Toaster } from "react-hot-toast";
+import { usePathname } from "next/navigation";
 
 function InitialLoader() {
   return (
@@ -63,17 +63,15 @@ function InitialLoader() {
 }
 
 export default function Template({ children }) {
+  const pathname = usePathname();
   const [isLoading, setIsLoading] = useState(true);
-  //
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  //
-  const isBurgerPlayed = useRef(false);
-  const isAnimePlaying = useRef(false);
+  const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
 
   useEffect(() => {
     function handleResize() {
-      if (window.innerWidth > 1024 && isBurgerPlayed.current) {
-        handleBurgerAction(isBurgerPlayed, isAnimePlaying);
+      if (window.innerWidth > 1024) {
+        setIsBurgerMenuOpen(false);
       }
     }
 
@@ -107,6 +105,10 @@ export default function Template({ children }) {
     };
   }, []);
 
+  useEffect(() => {
+    setIsBurgerMenuOpen(false);
+  }, [pathname]);
+
   return (
     <>
       {isLoading ? (
@@ -114,16 +116,15 @@ export default function Template({ children }) {
       ) : (
         <div className="font-sf-md project--template relative flex min-h-[100vh] w-full flex-col justify-between overflow-hidden bg-[#ffffff]">
           <Header
-            isBurgerPlayed={isBurgerPlayed}
+            setIsBurgerMenuOpen={setIsBurgerMenuOpen}
             setIsSearchOpen={setIsSearchOpen}
-            isAnimePlaying={isAnimePlaying}
           />
           {children}
           <Toaster />
           <Footer />
           <Burger
-            isBurgerPlayed={isBurgerPlayed}
-            isAnimePlaying={isAnimePlaying}
+            isBurgerMenuOpen={isBurgerMenuOpen}
+            setIsBurgerMenuOpen={setIsBurgerMenuOpen}
           />
           <SearchBox
             isSearchOpen={isSearchOpen}

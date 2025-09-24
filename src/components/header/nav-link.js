@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { handleBurgerAction } from "./header";
 import { usePathname } from "next/navigation";
-import { handleSearchBoxAction } from "./search-box";
 import { useSession } from "next-auth/react";
 import { SignOutBtn } from "../global-components";
 
@@ -31,11 +29,7 @@ export const links = [
   },
 ];
 
-export default function NavLinks({
-  isBurgerPlayed,
-  isSearchBoxOpened,
-  isAnimePlaying,
-}) {
+export default function NavLinks({ setIsBurgerMenuOpen, setIsSearchOpen }) {
   const { data: session, status } = useSession();
   const pathname = usePathname();
 
@@ -44,7 +38,7 @@ export default function NavLinks({
       <div
         className="cursor-pointer justify-self-end lg:hidden"
         onClick={() => {
-          handleBurgerAction(isBurgerPlayed, isAnimePlaying);
+          setIsBurgerMenuOpen(true);
         }}
       >
         <Image
@@ -57,9 +51,7 @@ export default function NavLinks({
       </div>
       <div className="hidden cursor-pointer lg:col-start-2 lg:col-end-5 lg:block lg:pl-[10px] xl:pl-[30px]">
         <div
-          onClick={() => {
-            handleSearchBoxAction(isSearchBoxOpened, isAnimePlaying);
-          }}
+          onClick={() => setIsSearchOpen(true)}
           className="search-input flex w-full items-center gap-[10px] rounded-lg border-none bg-[#F5F5F5] px-3 py-2 focus-within:outline-none"
         >
           <Image
