@@ -102,7 +102,7 @@ export default function Page() {
             type="submit"
             disabled={status === "submitting"}
             value={status === "submitting" ? "submitting" : "submit"}
-            className="rounded-full bg-black py-[10px] text-[20px] uppercase text-white shadow-lg"
+            className="rounded-full bg-black py-[10px] text-[20px] uppercase text-white shadow-lg disabled:opacity-50"
           />
         </form>
         <p className="mb-[30px] px-[20px] text-center text-[18px] capitalize">
