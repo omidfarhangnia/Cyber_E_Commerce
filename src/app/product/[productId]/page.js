@@ -1,4 +1,5 @@
 import {
+  HandleProduct,
   Product,
   ProductCommentContainer,
   ProductForm,
@@ -201,6 +202,7 @@ async function ProductData({ product }) {
         <h1 className="text-center text-[25px] font-bold md:text-[35px]">
           {product.name}
         </h1>
+        <HandleProduct product={product} />
         <div className="mt-[20px] flex w-[85%] items-center justify-between font-semibold text-[#4a4a4a] md:w-[60%]">
           <div>sales number : {product.sales_num}</div>
           <div>{product.score}/5</div>

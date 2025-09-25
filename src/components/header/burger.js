@@ -8,9 +8,12 @@ import { categories } from "@/app/category/page";
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { useSession } from "next-auth/react";
+import { SignOutBtn } from "../global-components";
 gsap.registerPlugin(useGSAP);
 
 export default function Burger({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
+  const { data: session } = useSession();
   const pathname = usePathname();
   const router = useRouter();
   const containerRef = useRef(null);
@@ -71,7 +74,7 @@ export default function Burger({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
     >
       <div className="bg-[#b5b5b5]">
         <div className="nav-links-sm relative h-[100vh] opacity-0">
-          <div className="fixed right-[10vw] top-[15vh] flex w-[80vw] flex-col justify-between rounded-[30px] bg-[rgba(255,255,255,0.4)] px-[20px] py-[30px]">
+          <div className="fixed right-[10vw] top-[10vh] flex w-[80vw] flex-col justify-between rounded-[30px] bg-[rgba(255,255,255,0.4)] px-[20px] py-[30px]">
             <div className="flex items-center justify-between px-[2.5vw]">
               <Link href={"/"}>
                 <Image
@@ -96,7 +99,7 @@ export default function Burger({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
                 />
               </div>
             </div>
-            <div className="my-4 flex flex-col items-start gap-[10px] pl-[6vw] text-[18px] md:pl-[10vw] md:text-[20px]">
+            <div className="my-4 flex flex-col items-start gap-[10px] pl-[6vw] md:pl-[10vw] md:text-[18px]">
               {links.map((link) => {
                 return (
                   <Link
@@ -122,6 +125,61 @@ export default function Burger({ isBurgerMenuOpen, setIsBurgerMenuOpen }) {
               >
                 search
               </button>
+              {!session ? (
+                <>
+                  <Link
+                    href="/sign-up"
+                    className={`${pathname === "/sign-up" && "font-semibold"} nav--links hover:border-black`}
+                  >
+                    sign up
+                  </Link>
+                  <Link
+                    href="/sign-in"
+                    className={`${pathname === "/sign-in" && "font-semibold"} nav--links hover:border-black`}
+                  >
+                    sign in
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <SignOutBtn />
+                  <div className="flex w-full items-center gap-x-[5%]">
+                    <Link
+                      href="/favorites"
+                      className={`${pathname === "/favorites" && "opacity-95"} nav--links opacity-60 hover:border-black`}
+                    >
+                      <Image
+                        width={28}
+                        height={28}
+                        alt="favorite icon"
+                        src="/icons/favorites.svg"
+                      />
+                    </Link>
+                    <Link
+                      href="/shopping-cart"
+                      className={`${pathname === "/shopping-cart" && "opacity-95"} nav--links opacity-60 hover:border-black`}
+                    >
+                      <Image
+                        width={28}
+                        height={28}
+                        alt="favorite icon"
+                        src="/icons/cart.svg"
+                      />
+                    </Link>
+                    <Link
+                      href="/profile"
+                      className={`${pathname === "/profile" && "opacity-95"} nav--links opacity-60 hover:border-black`}
+                    >
+                      <Image
+                        width={28}
+                        height={28}
+                        alt="favorite icon"
+                        src="/icons/user.svg"
+                      />
+                    </Link>
+                  </div>
+                </>
+              )}
             </div>
             <div className="border-t-solid flex w-full flex-wrap justify-center gap-[2%] self-center border-t-[1px] border-t-[#2E2E2E] pt-[20px] text-[14px] md:text-[16px]">
               {categories.map((category) => {

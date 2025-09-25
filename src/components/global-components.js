@@ -13,195 +13,6 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export function Product({ product }) {
-  const { data: session, update } = useSession();
-  const [isLiked, setIsLiked] = useState(false);
-  const [isInCart, setIsInCart] = useState(false);
-  const [animeLoading, setAnimeLoading] = useState(false);
-  const btnRef = useRef();
-
-  useEffect(() => {
-    if (session?.user?.favorites) {
-      try {
-        const favorites = JSON.parse(session.user.favorites);
-        setIsLiked(favorites.includes(product.id));
-      } catch (error) {
-        console.error("Failed to parse favorites:", error);
-        setIsLiked(false);
-      }
-    } else {
-      setIsLiked(false);
-    }
-
-    if (session?.user?.shopping_cart) {
-      try {
-        const shopping_cart = JSON.parse(session.user.shopping_cart);
-        setIsInCart(shopping_cart.includes(product.id));
-      } catch (error) {
-        console.error("failed to parse favorites:", error);
-        setIsInCart(false);
-      }
-    } else {
-      setIsInCart(false);
-    }
-  }, [session, product.id]);
-
-  async function handleLikeProduct(e) {
-    e.stopPropagation();
-
-    if (animeLoading) return;
-    setIsLiked((prevIsLiked) => !prevIsLiked);
-
-    const tl = new gsap.timeline();
-    setAnimeLoading(true);
-    tl.to(e.target, {
-      y: -10,
-      rotateZ: -10,
-      duration: 0.2,
-      scale: 1.1,
-      ease: "bounce",
-    }).to(e.target, {
-      y: 0,
-      rotateZ: 0,
-      scale: 1,
-      duration: 0.2,
-      ease: "bounce",
-      onComplete: async () => {
-        const res = await fetch("/api/like-product", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            productId: product.id,
-            email: session.user.email,
-            favorites: session.user.favorites,
-            status: isLiked ? "remove" : "add",
-          }),
-        });
-
-        if (res.ok) {
-          update();
-        } else {
-          console.log("liked failed");
-          setIsLiked((prevIsLiked) => !prevIsLiked);
-        }
-        setAnimeLoading(false);
-      },
-    });
-  }
-
-  function handleBuyProduct(e) {
-    e.stopPropagation();
-
-    if (animeLoading) return;
-
-    const tl = new gsap.timeline();
-    const btnShoppingCart = btnRef.current.querySelector("img");
-    const btnAddText = btnRef.current.querySelector(".addSpan");
-    const btnRemoveText = btnRef.current.querySelector(".removeSpan");
-
-    async function handleToggleCart() {
-      const res = await fetch("/api/add-to-cart", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          productId: product.id,
-          email: session.user.email,
-          shopping_cart: session.user.shopping_cart,
-          status: isInCart ? "remove" : "add",
-        }),
-      });
-
-      if (res.ok) {
-        update();
-      } else {
-        console.log("liked failed");
-        setIsInCart((prevIsInCart) => !prevIsInCart);
-      }
-    }
-
-    setIsInCart(!isInCart);
-
-    if (!isInCart) {
-      // add to cart
-      tl.to(btnShoppingCart, {
-        x: "100px",
-        duration: 0.7,
-        ease: "expo",
-      })
-        .to(
-          btnAddText,
-          {
-            x: "250%",
-            duration: 0.4,
-            ease: "expo",
-          },
-          "-=.4",
-        )
-        .set(btnShoppingCart, {
-          x: "-200px",
-        })
-        .to(btnShoppingCart, {
-          x: "10px",
-          duration: 0.4,
-          ease: "expo.out",
-        })
-        .set(btnRemoveText, {
-          display: "inline",
-        })
-        .to(btnRemoveText, {
-          opacity: "1",
-          duration: 0.4,
-          ease: "expo.out",
-          onComplete: handleToggleCart,
-        });
-    } else {
-      // remove from cart
-      tl.to(btnShoppingCart, {
-        x: "100px",
-        duration: 0.7,
-        ease: "expo",
-      })
-        .to(
-          btnRemoveText,
-          {
-            x: "250%",
-            duration: 0.4,
-            ease: "expo",
-          },
-          "-=.4",
-        )
-        .set(btnShoppingCart, {
-          x: "-200px",
-        })
-        .to(btnShoppingCart, {
-          x: "0",
-          duration: 0.4,
-          ease: "expo.out",
-        })
-        .set(btnAddText, {
-          display: "inline",
-        })
-        .to(btnAddText, {
-          opacity: "1",
-          duration: 0.4,
-          ease: "expo.out",
-          onComplete: handleToggleCart,
-        });
-    }
-  }
-
-  const notify = () =>
-    toast.custom(
-      <div className="rounded-[10px] bg-[#f4f4f4] px-[40px] py-[20px] text-[20px] capitalize">
-        💡 please sign in first.
-      </div>,
-      {
-        id: "sign-in-toast",
-        duration: 2500,
-        position: "bottom-right",
-        removeDelay: 500,
-      },
-    );
-
   return (
     <>
       <div className="products flex w-[90%] min-w-[160px] max-w-[240px] flex-col items-center rounded-[9px] border-[1px] border-solid border-black px-[10px] py-[25px] hover:bg-[#f4f4f4] hover:transition-colors md:max-w-[300px] md:px-[20px]">
@@ -245,60 +56,191 @@ export function Product({ product }) {
             )}
           </div>
         </Link>
-        <div className="mb-[15px] mt-[10px] flex w-full items-center justify-center gap-[15px]">
-          <button
-            className="cursor-pointer disabled:cursor-default disabled:opacity-50"
-            onClick={(e) => {
-              if (session) {
-                handleLikeProduct(e);
-              } else {
-                notify();
-              }
-            }}
-            title={!session ? "You Need To Sign In First" : ""}
-          >
-            <Image
-              width={32}
-              height={32}
-              alt="like icon"
-              src={
-                isLiked ? "/icons/like-active.svg" : "/icons/like-inactive.svg"
-              }
-            />
-          </button>
-          <button
-            ref={btnRef}
-            onClick={(e) => {
-              if (session) {
-                handleBuyProduct(e);
-              } else {
-                notify();
-              }
-            }}
-            title={!session ? "You Need To Sign In First" : ""}
-            className="relative flex w-[80%] items-center gap-[5px] overflow-hidden rounded-full bg-black px-[25px] py-[2px] text-[14px] capitalize text-white transition-all hover:bg-gray-900 disabled:cursor-default disabled:opacity-50 md:justify-center md:px-[35px] md:py-[5px]"
-          >
-            <span
-              className={`addSpan ${isInCart && "absolute left-[30%] hidden opacity-0"}`}
-            >
-              Buy Now
-            </span>
-            <span
-              className={`removeSpan ${!isInCart && "absolute left-[20%] hidden opacity-0"}`}
-            >
-              remove now
-            </span>
-            <Image
-              width={32}
-              height={32}
-              alt="product image"
-              className="md:h-[35px] md:w-[35px]"
-              src={"/icons/shopping-cart.svg"}
-            />
-          </button>
-        </div>
+        <HandleProduct product={product} />
       </div>
     </>
+  );
+}
+
+export function HandleProduct({ product }) {
+  const { data: session, update } = useSession();
+  const [isLiked, setIsLiked] = useState(false);
+  const [isInCart, setIsInCart] = useState(false);
+  const [animeLoading, setAnimeLoading] = useState(false);
+  const btnRef = useRef();
+
+  useEffect(() => {
+    if (session?.user?.favorites) {
+      try {
+        const favorites = JSON.parse(session.user.favorites);
+        setIsLiked(favorites.includes(product.id));
+      } catch (error) {
+        console.error("Failed to parse favorites:", error);
+        setIsLiked(false);
+      }
+    } else {
+      setIsLiked(false);
+    }
+
+    if (session?.user?.shopping_cart) {
+      try {
+        const shopping_cart = JSON.parse(session.user.shopping_cart);
+        setIsInCart(shopping_cart.includes(product.id));
+      } catch (error) {
+        console.error("failed to parse favorites:", error);
+        setIsInCart(false);
+      }
+    } else {
+      setIsInCart(false);
+    }
+  }, [session, product.id]);
+
+  async function handleLikeProduct(e) {
+    e.stopPropagation();
+
+    if (animeLoading) return;
+    setIsLiked((prevIsLiked) => !prevIsLiked);
+    setAnimeLoading(true);
+
+    async function handleToggleLike() {
+      const res = await fetch("/api/like-product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId: product.id,
+          email: session.user.email,
+          favorites: session.user.favorites,
+          status: isLiked ? "remove" : "add",
+        }),
+      });
+
+      if (res.ok) {
+        update();
+      } else {
+        console.log("liked failed");
+        setIsLiked((prevIsLiked) => !prevIsLiked);
+      }
+      setAnimeLoading(false);
+    }
+
+    const tl = new gsap.timeline();
+    tl.to(e.target, {
+      y: -10,
+      rotateZ: -10,
+      duration: 0.2,
+      scale: 1.1,
+      ease: "bounce",
+    }).to(e.target, {
+      y: 0,
+      rotateZ: 0,
+      scale: 1,
+      duration: 0.2,
+      ease: "bounce",
+      onComplete: handleToggleLike,
+    });
+  }
+
+  function handleBuyProduct(e) {
+    e.stopPropagation();
+
+    if (animeLoading) return;
+    setIsInCart((isInCart) => !isInCart);
+    setAnimeLoading(true);
+
+    async function handleToggleCart() {
+      const res = await fetch("/api/add-to-cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          productId: product.id,
+          email: session.user.email,
+          shopping_cart: session.user.shopping_cart,
+          status: isInCart ? "remove" : "add",
+        }),
+      });
+
+      if (res.ok) {
+        update();
+      } else {
+        console.log("adding failed");
+        setIsInCart((prevIsInCart) => !prevIsInCart);
+      }
+      setAnimeLoading(false);
+    }
+
+    const shopingCard = btnRef.current.querySelector(".shoping-card");
+
+    const tl = new gsap.timeline();
+    tl.set(shopingCard, {
+      opacity: 0,
+    }).to(shopingCard, {
+      opacity: 1,
+      duration: 0.25,
+      delay: 0.25,
+      onComplete: handleToggleCart,
+    });
+  }
+
+  const notify = () =>
+    toast.custom(
+      <div className="rounded-[10px] bg-[#f4f4f4] px-[40px] py-[20px] text-[20px] capitalize">
+        💡 please sign in first.
+      </div>,
+      {
+        id: "sign-in-toast",
+        duration: 2500,
+        position: "bottom-right",
+        removeDelay: 500,
+      },
+    );
+
+  return (
+    <div className="mb-[15px] mt-[10px] flex w-full max-w-[250px] items-center justify-center gap-[15px]">
+      <button
+        className="cursor-pointer disabled:cursor-default disabled:opacity-50"
+        onClick={(e) => {
+          if (session) {
+            handleLikeProduct(e);
+          } else {
+            notify();
+          }
+        }}
+        title={!session ? "You Need To Sign In First" : ""}
+      >
+        <Image
+          width={32}
+          height={32}
+          alt="like icon"
+          src={isLiked ? "/icons/like-active.svg" : "/icons/like-inactive.svg"}
+        />
+      </button>
+      <button
+        ref={btnRef}
+        onClick={(e) => {
+          if (session) {
+            handleBuyProduct(e);
+          } else {
+            notify();
+          }
+        }}
+        title={!session ? "You Need To Sign In First" : ""}
+        className="relative flex w-[80%] items-center overflow-hidden rounded-full bg-black px-[25px] text-[18px] capitalize text-white transition-all hover:bg-gray-900 disabled:cursor-default disabled:opacity-50 md:justify-center md:px-[35px] md:py-[5px]"
+      >
+        <span className={`absolute left-[30%] ${isInCart && "hidden"}`}>
+          Buy
+        </span>
+        <span className={`absolute left-[20%] ${!isInCart && "hidden"}`}>
+          remove
+        </span>
+        <Image
+          width={32}
+          height={32}
+          alt="product image"
+          className="shoping-card ml-auto md:h-[35px] md:w-[35px]"
+          src={"/icons/shopping-cart.svg"}
+        />
+      </button>
+    </div>
   );
 }
 
