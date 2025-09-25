@@ -1,27 +1,48 @@
 "use client";
 
+import { checkValidation } from "@/components/auth/validation";
 import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   if (session) redirect("/");
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // status = "idle" | "submitting" | "error"
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const res = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
 
-    if (!res?.ok) {
-      throw new Error("invalided email and password");
+    if (checkValidation(email, password, setStatus, setError)) {
+      setStatus("submitting");
+      setError("");
+    } else {
+      return;
+    }
+
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (!res?.ok || res.error !== undefined) {
+        setStatus("error");
+        setError("invalid email or password.");
+        return;
+      }
+
+      setStatus("idle");
+    } catch (err) {
+      setStatus("error");
+      setError("something went wrong, please try again.");
     }
   }
 
@@ -45,6 +66,7 @@ export default function Page() {
               type="email"
               id="email"
               placeholder="Email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -61,15 +83,20 @@ export default function Page() {
               name="password"
               type="password"
               id="password"
+              autoComplete="current-password"
               placeholder="****"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          <p className="mb-[-20px] mt-[-15px] h-[18px] text-center text-[14px] capitalize text-red-500">
+            {status === "error" && error}
+          </p>
           <input
             type="submit"
-            value="submit"
-            className="rounded-full bg-black py-[10px] text-[20px] uppercase text-white shadow-lg"
+            disabled={status === "submitting"}
+            value={status === "submitting" ? "submitting" : "submit"}
+            className="rounded-full bg-black py-[10px] text-[20px] uppercase text-white shadow-lg disabled:opacity-50"
           />
         </form>
         <p className="mb-[30px] px-[20px] text-center text-[18px] capitalize">

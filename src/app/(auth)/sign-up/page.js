@@ -1,36 +1,54 @@
 "use client";
 
+import { checkValidation } from "@/components/auth/validation";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect, useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function Page() {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   if (session) redirect("/");
 
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // status = "idle" | "submitting" | "error"
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
 
   async function handleSubmit(e) {
     e.preventDefault();
 
-    const res = await fetch("/api/auth/sign-up", {
-      method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (res?.ok) {
-      router.push("/sign-in");
+    if (checkValidation(email, password, setStatus, setError)) {
+      setStatus("submitting");
+      setError("");
     } else {
-      throw new Error("email or password is invalid");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/auth/sign-up", {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (res.ok) {
+        setStatus("idle");
+        router.push("/sign-in");
+      } else {
+        setStatus("error");
+        setError("email is in used.");
+      }
+    } catch (err) {
+      setStatus("error");
+      setError("something went wrong, please try again.");
     }
   }
 
@@ -54,6 +72,7 @@ export default function Page() {
               type="email"
               id="email"
               placeholder="Email"
+              autoComplete="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -70,14 +89,19 @@ export default function Page() {
               name="password"
               type="password"
               id="password"
+              autoComplete="current-password"
               placeholder="****"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+          <p className="mb-[-20px] mt-[-15px] h-[18px] text-center text-[14px] capitalize text-red-500">
+            {status === "error" && error}
+          </p>
           <input
             type="submit"
-            value="submit"
+            disabled={status === "submitting"}
+            value={status === "submitting" ? "submitting" : "submit"}
             className="rounded-full bg-black py-[10px] text-[20px] uppercase text-white shadow-lg"
           />
         </form>
@@ -88,7 +112,8 @@ export default function Page() {
             className="uppercase underline underline-offset-4"
           >
             sign in
-          </Link>.
+          </Link>
+          .
         </p>
       </div>
       <div className="bg-glass absolute left-0 top-0 z-[2] h-full w-full"></div>
