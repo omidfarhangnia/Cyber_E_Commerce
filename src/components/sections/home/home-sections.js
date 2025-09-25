@@ -51,6 +51,8 @@ export function HomeSec1() {
           <Image
             width="400"
             height="600"
+            fetchPriority="high"
+            priority
             alt="this is iphone image"
             className="relative h-auto w-auto object-contain lg:ml-auto"
             src="/images/iphone-image.webp"
@@ -513,7 +515,9 @@ function Sec5LgDevice({ data }) {
                 >
                   {product.title}
                 </h3>
-                <p className="mb-[15px] mt-[25px] w-full overflow-hidden overflow-ellipsis text-nowrap text-justify text-[15px] font-medium text-[#000000]">
+                <p
+                  className={`${product.id > 2 ? "text-white" : "text-black"} mb-[15px] mt-[25px] w-full overflow-hidden overflow-ellipsis text-nowrap text-justify text-[15px] font-medium text-[#000000]`}
+                >
                   {product.description}
                 </p>
                 <Link href={"/"}>
