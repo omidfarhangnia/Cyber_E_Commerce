@@ -26,6 +26,7 @@ A full-stack e-commerce application built with Next.js 15, Prisma, and Tailwind 
 -   **✨ Smooth Animations:** Engaging and smooth user interface animations powered by **GSAP**.
 -   **📱 Fully Responsive Design:** A pixel-perfect, mobile-first design that looks great on all devices, built with **Tailwind CSS**.
 -   **🔍 Product Search & Filtering:** Easily find products with an intuitive search and filtering system.
+-   **Optimized Performance**: Achieved high Lighthouse scores through various optimization techniques, ensuring a fast and smooth user experience.
 
 ---
 
@@ -44,7 +45,20 @@ This project uses a modern, full-stack architecture:
 | **Dev Tools** | [**Prettier**](https://prettier.io/) for code formatting, TypeScript                |
 
 ---
+## ⚡ Performance Optimization
 
+A core focus of this project was to deliver an exceptional user experience through high performance. Significant efforts were made to optimize load times and responsiveness, resulting in outstanding Lighthouse scores for the deployed application. 
+
+* **Image Optimization:** Converting all images to modern WebP format and correctly sizing them to reduce payload.
+* **LCP (Largest Contentful Paint) Element Optimization:** Prioritizing the main visual content for rapid rendering.
+* **Efficient JavaScript Bundling:** Minimizing and splitting JavaScript to reduce load on the main thread.
+* **Addressing Layout Shifts:** Eliminating unexpected content movement for a stable user interface.
+
+**Final Lighthouse Scores (Desktop Simulation):**
+
+![Lighthouse Scores](https://raw.githubusercontent.com/omidfarhangnia/Cyber_E_Commerce/main/assets/lighthouse.JPG)
+
+--
 ## 🚀 Getting Started
 
 To run this project locally, follow these steps:
