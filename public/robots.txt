@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /sign-in
+Disallow: /sign-up
+Disallow: /favorites
+Disallow: /profile
+Disallow: /shopping-cart
+
+Allow: /
+
+Sitemap: https://cyber-e-commerce-six.vercel.app/sitemap.xml
