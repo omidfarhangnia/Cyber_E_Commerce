@@ -29,7 +29,7 @@ export function HomeSec1() {
   });
 
   return (
-    <div className="section_1 flex items-center justify-center bg-[#211C24]">
+    <div className="section_1 flex min-h-[60vh] items-center justify-center bg-[#211C24]">
       <div className="flex w-full max-w-[1150px] flex-wrap items-center justify-center px-[16px] pt-[88px] lg:justify-evenly">
         <div className="section_1--contentContainer flex w-full flex-col items-center gap-[20px] lg:w-[45%] lg:items-start">
           <h3 className="text-[25px] font-semibold leading-[32px] text-[#7A777C]">
